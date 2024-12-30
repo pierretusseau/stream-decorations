@@ -13,7 +13,7 @@ function index() {
   return (
     <div
       className={`group/sidebar ${[
-        "w-[420px]",
+        "w-[432px]",
         'relative',
         'overflow-hidden',
         'flex flex-col'
@@ -38,7 +38,7 @@ function index() {
       <div className={`group/sidebar-content ${[
         'relative z-10',
       ].join(' ')}`}>
-        Content
+        {/* Content */}
       </div>
       <div className={`group/bottom-deco ${[
         'relative z-10',
