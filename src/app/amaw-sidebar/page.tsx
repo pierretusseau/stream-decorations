@@ -13,7 +13,7 @@ function index() {
   return (
     <div
       className={`group/sidebar ${[
-        "w-[340px]",
+        "w-[420px]",
         'relative',
         'overflow-hidden',
         'flex flex-col'
