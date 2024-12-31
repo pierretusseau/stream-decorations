@@ -26,7 +26,7 @@ export const subscribeToHunts = () => {
     .on(
       'postgres_changes',
       { event: 'INSERT', schema: 'public', table: 'hunts' },
-      // @ts-expect-error
+      // @ts-expect-error : Need to find proper type
       (payload) => addHunt(payload.new)
     )
     .on(
@@ -37,7 +37,7 @@ export const subscribeToHunts = () => {
     .on(
       'postgres_changes',
       { event: 'UPDATE', schema: 'public', table: 'hunts' },
-      // @ts-expect-error
+      // @ts-expect-error : Need to find proper type
       (payload) => editHunt(payload.new)
     )
     .subscribe()

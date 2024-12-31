@@ -27,9 +27,9 @@ function AmawTracker({
   
   if (!hunts || hunts.length === 0) return null
 
-  console.log('weapons', weapons)
-  console.log('monsters', monsters)
-  console.log('hunts', hunts)
+  // console.log('weapons', weapons)
+  // console.log('monsters', monsters)
+  // console.log('hunts', hunts)
 
   const limitedHunts = hunts.slice(Math.max(hunts.length - 10, 0))
 
