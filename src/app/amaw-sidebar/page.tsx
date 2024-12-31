@@ -8,8 +8,7 @@ const cam_height = 320
 const sidebar_height = screen_height - cam_height
 const sidebar_width = 420
 
-function index() {
-  
+function AmawSidebar() {
   return (
     <div
       className={`group/sidebar ${[
@@ -71,4 +70,4 @@ function index() {
   )
 }
 
-export default index
+export default AmawSidebar
