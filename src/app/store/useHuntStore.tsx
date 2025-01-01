@@ -9,6 +9,8 @@ const useHuntStore = create(() => ({
 
 export default useHuntStore
 
+// Supabase
+/*----------------------------------------------------*/
 export const fetchHunts = async () => {
   console.log('initializing hunts')
   const { data } = await supabase
@@ -42,6 +44,9 @@ export const subscribeToHunts = () => {
     )
     .subscribe()
 }
+
+// Store manipulation methods
+/*----------------------------------------------------*/
 
 export const addHunt = (hunt: Hunt) => {
   useHuntStore.setState((state) => ({ hunts: [...state.hunts, hunt] }))

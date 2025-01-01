@@ -2,7 +2,6 @@
 
 import React, { useEffect } from 'react'
 import useHuntStore, {
-  // setHunts
   fetchHunts,
   subscribeToHunts
 } from '@/app/store/useHuntStore'
@@ -26,10 +25,6 @@ function AmawTracker({
   }, [])
   
   if (!hunts || hunts.length === 0) return null
-
-  // console.log('weapons', weapons)
-  // console.log('monsters', monsters)
-  // console.log('hunts', hunts)
 
   const limitedHunts = hunts.slice(Math.max(hunts.length - 10, 0))
 
