@@ -4,7 +4,7 @@ import React, { useEffect } from 'react'
 import useHuntStore, {
   fetchHunts,
   subscribeToHunts
-} from '@/app/store/useHuntStore'
+} from '@/store/useHuntStore'
 import Hunt from '@/app/components/AmawTracker/Hunt'
 
 const screen_width = 2560

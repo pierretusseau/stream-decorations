@@ -1,5 +1,5 @@
 import { create } from "zustand"
-import supabase from '@/app/lib/supabase-browser'
+import supabase from '@//lib/supabase-browser'
 
 // Store creation
 /*----------------------------------------------------*/

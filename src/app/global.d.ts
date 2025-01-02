@@ -1,18 +1,8 @@
-type Monster = {
-  id: number
-  name: string
-}
+import type { Database as DB, Tables } from "@/lib/database.type"
 
-type Weapon = {
-  id: number
-  acronym: string
-  name: string
-}
-
-type Hunt = {
-  id: number
-  created_at: string
-  monster: Monster.id
-  weapon: Weapon.id
-  time: string
+declare global {
+  type Database = DB
+  type Monster = Tables<'monsters'>
+  type Weapon = Tables<'weapons'>
+  type Hunt = Tables<'hunts'>
 }

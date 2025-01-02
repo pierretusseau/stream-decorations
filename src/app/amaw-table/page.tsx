@@ -1,9 +1,6 @@
 import React from 'react'
 import supabase from '@//lib/supabase-browser'
-import AmawTracker from '@/app/components/AmawTracker'
-
-// Bundle WEBP => PNG
-// https://www.reddit.com/r/software/comments/q78y0c/i_have_a_ton_of_webp_images_need_them_in_png_how/
+import AmawTable from '@/app/components/AmawTable'
 
 export const dynamic = 'force-dynamic'
 
@@ -29,12 +26,14 @@ const getWeapons = async () => {
   return data
 }
 
-export default async function AmawTrackerPage() {
+export default async function AmawTablePage() {
   const monsters = await getMonsters()
   const weapons = await getWeapons()
-  
-  return <AmawTracker
+
+  return (
+    <AmawTable
     monsters={monsters}
     weapons={weapons}
-  />
+    />
+  )
 }
