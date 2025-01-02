@@ -1,11 +1,21 @@
 import { create } from "zustand"
+import { persist } from "zustand/middleware"
 import supabase from '@//lib/supabase-browser'
 
 // Store creation
 /*----------------------------------------------------*/
-const useHuntStore = create(() => ({
-  hunts: [] as Hunt[]
-}))
+const useHuntStore = create(
+  persist(
+    // (set, get) => ({
+    () => ({
+      hunts: [] as Hunt[]
+    }),
+    {
+      name: 'amaw-hunts', // name of the item in the storage (must be unique)
+      // storage: createJSONStorage(() => sessionStorage), // (optional) by default, 'localStorage' is used
+    },
+  ),
+)
 
 export default useHuntStore
 

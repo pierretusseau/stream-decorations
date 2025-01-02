@@ -6,17 +6,20 @@ import useHuntStore, {
   fetchHunts,
   subscribeToHunts
 } from '@/store/useHuntStore'
+import useMonstersStore, {
+  fetchMonsters,
+  subscribeToMonsters
+} from '@/store/useMonstersStore'
 
-function AmawMonsters({
-  monsters
-}: {
-  monsters: Monster[]
-}) {
+function AmawMonsters() {
   const storeHunts = useHuntStore((state) => state.hunts)
+  const storeMonsters = useMonstersStore((state) => state.monsters)
 
   useEffect(() => {
     fetchHunts()
     subscribeToHunts()
+    fetchMonsters()
+    subscribeToMonsters()
   }, [])
 
   return (
@@ -26,7 +29,7 @@ function AmawMonsters({
       <div
         className="group/highrank flex flex-wrap gap-4"
       >
-        {monsters
+        {storeMonsters
           .filter(monster => monster.quest_level)
           .map(monster => {
             const hunts = storeHunts.filter(hunt => hunt.monster === monster.id)
@@ -39,7 +42,7 @@ function AmawMonsters({
       <div
         className="group/masterrank flex flex-wrap gap-4"
       >
-        {monsters
+        {storeMonsters
           .filter(monster => monster.mr_level)
           .map(monster => {
             const hunts = storeHunts.filter(hunt => hunt.monster === monster.id)
