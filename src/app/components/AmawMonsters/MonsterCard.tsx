@@ -1,5 +1,6 @@
 import React from 'react'
 import MonsterImage from '@/app/components/common/MonsterImage'
+import { CheckBadgeIcon } from '@heroicons/react/24/solid'
 
 function MonsterCard({
   monster,
@@ -30,7 +31,13 @@ function MonsterCard({
         className="bg-green-900 opacity-75 w-full absolute bottom-0 left-0 z-0"
         style={{ height: `${(100 / 14) * hunts.length}%` }}
       ></div>
-      <p className="p-0 font-teko text-3xl absolute right-1 -bottom-1 drop-shadow-[0_0_2px_rgba(0,0,0,0.8)] z-10">{hunts.length}/14</p>
+      {hunts.length < 14
+        ? <p className={`${[
+          "p-0 font-teko text-3xl drop-shadow-[0_0_1px_rgba(0,0,0,1)] z-10",
+          "absolute right-1 -bottom-1"
+        ].join(' ')}`}>{hunts.length}/14</p>
+        : <div className="bg-green-500 absolute bottom-0 right-0 z-10 px-3 py-1 rounded-tl-xl"><CheckBadgeIcon className="size-6"/></div>
+      }
     </div>
   )
 }
