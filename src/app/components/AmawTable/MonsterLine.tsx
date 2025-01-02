@@ -1,10 +1,9 @@
 import React, { useCallback, useState } from 'react'
-import Image from 'next/image'
-import { monsterNameParser } from '@/utils/utils'
 import useHuntStore from '@/store/useHuntStore'
 import HuntCell from '@/app/components/AmawTable/HuntCell'
 import useSettingsStore from '@/store/useSettingsStore'
 import { LockClosedIcon } from '@heroicons/react/24/solid'
+import MonsterImage from '@/app/components/common/MonsterImage'
 
 function MonsterLine({
   monster,
@@ -52,15 +51,8 @@ function MonsterLine({
         onContextMenu={(e) => handleMonsterLockState(e)}
       >
         <div className="relative">
-          <Image
-            src={`/mhw-monsters/${monsterNameParser(monster.name)}.png`}
-            width={50}
-            height={50}
-            alt={`Icon of ${monster.name}`}
-            className={[
-              "group/monster-image",
-              !monsterUnlocked && 'opacity-50'
-            ].join(' ')}
+          <MonsterImage
+            monster={monster}
           />
           {!monsterUnlocked &&<LockClosedIcon className="size-8 absolute top-1/2 left-1/2 -translate-y-[50%] -translate-x-[50%] opacity-75 pointer-events-none" />}
         </div>

@@ -16,6 +16,7 @@ function MonsterImage({
       height={size}
       alt={`Icon of ${monster.name}`}
       className="relative z-10"
+      title={`${monster.name} - ${monster.quest}`}
     />
   )
 }
