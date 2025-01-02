@@ -44,7 +44,7 @@ function HuntCellModal({
   useEffect(() => {
     setHuntTime(hunt?.time || '')
     setHuntYoutube(hunt?.video_uri || '')
-  }, [hunt])
+  }, [hunt, monster])
   
   const handleSave = useCallback(async () => {
     await fetch(`${window.location.origin}/api/save-hunt`, {
@@ -61,7 +61,7 @@ function HuntCellModal({
     }).then(res => res.json())
       .then(({code, error, body}) => {
         if (code === 200) {
-          console.log('Saved hunt timer')
+          console.log('Saved new hunt state')
         }
         if (error) {
           throw new Error(body.message)

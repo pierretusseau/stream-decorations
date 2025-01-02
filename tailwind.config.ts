@@ -8,6 +8,9 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        teko: ['var(--font-teko)'],
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",

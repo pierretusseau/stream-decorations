@@ -9,17 +9,28 @@ export async function POST(
   req: NextRequest,
   // { params }: { params: { id: number }}
 ) {
-  const { service_key, monster, weapon, time, hunt_id, video_uri } = await req.json()
+  const {
+    service_key,
+    monster,
+    weapon,
+    time,
+    hunt_id,
+    video_uri,
+  } = await req.json()
   const supabase = await createSupaClient(service_key)
 
+  const newHuntData = {
+    monster: monster,
+    weapon: weapon,
+    time: time,
+    id: hunt_id,
+    video_uri: video_uri,
+  }
+
+  console.log('New hunt data', newHuntData)
+
   const newHunt = Object.fromEntries(
-    Object.entries({
-      monster: monster,
-      weapon: weapon,
-      time: time,
-      id: hunt_id,
-      video_uri: video_uri,
-    })
+    Object.entries(newHuntData)
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       .filter(([_, value]) => value !== undefined)
   ) as Hunt
