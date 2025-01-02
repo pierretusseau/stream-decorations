@@ -1,6 +1,7 @@
 import React from 'react'
 import MonsterImage from '@/app/components/common/MonsterImage'
 import { CheckBadgeIcon } from '@heroicons/react/24/solid'
+import ProgressionBackground from '../common/ProgressionBackground'
 
 function MonsterCard({
   monster,
@@ -27,10 +28,10 @@ function MonsterCard({
         monster={monster}
         size={75}
       />
-      <div
-        className="bg-green-900 opacity-75 w-full absolute bottom-0 left-0 z-0 transition h-full origin-bottom"
-        style={{ transform: `scaleY(${(100 / 14) * hunts.length}%)` }}
-      ></div>
+      <ProgressionBackground
+        value={hunts.length}
+        total={14}
+      />
       {hunts.length < 14
         ? <p className={`${[
           "p-0 font-teko text-3xl drop-shadow-[0_0_1px_rgba(0,0,0,1)] z-10",
