@@ -21,11 +21,12 @@ function MonsterLine({
   const handleMonsterLockState = useCallback(async (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (service_key.length === 0) return
     e.preventDefault()
-    await fetch(`${window.location.origin}/api/unlock-monster/${monster.id}`, {
+    await fetch(`${window.location.origin}/api/unlock-monster`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        service_key: service_key
+        service_key: service_key,
+        id: monster.id
       })
     }).then(res => res.json())
       .then(({code, error, body, unlocked}) => {

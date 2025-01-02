@@ -6,11 +6,9 @@ import { createSupaClient } from '@/lib/supabase-service'
 export const dynamic = 'force-dynamic'
 
 export async function POST(
-  req: NextRequest,
-  { params }: { params: { id: number }}
+  req: NextRequest
 ) {
-  const { id } = await params
-  const { service_key } = await req.json()
+  const { service_key, id } = await req.json()
   const supabase = await createSupaClient(service_key)
   
   console.log('Changed monster unlock state')
