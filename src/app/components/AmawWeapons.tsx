@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect } from 'react'
-import useHuntStore from '@/store/useHuntStore'
+import useHuntStore, { fetchHunts, subscribeToHunts } from '@/store/useHuntStore'
 import WeaponCard from '@/app/components/AmawWeapons/WeaponCard'
 import { fetchMonsters } from '@/store/useMonstersStore';
 
@@ -13,6 +13,8 @@ function AmawWeapons({
   const storeHunts = useHuntStore((state) => state.hunts)
 
   useEffect(() => {
+    fetchHunts()
+    subscribeToHunts()
     fetchMonsters()
   }, [])
 
