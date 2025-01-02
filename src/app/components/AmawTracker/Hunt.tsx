@@ -1,5 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
+import { monsterNameParser } from '@/utils/utils'
 
 function Hunt({
   monster,
@@ -16,17 +17,17 @@ function Hunt({
     >
       <div className="group/hunt-images relative">
         <Image
-          src={`/mhw-monsters/MHW_${monster.name.replace(' ', '_')}_Icon.webp.png`}
+          src={`/mhw-monsters/${monsterNameParser(monster.name)}.png`}
           width={120}
           height={120}
-          alt={`Image of ${monster.name}`}
+          alt={`Icon of ${monster.name}`}
           className="group/monster-image"
         />
         <Image
           src={`/mhw-weapons/${weapon.acronym}.svg`}
           width={100}
           height={100}
-          alt={`Image of ${monster.name}`}
+          alt={`Icon of ${weapon.name}`}
           className="group/weapon-image absolute -top-8 -right-12 bg-neutral-950 rounded-full p-4 scale-90"
         />
       </div>
