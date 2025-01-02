@@ -5,7 +5,7 @@ import Box from '@mui/material/Box'
 // import Typography from '@mui/material/Typography'
 import useSettingsStore from '@/store/useSettingsStore'
 import { monsterNameParser } from '@/utils/utils'
-import { Button } from '@mui/material'
+import { IconButton, Button } from '@mui/material'
 import {
   TrashIcon,
   CheckIcon
@@ -144,19 +144,19 @@ function HuntCellModal({
         </div>
         <div className="flex gap-2 mt-2">
           <Button
+            variant="contained"
             onClick={() => handleSave()}
             startIcon={<CheckIcon className="size-6 text-neutral-50" />}
+            fullWidth
           >
             Save
           </Button>
-          <Button
+          <IconButton
             onClick={() => handleDelete()}
-            variant="outlined"
             color="error"
-            startIcon={<TrashIcon className="size-6 text-neutral-50" />}
           >
-            Delete
-          </Button>
+            <TrashIcon className="size-6 text-red-600" />
+          </IconButton>
         </div>
       </Box>
     </Modal>

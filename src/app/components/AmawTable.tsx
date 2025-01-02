@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import {
   fetchHunts,
   subscribeToHunts
@@ -20,7 +20,21 @@ function AmawTable({
   weapons: Weapon[]
 }) {
   const [openModal, setOpenModal] = useState(false)
+  const [adminMode, setAdminMode] = useState(false)
   const service_key = useSettingsStore((state) => state.supabase_service_key)
+
+  const handleAdminShortcut = useCallback((e: KeyboardEvent) => {
+    if (e.ctrlKey && e.key === "p") {
+      console.log(`Admin mode activated`)
+      e.preventDefault()
+      setAdminMode(true)
+    }
+  }, [])
+
+  useEffect(() => {
+    document.addEventListener('keydown', (e) => handleAdminShortcut(e))
+    return document.removeEventListener('keydown', handleAdminShortcut)
+  }, [handleAdminShortcut])
 
   useEffect(() => {
     fetchHunts()
@@ -33,7 +47,13 @@ function AmawTable({
       className={`group/amaw-table w-full flex flex-col gap-2 bg-neutral-800`}
     >
       <header className="group/amaw-table-header flex w-full pt-2 fixed bg-neutral-800 z-10 pb-2">
-        <IconButton onClick={() => setOpenModal(true)} className="w-[50px] opacity-0 hover:opacity-100">
+        <IconButton
+          onClick={() => setOpenModal(true)}
+          className={`${[
+            "w-[50px]",
+            adminMode ? "pointer-events-auto" : "pointer-events-none opacity-0"
+          ].join(' ')}`}
+        >
           <Cog6ToothIcon className="size-6 text-neutral-50" />
         </IconButton>
         <div className="flex w-full">
