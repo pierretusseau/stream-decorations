@@ -28,8 +28,8 @@ function MonsterCard({
         size={75}
       />
       <div
-        className="bg-green-900 opacity-75 w-full absolute bottom-0 left-0 z-0"
-        style={{ height: `${(100 / 14) * hunts.length}%` }}
+        className="bg-green-900 opacity-75 w-full absolute bottom-0 left-0 z-0 transition h-full origin-bottom"
+        style={{ transform: `scaleY(${(100 / 14) * hunts.length}%)` }}
       ></div>
       {hunts.length < 14
         ? <p className={`${[
