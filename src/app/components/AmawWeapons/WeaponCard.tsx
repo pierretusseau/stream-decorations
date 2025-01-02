@@ -26,7 +26,7 @@ function WeaponCard({
       <div className="flex justify-center">
         <WeaponImage
           weapon={weapon}
-          size={60}
+          size={100}
           className="drop-shadow-[0_0_3px_rgba(0,0,0,1)]"
         />
         <ProgressionBackground

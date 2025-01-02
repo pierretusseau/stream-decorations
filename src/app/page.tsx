@@ -30,7 +30,7 @@ export default function Home() {
         <HomeLink
           href="/amaw-weapons"
           title="AMAW Weapons"
-          subtitle="220x824"
+          subtitle="220x1104"
         />
       </main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center mt-auto">
