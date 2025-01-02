@@ -2,6 +2,8 @@ import React from 'react'
 import supabase from '@//lib/supabase-browser'
 import AmawMonsters from '@/app/components/AmawMonsters'
 
+export const dynamic = 'force-dynamic'
+
 const getMonsters = async () => {
   const { data, error } = await supabase
     .from('monsters')
@@ -12,7 +14,6 @@ const getMonsters = async () => {
 
   return data
 }
-
 export default async function AmawTablePage() {
   const monsters = await getMonsters()
 
