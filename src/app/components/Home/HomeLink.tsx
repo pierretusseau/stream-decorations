@@ -11,7 +11,7 @@ function HomeLink({
   subtitle?: string
 }) {
   const linkStyles = [
-    "h-[100px] w-[100px] bg-neutral-900 rounded-lg hover:bg-neutral-800",
+    "h-[100px] w-[150px] bg-neutral-900 rounded-lg hover:bg-neutral-800",
     "flex flex-col gap-1 items-center text-center",
     "p-4",
     "transition"
@@ -20,7 +20,7 @@ function HomeLink({
   return (
     <Link href={href} className={linkStyles}>
       <p className="font-bold">{title}</p>
-      <p className="text-xs text-neutral-600">{subtitle}</p>
+      <p className="text-xs text-neutral-600 mt-auto">{subtitle}</p>
     </Link>
   )
 }

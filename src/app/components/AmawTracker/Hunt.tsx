@@ -28,7 +28,7 @@ function Hunt({
           width={100}
           height={100}
           alt={`Icon of ${weapon.name}`}
-          className="group/weapon-image absolute -top-8 -right-12 bg-neutral-950 rounded-full p-4 scale-90"
+          className="group/weapon-image absolute bottom-10 -right-12 bg-neutral-950 rounded-full p-4 scale-90"
         />
       </div>
       <p className="font-bold text-xl">{hunt.time}</p>

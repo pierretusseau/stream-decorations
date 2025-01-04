@@ -4,10 +4,12 @@ import { monsterNameParser } from '@/utils/utils'
 
 function MonsterImage({
   monster,
-  size = 50
+  size = 50,
+  className = ''
 }: {
   monster: Monster
   size?: number
+  className?: string
 }) {
   return (
     <Image
@@ -15,7 +17,7 @@ function MonsterImage({
       width={size}
       height={size}
       alt={`Icon of ${monster.name}`}
-      className="relative z-10"
+      className={`relative z-10 ${className}`}
       title={`${monster.name} - ${monster.quest}`}
     />
   )
