@@ -10,34 +10,34 @@ function Announces({
 }: {
   announces: Announce[]
 }) {
-  const [activeAnnounce, setActiveAnnounce] = useState<number>(0)
+  const [activeAnnounce, setActiveAnnounce] = useState<number>(2)
 
   const nextAnnounce = useCallback(() => {
-    console.log('Active announce', activeAnnounce)
-    console.log(announces.length, activeAnnounce + 1, announces.length < activeAnnounce + 1)
     if (announces.length > activeAnnounce + 1) {
       setActiveAnnounce(activeAnnounce + 1)
     } else {
-      setActiveAnnounce(0)
+      setActiveAnnounce(-2) // Twice amount of wait between two full loops
     }
   }, [announces.length, activeAnnounce])
   
   useEffect(() => {
-    const intervalID = setInterval(nextAnnounce, announceTimer);
-    return () => clearInterval(intervalID);
+    const intervalID = setInterval(nextAnnounce, announceTimer)
+    return () => clearInterval(intervalID)
   }, [nextAnnounce])
 
   const currentAnnounce = announces.find((_,i) => i === activeAnnounce)
-  if (!currentAnnounce) return null
 
   return (
     <div
       className="w-[400px] h-[100px]"
     >
-      <Announce
-        announce={currentAnnounce}
-        timer={announceTimer}
-      />
+      {activeAnnounce < 0 || !currentAnnounce
+        ? <div></div>
+        : <Announce
+          announce={currentAnnounce}
+          timer={announceTimer}
+        />
+      }
     </div>
   )
 }
