@@ -1,5 +1,5 @@
 import React from 'react'
-import supabase from '@//lib/supabase-browser'
+import supabase from '@/lib/supabase-browser-amaw'
 import AmawLastHunt from '@/app/components/AmawLastHunt'
 
 export const dynamic = 'force-dynamic'

@@ -1,5 +1,5 @@
 import React from 'react'
-import supabase from '@//lib/supabase-browser'
+import supabase from '@/lib/supabase-browser-amaw'
 import AmawTracker from '@/app/components/AmawTracker'
 
 // Bundle WEBP => PNG

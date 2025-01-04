@@ -47,7 +47,7 @@ function HuntCellModal({
   }, [hunt, monster])
   
   const handleSave = useCallback(async () => {
-    await fetch(`${window.location.origin}/api/save-hunt`, {
+    await fetch(`${window.location.origin}/api/amaw/save-hunt`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -73,7 +73,7 @@ function HuntCellModal({
   }, [huntTime, monster, weapon, service_key, hunt, huntYoutube])
   
   const handleDelete = useCallback(async () => {
-    await fetch(`${window.location.origin}/api/delete-hunt`, {
+    await fetch(`${window.location.origin}/api/amaw/delete-hunt`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

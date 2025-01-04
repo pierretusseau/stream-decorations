@@ -7,11 +7,13 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "gentype": "supabase gen types typescript --project-id cmfggbydlvrxdprcmjkn --schema public > src/lib/database.type.ts"
+    "gentypeD": "supabase gen types typescript --project-id eyyyvyrblrpabbtccyko --schema public > src/lib/database-decorations.type.ts",
+    "gentypeA": "supabase gen types typescript --project-id cmfggbydlvrxdprcmjkn --schema public > src/lib/database-amaw.type.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@gsap/react": "^2.1.1",
     "@heroicons/react": "^2.2.0",
     "@mui/material": "^6.3.0",
     "@supabase/supabase-js": "^2.47.10",

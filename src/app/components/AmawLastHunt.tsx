@@ -13,15 +13,19 @@ function AmawLastHunt({
   monsters: Monster[]
   weapons: Weapon[]
 }) {
-  const huntsStore = useHuntStore((state) => state.hunts)
-  const lastHunt = huntsStore.slice(-1)[0]
-  const lastHuntMonster = monsters.find(monster => monster.id === lastHunt.monster)
-  const lastHuntWeapon = weapons.find(weapon => weapon.id === lastHunt.weapon)
-
+  console.log('lol ?')
   useEffect(() => {
     fetchHunts()
     subscribeToHunts()
   }, [])
+
+  const huntsStore = useHuntStore((state) => state.hunts)
+  const lastHunt = huntsStore.slice(-1)[0] || null
+
+  if (!lastHunt) return  null
+
+  const lastHuntMonster = monsters.find(monster => monster.id === lastHunt.monster)
+  const lastHuntWeapon = weapons.find(weapon => weapon.id === lastHunt.weapon)
 
   console.log(lastHunt)
 

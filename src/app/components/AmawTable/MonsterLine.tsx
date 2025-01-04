@@ -20,7 +20,7 @@ function MonsterLine({
   const handleMonsterLockState = useCallback(async (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (service_key.length === 0) return
     e.preventDefault()
-    await fetch(`${window.location.origin}/api/unlock-monster`, {
+    await fetch(`${window.location.origin}/api/amaw/unlock-monster`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

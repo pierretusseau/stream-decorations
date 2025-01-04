@@ -1,6 +1,6 @@
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
-import supabase from '@//lib/supabase-browser'
+import supabase from '@/lib/supabase-browser-amaw'
 
 // Store creation
 /*----------------------------------------------------*/
