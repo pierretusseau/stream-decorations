@@ -1,12 +1,10 @@
 'use client'
 
-import React, { useState } from 'react'
-import { Button } from '@mui/material'
-import useTwitchStore, {
-  setTwitchBearerToken,
-  setTwitchClientId,
-  setTwitchClientSecret
-} from '@/store/useTwitchStore'
+import React from 'react'
+import Header from '@/app/components/Header'
+import TwitchDebug from '@/app/components/Twitch/TwitchDebug'
+import OldTwitchMethod from '@/app/components/Twitch/OldTwitchMethod'
+import { ThemeProvider, createTheme } from '@mui/material/styles'
 
 declare global {
   type TwitchUser = {
@@ -22,95 +20,13 @@ declare global {
     view_count: number
   }
 }
-
-const base_url = 'https://api.twitch.tv/helix'
-const url = 'https://id.twitch.tv/oauth2/token'
-const username = 'k0baru'
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+});
 
 function TwitchHandler() {
-  const bearerToken = useTwitchStore((state) => state.bearer_token)
-  const clientId = useTwitchStore((state) => state.client_id)
-  const clientSecret = useTwitchStore((state) => state.client_secret)
-  const [user, setUser] = useState<TwitchUser|null>(null)
-
-  const params = new URLSearchParams()
-  params.append('client_id', clientId)
-  params.append('client_secret', clientSecret)
-  params.append('grant_type', 'client_credentials')
-  params.append('scope', 'moderator:read:followers')
-
-  const handleOAuth = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.preventDefault()
-    fetch(`${window.location.origin}/api/twitch/get-access-token`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        client_id: clientId,
-        client_secret: bearerToken,
-      })
-    }).then(res => res.json())
-      .then((res) => {
-        console.log(res)
-      })
-      .catch(err => {
-        console.error(err)
-      })
-  }
-
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.preventDefault()
-    fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: params
-    }).then(res => res.json())
-      .then((res) => {
-        setTwitchBearerToken(res)
-      })
-      .catch(err => {
-        console.error(err)
-      })
-  }
-
-  const getUser = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.preventDefault()
-    if (!bearerToken) throw Error('No bearer token')
-    fetch(`https://api.twitch.tv/helix/users?login=${username}`, {
-      method: "GET",
-      headers: {
-        "Authorization": `Bearer ${bearerToken.access_token}`,
-        "Client-Id": clientId
-      }
-    }).then(res => res.json())
-      .then(({data}) => {
-        setUser(data.find((user: TwitchUser) => user.login === username))
-      })
-      .catch(err => {
-        console.error(err)
-      })
-  }
-
-
-  const getFollowers = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.preventDefault()
-    if (!bearerToken) throw Error('No bearer token')
-    if (!user) throw Error('No user')
-    console.log('Fetching: ', `${base_url}/channels/followers?broadcaster_id=${user.id}`)
-    fetch(`${base_url}/channels/followers?broadcaster_id=${user.id}`, {
-      method: "GET",
-      headers: {
-        "Authorization": `Bearer ${bearerToken.access_token}`,
-        "Client-Id": clientId
-      }
-    }).then(res => res.json())
-      .then(({data}) => {
-        console.log(data)
-      })
-      .catch(err => {
-        console.error(err)
-      })
-  }
-
   // const subscribeTwitchHandler = useCallback(async () => {
   //   await fetch(`${window.location.origin}/api/twitch/event-handler`, {
   //     method: "GET",
@@ -134,51 +50,16 @@ function TwitchHandler() {
   // }, [subscribeTwitchHandler])
 
   return (
-    <div className="bg-neutral-950 min-h-screen flex flex-col gap-4">
-      <div className="flex flex-col gap-2">
-        <input type="text" value={clientId} onChange={(e) => setTwitchClientId(e.target.value)} placeholder="client_id"/>
-        <input type="password" value={clientSecret} onChange={(e) => setTwitchClientSecret(e.target.value)} placeholder="client_secret"/>
-      </div>
-
-      <div className="flex gap-2 items-start">
-        <Button
-          onClick={(e) => handleOAuth(e)}
-          className="min-w-[200px]"
-        >Connect twitch oAuth</Button>
-      </div>
-      <div className="flex gap-2 items-start">
-        <Button
-          onClick={(e) => handleClick(e)}
-          className="min-w-[200px]"
-        >Connect twitch</Button>
-        <div>
-          {bearerToken && Object.entries(bearerToken)
-            .map(([key, value]) => {
-              return <div key={key}>{key} : {value}</div>
-            })
-          }
-        </div>
-      </div>
-      <div className="flex gap-2 items-start">
-        <Button
-          onClick={(e) => getUser(e)}
-          className="min-w-[200px]"
-        >Get User</Button>
-        <div>
-          {user && Object.entries(user)
-            .map(([key, value]) => {
-              return <div key={key}>{key} : {value}</div>
-            })
-          }
-        </div>
-      </div>
-      {user && <div>
-        <Button
-          onClick={(e) => getFollowers(e)}
-          className="min-w-[200px]"
-        >Get Followers</Button>
-      </div>}
+    <ThemeProvider theme={darkTheme}>
+    <div className="bg-neutral-950 text-neutral-50 h-screen flex flex-col gap-10">
+      <Header />
+      <main className="bg-neutral-900 max-w-screen-2xl mx-auto flex flex-col gap-4">
+        <TwitchDebug />
+        <hr/>
+        <OldTwitchMethod />
+      </main>
     </div>
+    </ThemeProvider>
   )
 }
 

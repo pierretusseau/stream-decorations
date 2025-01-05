@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Teko } from "next/font/google";
 import "./globals.css";
 import { getServerSession } from "next-auth";
+import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import Provider from "@/lib/SessionProvider";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,7 +30,9 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions) as TwitchSession;
+  console.log(session)
+
   return (
     <html lang="en">
       <body

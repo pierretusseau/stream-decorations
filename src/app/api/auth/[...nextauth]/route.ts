@@ -1,77 +1,53 @@
-import NextAuth, { AuthOptions } from "next-auth";
+import NextAuth, {
+  // AuthOptions
+} from "next-auth";
+import TwitchProvider from "next-auth/providers/twitch";
+// import GithubProvider from "next-auth/providers/github"
+// import GoogleProvider from "next-auth/providers/google"
 
-export type TwitchProfile = {
-  sub: string
-  preferred_username: string
-  email: string
-  picture: string
-}
+// SRC => https://medium.com/@gabrielenapoli.dev/how-to-authenticate-with-twitch-and-next-js-bec0d35f0b46
+// SRC => https://www.youtube.com/watch?app=desktop&v=W3HulvsuqGI&t=1180s
 
-export default function TwitchProvider(
-  options: unknown
-): unknown {
-  return {
-    wellKnown: "https://id.twitch.tv/oauth2/.well-known/openid-configuration",
-    id: "twitch",
-    name: "Twitch",
-    type: "oauth",
-    authorization: {
-      params: {
-        scope: "openid user:read:email user:read:follows",
-        claims: {
-          id_token: {
-            email: null,
-            picture: null,
-            preferred_username: null,
-          },
-        },
-      },
-    },
-    idToken: true,
-    profile(profile: TwitchProfile) {
-      return {
-        id: profile.sub,
-        name: profile.preferred_username,
-        email: profile.email,
-        image: profile.picture,
-      }
-    },
-    style: {
-      logo: "/twitch.svg",
-      logoDark: "/twitch-dark.svg",
-      bg: "#fff",
-      text: "#65459B",
-      bgDark: "#65459B",
-      textDark: "#fff",
-    },
-    options,
-  }
-}
-
-export const authOptions: AuthOptions = {
-  secret: "MXsqeQSZqvht5RE6U7Sg/EqtgKKctiyNm5qA0GoS/HM=",
+export const authOptions = {
+  secret: process.env.AUTH_SECRET,
+  // Configure one or more authentication providers
   providers: [
+    // GithubProvider({
+    //   clientId: process.env.GITHUB_ID!,
+    //   clientSecret: process.env.GITHUB_SECRET!,
+    // }),
+    // GoogleProvider({
+    //   clientId: process.env.GOOGLE_ID!,
+    //   clientSecret: process.env.GOOGLE_SECRET!,
+    // }),
     TwitchProvider({
-      clientId: process.env.TWITCH_CLIENT_ID,
-      clientSecret: process.env.TWITCH_CLIENT_SECRET,
+      clientId: process.env.AUTH_TWITCH_ID!,
+      clientSecret: process.env.AUTH_TWITCH_SECRET!,
+      authorization: {
+        params: {
+          scope: 'openid user:read:email moderator:read:followers'
+        }
+      }
     }),
   ],
   callbacks: {
-    // async session ({ session, token, user }) {
-    //   return {...session, token }
-    // },
-    // async jwt ({ token, user, account, profile }) {
-    //   return {...token, ...account}
-    // }
-    async session ({ session, token }) {
-      return {...session, token }
+    // @ts-expect-error : Don't know the types for this
+    async jwt({ token, account }) {
+      // Persist the OAuth access_token to the token right after signin
+      if (account) {
+        token.accessToken = account.access_token
+      }
+      return token
     },
-    async jwt ({ token, account }) {
-      return {...token, ...account}
+    // @ts-expect-error : Don't know the types for this
+    async session({ session, token }) {
+      // Send properties to the client, like an access_token from a provider.
+      session.accessToken = token.accessToken
+      return session
     }
   }
-};
+}
 
-const handler =  NextAuth(authOptions)
-
+const handler = NextAuth(authOptions)
+// export default handler
 export { handler as GET, handler as POST }
