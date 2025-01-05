@@ -10,7 +10,7 @@ function Announces({
 }: {
   announces: Announce[]
 }) {
-  const [activeAnnounce, setActiveAnnounce] = useState<number>(2)
+  const [activeAnnounce, setActiveAnnounce] = useState<number>(0)
 
   const nextAnnounce = useCallback(() => {
     if (announces.length > activeAnnounce + 1) {
