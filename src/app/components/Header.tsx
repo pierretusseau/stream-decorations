@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import TwitchLogin from "@/app/components/TwitchLogin";
 import { Button } from '@mui/material'
-import { useSession } from 'next-auth/react';
+// import { useSession } from 'next-auth/react';
 import { Cog6ToothIcon } from '@heroicons/react/24/solid';
 import TwitchAuthStateModal from '@/app/components/Twitch/TwitchAuthStateModal';
 import useTwitchStore from '@/store/useTwitchStore';
@@ -14,7 +14,7 @@ const darkTheme = createTheme({
 });
 
 function Header() {
-  const { data: session } = useSession()
+  // const { data: session } = useSession()
   const [openModal, setOpenModal] = useState(false)
   const twitchAuthState = useTwitchStore((state) => state.twitch_auth_state)
 
@@ -27,10 +27,10 @@ function Header() {
           >Home</Button>
         </div>
         <div className="flex items-center gap-4">
-          {session && <Button
+          {/* {session && <Button
             href="/twitch-handler"
             className="flex gap-2 items-center"
-          ><Cog6ToothIcon className="size-4"/> Twitch</Button>}
+          ><Cog6ToothIcon className="size-4"/> Twitch</Button>} */}
           {twitchAuthState && <Button
             onClick={() => setOpenModal(true)}
           ><Cog6ToothIcon className="size-4"/></Button>}
