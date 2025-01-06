@@ -5,6 +5,7 @@ declare global {
   // Decorations
   type DatabaseDecorations = DBDecorations
   type Announce = TablesDecorations<'announces'>
+  type Token = TablesDecorations<'twitch_tokens'>
   // AMAW
   type DatabaseAmaw = DBAmaw
   type Monster = TablesAmaw<'monsters'>

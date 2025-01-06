@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Teko } from "next/font/google";
 import "./globals.css";
-import { getServerSession } from "next-auth";
-import { authOptions } from '@/app/api/auth/[...nextauth]/route'
+// import { getServerSession } from "next-auth";
+// import { authOptions } from '@/app/api/auth/nextauth/route'
 import Provider from "@/lib/SessionProvider";
 
 const geistSans = Geist({
@@ -30,15 +30,15 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await getServerSession(authOptions) as TwitchSession;
-  console.log(session)
+  // const session = await getServerSession(authOptions) as TwitchSession;
 
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${teko.variable} antialiased`}
       >
-        <Provider session={session}>{children}</Provider>
+        {/* <Provider session={session}>{children}</Provider> */}
+        {children}
       </body>
     </html>
   );

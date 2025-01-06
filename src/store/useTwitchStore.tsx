@@ -4,8 +4,6 @@ import {
   // createJSONStorage
 } from 'zustand/middleware'
 // import supabase from '@//lib/supabase-browser'
-// @ts-expect-error : Not a TS lib 😡
-// import TES from 'tesjs'
 
 // Types
 /*----------------------------------------------------*/
@@ -34,7 +32,8 @@ const useTwitchStore = create(
       bearer_token: null as TwitchBearerToken,
       followers: [] as Follower[],
       totalFollowers: 0,
-      lastFollower: null as Follower | null
+      lastFollower: null as Follower | null,
+      twitch_auth_state: ''
     }),
     {
       name: 'twitch-api', // name of the item in the storage (must be unique)
@@ -56,6 +55,9 @@ export const setTwitchClientSecret = (client_secret: string) => {
 export const setTwitchBearerToken = (bearer_token: TwitchBearerToken) => {
   useTwitchStore.setState(() => ({ bearer_token: bearer_token }))
 }
+export const setTwitchAuthState = (state: string) => {
+  useTwitchStore.setState(() => ({ twitch_auth_state: state }))
+}
 
 // Followers
 /*----------------------------------------------------*/
@@ -65,36 +67,21 @@ export const fetchFollowers = async (session: TwitchSession) => {
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${session.accessToken}`,
-      'Client-Id': '0xkv8lvr9f0ojilv88ot991h589hxl'
+      'Client-Id': process.env.NEXT_PUBLIC_AUTH_TWITCH_ID!
     }
   }).then(res => res.json())
-    .then(({ data: followers }) => {
+    .then((res) => {
+      // console.log(res)
+      const { data: followers } = res
+      console.log(followers)
       setFollowers(followers)
       setTotalFollowers(followers)
       setLastFollowers(followers)
     })
-}
-
-export const subscribeToFollowers = (
-  clientId: string,
-  clientSecret: string
-) => {
-  console.log('Subscribing to followers...')
-  const tes = new TES({
-    identity: {
-      identity: clientId,
-      secret: clientSecret
-    },
-    listener: {
-      type: "webhook",
-      baseURL: "https://localhost:3000", // TODO : Make dynamic
-      // secret: webhookSecret
-    }
-  })
-
-  tes.on("channel.update", (event: { broadcaster_user_name: string; title: string }) => {
-    console.log(`${event.broadcaster_user_name}'s new title is ${event.title}`);
-});
+    .catch(err => {
+      console.error('Error while fetching follower')
+      console.log(err)
+    })
 }
 
 export const setFollowers = (followers: Follower[]) => {

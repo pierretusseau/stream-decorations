@@ -13,6 +13,7 @@ const useSettingsStore = create(
     // (set, get) => ({
     () => ({
       supabase_service_key: '',
+      supabase_decorations_service_key: '',
     }),
     {
       name: 'amaw-settings', // name of the item in the storage (must be unique)
@@ -27,4 +28,7 @@ export default useSettingsStore
 /*----------------------------------------------------*/
 export const editSupabaseServiceKey = (key: string) => {
   useSettingsStore.setState(() => ({ supabase_service_key: key }))
+}
+export const editSupabaseDecorationsServiceKey = (key: string) => {
+  useSettingsStore.setState(() => ({ supabase_decorations_service_key: key }))
 }

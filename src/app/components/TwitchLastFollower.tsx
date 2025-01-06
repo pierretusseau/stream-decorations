@@ -1,6 +1,9 @@
 'use client'
 
-import useTwitchStore, { fetchFollowers, subscribeToFollowers } from '@/store/useTwitchStore'
+import useTwitchStore, {
+  fetchFollowers,
+  // subscribeToFollowers
+} from '@/store/useTwitchStore'
 import { useSession } from 'next-auth/react'
 import React, { useEffect } from 'react'
 
@@ -12,9 +15,30 @@ function TwitchLastFollower() {
 
   useEffect(() => {
     if (!session) return
-    fetchFollowers(session as TwitchSession)
+    const twitchSession = session as TwitchSession
+    fetchFollowers(twitchSession)
     // subscribeToFollowers(clientId, clientSecret)
+    // fetch(`/api/twitch/get-bearer-token`, {
+    //   method: "POST",
+    //   body: JSON.stringify({
+    //     code: twitchSession.accessToken
+    //   })
+    // })
   }, [session, clientId, clientSecret])
+
+  useEffect(() => {
+    // fetch(`/api/twitch/websocket`, {
+    //   method: 'GET',
+    // }).then(res => res.json())
+    //   .then(({ code, body }) => {
+    //     console.log(code)
+    //     console.log(body)
+    //   })
+    //   .catch(err => {
+    //     console.error(err)
+    //   })
+  }, [])
+  
   
   return (
     <div className="flex flex-col gap-2">
