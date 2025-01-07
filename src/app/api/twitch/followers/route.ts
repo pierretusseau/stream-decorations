@@ -81,7 +81,7 @@ export async function GET(
 
   return NextResponse.json({
     code: 200,
-    followers: followers,
+    followers: followers as Follower[],
     body: { message: 'Fetched twitch followers with success' }
   })
 }

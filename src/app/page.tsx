@@ -2,6 +2,7 @@
 
 import HomeLink from "@/app/components/Home/HomeLink";
 import Header from "@/app/components/Header";
+import HomeDynamicModules from "@/app/components/Home/HomeDynamicModules";
 
 export default function Home() {
   const date = new Date()
@@ -10,6 +11,12 @@ export default function Home() {
     <div className="bg-neutral-950 text-neutral-50 h-screen flex flex-col gap-10">
       <Header />
       <main className="flex flex-col gap-12 p-4">
+        <section>
+          <h2>Dynamic Modules</h2>
+          <div className="flex flex-wrap gap-8">
+            <HomeDynamicModules />
+          </div>
+        </section>
         <section>
           <h2>Decorations</h2>
           <div className="flex flex-wrap gap-8">

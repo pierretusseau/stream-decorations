@@ -9,7 +9,12 @@ export default async function TwitchFollowersPage({
   params: Promise<{ code: string }>
 }) {
   const { code } = await params
-  return <TwitchFollowers
-    code={code}
-  />
+
+  if (!code) {
+    return <div>Provide a code</div>
+  } else {
+    return <TwitchFollowers
+      code={code}
+    />
+  }
 }

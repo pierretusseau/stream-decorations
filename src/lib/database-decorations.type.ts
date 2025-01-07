@@ -39,6 +39,27 @@ export type Database = {
         }
         Relationships: []
       }
+      modules: {
+        Row: {
+          code: string
+          created_at: string
+          id: number
+          type: string | null
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          id?: number
+          type?: string | null
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          id?: number
+          type?: string | null
+        }
+        Relationships: []
+      }
       twitch_tokens: {
         Row: {
           access_token: string

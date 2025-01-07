@@ -6,6 +6,7 @@ import {
   NextRequest,
   NextResponse
 } from 'next/server'
+import { redirect } from 'next/navigation'
 
 export async function GET(
   req: NextRequest,
@@ -57,6 +58,7 @@ export async function GET(
       console.log(err)
     })
 
+  redirect('/')
   return NextResponse.json({
     code: 200,
     body: { message: `Ok`}

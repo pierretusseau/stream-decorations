@@ -14,7 +14,8 @@ const Login = ({
 
   const requiredScopes = [
     "channel:read:subscriptions",
-    "moderator:read:followers"
+    "moderator:read:followers",
+    "user:manage:whispers"
   ]
 
   const baseURI = 'https://id.twitch.tv/oauth2/authorize'
@@ -37,7 +38,6 @@ const Login = ({
   return (
     <Button
       className="flex items-center gap-5a"
-      // onClick={() => signIn()}
       onClick={(e) => handleSignIn(e)}
       href={`${baseURI}?${params}`}
       startIcon={<BsTwitch className="h-4 w-4" />}
