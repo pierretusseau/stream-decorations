@@ -61,12 +61,12 @@ export const setTwitchAuthState = (state: string) => {
 
 // Followers
 /*----------------------------------------------------*/
-export const fetchFollowers = async (session: TwitchSession) => {
+export const fetchFollowers = async (accessToken: string) => {
   console.log('Fetching followers...')
   fetch('https://api.twitch.tv/helix/channels/followers?broadcaster_id=52532305', {
     method: 'GET',
     headers: {
-      'Authorization': `Bearer ${session.accessToken}`,
+      'Authorization': `Bearer ${accessToken}`,
       'Client-Id': process.env.NEXT_PUBLIC_AUTH_TWITCH_ID!
     }
   }).then(res => res.json())
