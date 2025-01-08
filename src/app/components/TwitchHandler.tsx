@@ -2,7 +2,7 @@
 
 import React from 'react'
 import Header from '@/app/components/Header'
-import TwitchDebug from '@/app/components/Twitch/TwitchDebug'
+// import TwitchDebug from '@/app/components/Twitch/TwitchDebug'
 import OldTwitchMethod from '@/app/components/Twitch/OldTwitchMethod'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 
@@ -54,7 +54,7 @@ function TwitchHandler() {
     <div className="bg-neutral-950 text-neutral-50 h-screen flex flex-col gap-10">
       <Header />
       <main className="bg-neutral-900 max-w-screen-2xl mx-auto flex flex-col gap-4">
-        <TwitchDebug />
+        {/* <TwitchDebug /> */}
         <hr/>
         <OldTwitchMethod />
       </main>
