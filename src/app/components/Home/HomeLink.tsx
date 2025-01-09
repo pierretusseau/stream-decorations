@@ -5,13 +5,18 @@ function HomeLink({
   href,
   title,
   subtitle,
+  large = false
 }: {
   href: string
   title: string
   subtitle?: string
+  large?: boolean
 }) {
   const linkStyles = [
-    "h-[100px] w-[150px] bg-neutral-900 rounded-lg hover:bg-neutral-800",
+    large
+      ? "w-[300px]"
+      : "w-[150px]",
+    "h-[100px] bg-neutral-900 rounded-lg hover:bg-neutral-800",
     "flex flex-col gap-1 items-center text-center",
     "p-4",
     "transition"

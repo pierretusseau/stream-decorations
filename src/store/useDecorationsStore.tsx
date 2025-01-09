@@ -8,27 +8,23 @@ import {
 // Store creation
 /*----------------------------------------------------*/
 
-const useSettingsStore = create(
+const useDecorationsStore = create(
   persist(
     // (set, get) => ({
     () => ({
-      supabase_service_key: '',
-      supabase_decorations_service_key: '',
+      decorations: [] as Decoration[]
     }),
     {
-      name: 'amaw-settings', // name of the item in the storage (must be unique)
+      name: 'decorations', // name of the item in the storage (must be unique)
       // storage: createJSONStorage(() => sessionStorage), // (optional) by default, 'localStorage' is used
     },
   ),
 )
 
-export default useSettingsStore
+export default useDecorationsStore
 
 // Store manipulation methods
 /*----------------------------------------------------*/
-export const editSupabaseServiceKey = (key: string) => {
-  useSettingsStore.setState(() => ({ supabase_service_key: key }))
-}
-export const editSupabaseDecorationsServiceKey = (key: string) => {
-  useSettingsStore.setState(() => ({ supabase_decorations_service_key: key }))
+export const setDecorations = async (decorations: Decoration[]) => {
+  useDecorationsStore.setState(() => ({ decorations: decorations }))
 }

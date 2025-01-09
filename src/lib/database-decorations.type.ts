@@ -39,6 +39,57 @@ export type Database = {
         }
         Relationships: []
       }
+      modules: {
+        Row: {
+          code: string
+          created_at: string
+          id: number
+          type: string | null
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          id?: number
+          type?: string | null
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          id?: number
+          type?: string | null
+        }
+        Relationships: []
+      }
+      twitch_tokens: {
+        Row: {
+          access_token: string
+          created_at: string
+          expires_in: number | null
+          id: number
+          refresh_token: string
+          scope: Json[] | null
+          token_type: string | null
+        }
+        Insert: {
+          access_token: string
+          created_at?: string
+          expires_in?: number | null
+          id?: number
+          refresh_token: string
+          scope?: Json[] | null
+          token_type?: string | null
+        }
+        Update: {
+          access_token?: string
+          created_at?: string
+          expires_in?: number | null
+          id?: number
+          refresh_token?: string
+          scope?: Json[] | null
+          token_type?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

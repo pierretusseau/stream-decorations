@@ -13,7 +13,6 @@ function AmawLastHunt({
   monsters: Monster[]
   weapons: Weapon[]
 }) {
-  console.log('lol ?')
   useEffect(() => {
     fetchHunts()
     subscribeToHunts()
@@ -26,8 +25,6 @@ function AmawLastHunt({
 
   const lastHuntMonster = monsters.find(monster => monster.id === lastHunt.monster)
   const lastHuntWeapon = weapons.find(weapon => weapon.id === lastHunt.weapon)
-
-  console.log(lastHunt)
 
   if (!lastHuntMonster || !lastHuntWeapon) return null
 
