@@ -6,124 +6,118 @@ import {
 } from 'next/server'
 import WebSocket from 'ws';
 import { createSupaClient } from '@/lib/supabase-service-decorations'
+import welcomeSession from '@/websockets/welcome';
 
-export async function GET(
+import {
+  ChannelFollowSubscription,
+  // ChannelUpdateSubscription,
+  // UserWhisperMessageSubscription
+} from '@/websockets/subscriptions'
+
+export const dynamic = 'force-dynamic'
+
+declare global {
+  type Payload = {
+    session: {
+      id: string
+      status: string
+      connected_at: string
+      keepalive_timeout_seconds: number
+      reconnect_url: null
+    }
+  }
+  type SubscriptionHandler = (access_token: string, session: Payload['session']) => void | Promise<void>
+  type TwitchSubscriptionBodyData = {
+    id: string
+    status: string
+    type: string
+    version: string
+    condition: unknown
+    created_at: string
+    transport: {
+      method: string
+      callback?: string // Only if webhook
+      session_id ?: string // Only if websocket
+    }
+    cost: number
+  }
+  type TwitchSubscriptionBody = {
+    data: TwitchSubscriptionBodyData | TwitchSubscriptionBodyData[]
+    // connected_at?: {
+    //   conduit_id?: string
+    // }
+    total: number
+    total_cost: number
+    max_total_cost: number
+  }
+}
+
+const subscribeEvents: Record<string, SubscriptionHandler> = {
+  // 'user.whisper.message': UserWhisperMessageSubscription,
+  'channel.follow': ChannelFollowSubscription,
+  // 'channel.update': ChannelUpdateSubscription,
+}
+
+export async function POST(
   req: NextRequest,
 ) {
   console.log('Connecting to WebSocket server...')
-  const { searchParams } = new URL(req.url)
-  const code = searchParams.get('code')
+  const { access_token } = await req.json()
 
-  if (code !== process.env.TWITCH_FOLLOWERS_CODE) return NextResponse.json({
-    code: 403,
-    body: { message: 'Unauthorized' }
-  })
-
-  if (!process.env.SUPABASE_DECORATION_SERVICE_KEY) return NextResponse.json({
+  const serviceKey = process.env.SUPABASE_DECORATION_SERVICE_KEY
+  if (!serviceKey) return NextResponse.json({
     code: 500,
     body: { message: 'Missing SUPABASE_DECORATION_SERVICE_KEY env variable' }
   })
 
-  const supabase = await createSupaClient(process.env.SUPABASE_DECORATION_SERVICE_KEY)
-  const { data: tokensData, error: tokensError } = await supabase
+  const supabase = await createSupaClient(serviceKey)
+  const { data: token, error: tokenError } = await supabase
     .from('twitch_tokens')
     .select('access_token')
     .single()
 
-  if (tokensError) {
-    console.log(tokensError)
+  if (tokenError) {
     return NextResponse.json({
       code: 500,
       body: { message: 'Error while getting Supabase token' }
     })
-  } else {
-    console.log(tokensData)
   }
+  if (token.access_token !== access_token) return NextResponse.json({
+    code: 403,
+    body: { message: 'Wrong access token' }
+  })
 
   const twitchWSServerURI = 'wss://eventsub.wss.twitch.tv/ws'
-  const keepalive_timeout_seconds = 600
+  const keepalive_timeout_seconds = 10
+  let keepAlive: number
   const wss = new WebSocket(`${twitchWSServerURI}?keepalive_timeout_seconds=${keepalive_timeout_seconds || 10}`)
   // console.log(wss)
   wss.on('message', (message) => {
     const jsonString = message.toString('utf8')
     const jsonObject = JSON.parse(jsonString)
     const { metadata, payload } = jsonObject
-    console.log(metadata.message_type)
+    console.log('[WSS] NEW Message :', metadata.message_type)
     if (metadata.message_type === 'session_welcome') {
-      const { session } = payload
-  
-      fetch('https://api.twitch.tv/helix/eventsub/subscriptions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${tokensData.access_token}`,
-          'Client-Id': process.env.NEXT_PUBLIC_AUTH_TWITCH_ID!,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          // "type": "user.update",
-          "type": "user.whisper.message",
-          "version": "1",
-          "condition": {
-              "user_id": process.env.NEXT_PUBLIC_BROADCASTER_ID
-          },
-          "transport": {
-              "method": "websocket",
-              "session_id": session.id
-          }
-        })
-      }).then(res => res.json())
-        .then(res => {
-          console.log('Response from Websocket subscription')
-          console.log(res)
-        })
-      fetch('https://api.twitch.tv/helix/eventsub/subscriptions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${tokensData.access_token}`,
-          'Client-Id': process.env.NEXT_PUBLIC_AUTH_TWITCH_ID!,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          "type": "channel.follow",
-          "version": "2",
-          "condition": {
-              "broadcaster_user_id": process.env.NEXT_PUBLIC_BROADCASTER_ID,
-              "moderator_user_id": process.env.NEXT_PUBLIC_BROADCASTER_ID
-          },
-          "transport": {
-              "method": "websocket",
-              "session_id": session.id
-          }
-        })
-      }).then(res => res.json())
-        .then(res => {
-          console.log('Response from Websocket subscription')
-          console.log(res)
-        })
-      fetch('https://api.twitch.tv/helix/eventsub/subscriptions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${tokensData.access_token}`,
-          'Client-Id': process.env.NEXT_PUBLIC_AUTH_TWITCH_ID!,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          "type": "channel.update",
-          "version": "1",
-          "condition": {
-              "broadcaster_user_id": process.env.NEXT_PUBLIC_BROADCASTER_ID
-          },
-          "transport": {
-              "method": "websocket",
-              "session_id": session.id
-          }
-        })
-      }).then(res => res.json())
-        .then(res => {
-          console.log('Response from Websocket subscription')
-          console.log(res)
-        })
+      console.log(jsonObject)
+      // Subscribe to events
+      welcomeSession(payload, access_token, subscribeEvents)
+      wss.emit('connection')
+      // wss.
+    } else if (metadata.message_type === 'session_keepalive') {
+      // Keep alive message
+      if (!keepAlive) {
+        keepAlive = 0
+        console.log(jsonObject)
+      }
+      keepAlive++
+      console.log('session_keepalive', keepAlive)
+    } else if (Object.keys(subscribeEvents).some(key => key === payload.subscription.type)) {
+      // Known event
+      console.log('+ New', payload.subscription.type)
+      console.log(jsonObject)
     } else {
+      // Unknown events
+      console.log('Unknown notification !')
       console.log(jsonObject)
     }
   })

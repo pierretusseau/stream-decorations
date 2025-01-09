@@ -1,6 +1,11 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
+import { NextRequest } from 'next/server';
+import crypto from 'crypto'
 
-export const refreshToken = (
+const TWITCH_MESSAGE_ID = 'Twitch-Eventsub-Message-Id'.toLowerCase();
+const TWITCH_MESSAGE_TIMESTAMP = 'Twitch-Eventsub-Message-Timestamp'.toLowerCase();
+
+export const refreshToken = async (
   tokens: {
     access_token: string
     refresh_token: string
@@ -8,7 +13,7 @@ export const refreshToken = (
   supabase: SupabaseClient
 ) => {
   console.log('Askin for a new token through refresh token...')
-  fetch('https://id.twitch.tv/oauth2/token', {
+  const access_token = await fetch('https://id.twitch.tv/oauth2/token', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded'
@@ -21,8 +26,6 @@ export const refreshToken = (
     })
   }).then(refreshRes => refreshRes.json())
     .then(async (refreshRes) => {
-      console.log('Refresh token response')
-      console.log(refreshRes)
       const { error: refreshTokenError } = await supabase
         .from('twitch_tokens')
         .update({
@@ -37,8 +40,31 @@ export const refreshToken = (
         console.log('Error while update Supabase tokens')
         console.log(refreshTokenError)
         throw new Error('Error while update Supabase tokens')
+      } else {
+        return refreshRes.access_token
       }
     }).catch(err => {
       throw new Error(err)
     })
+  
+  return access_token
+}
+
+export const getHmacMessage = async (request: NextRequest, body: string) => {
+  const values = [
+    request.headers.get(TWITCH_MESSAGE_ID),
+    request.headers.get(TWITCH_MESSAGE_TIMESTAMP),
+    body
+  ]
+  return values.join('');
+}
+
+export const getHmac = (secret: string, message: string) => {
+  return crypto.createHmac('sha256', secret)
+    .update(message)
+    .digest('hex');
+}
+
+export const verifyMessage = (hmac: string, verifySignature: string) => {
+  return crypto.timingSafeEqual(Buffer.from(hmac), Buffer.from(verifySignature));
 }
