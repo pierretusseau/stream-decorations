@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "next lint",
     "gentypeD": "supabase gen types typescript --project-id eyyyvyrblrpabbtccyko --schema public > src/lib/database-decorations.type.ts",
-    "gentypeA": "supabase gen types typescript --project-id cmfggbydlvrxdprcmjkn --schema public > src/lib/database-amaw.type.ts"
+    "gentypeA": "supabase gen types typescript --project-id cmfggbydlvrxdprcmjkn --schema public > src/lib/database-amaw.type.ts",
+    "test-sub": "twitch event trigger subscribe -F https://localhost:3000/api/twitch/webhook"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
