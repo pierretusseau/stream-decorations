@@ -8,9 +8,10 @@ import {
 // Types
 /*----------------------------------------------------*/
 declare global {
-  type TwitchBearerToken = {
+  type TwitchAppToken = {
     access_token: string
     expires_in: number
+    expiration_date?: string
     token_type: "bearer"
   } | null
   type Follower = {
@@ -18,6 +19,28 @@ declare global {
     user_id: string
     user_login: string
     user_name: string
+  }
+  type Subscriptions = {
+    total: number
+    data: Subscription[]
+    max_total_cost: 10000
+    total_cost: 0,
+    pagination?: unknown // TODO : Eventually pass a correct pagination
+  }
+  type Subscription = {
+    id: string,
+    status: string,
+    type: string,
+    version: string,
+    condition: {
+        user_id: string
+    },
+    created_at: string,
+    transport: {
+        method: string,
+        callback: string
+    },
+    cost: 0
   }
 }
 
@@ -29,15 +52,17 @@ const useTwitchStore = create(
     () => ({
       client_id: '',
       client_secret: '',
-      bearer_token: null as TwitchBearerToken,
+      app_token: null as TwitchAppToken,
       followers: [] as Follower[],
       totalFollowers: 0,
       lastFollower: null as Follower | null,
-      twitch_auth_state: ''
+      twitch_auth_state: '',
+      subscriptions: null as Subscriptions | null,
     }),
     {
       name: 'twitch-api', // name of the item in the storage (must be unique)
-      // storage: createJSONStorage(() => sessionStorage), // (optional) by default, 'localStorage' is used
+      // storae: createJSONStorage(() => sessionStorage), // (optional) by default, 'localStorage' is used
+      // version: 2
     },
   ),
 )
@@ -52,11 +77,14 @@ export const setTwitchClientId = (client_id: string) => {
 export const setTwitchClientSecret = (client_secret: string) => {
   useTwitchStore.setState(() => ({ client_secret: client_secret }))
 }
-export const setTwitchBearerToken = (bearer_token: TwitchBearerToken) => {
-  useTwitchStore.setState(() => ({ bearer_token: bearer_token }))
+export const setTwitchAppToken = (app_token: TwitchAppToken) => {
+  useTwitchStore.setState(() => ({ app_token: app_token }))
 }
 export const setTwitchAuthState = (state: string) => {
   useTwitchStore.setState(() => ({ twitch_auth_state: state }))
+}
+export const setSubscriptions = (subscriptions: Subscriptions) => {
+  useTwitchStore.setState(() => ({ subscriptions: subscriptions }))
 }
 
 // Followers

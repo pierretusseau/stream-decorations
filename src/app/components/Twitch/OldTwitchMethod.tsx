@@ -4,11 +4,26 @@ import React, {
   useState
 } from 'react'
 import useTwitchStore, {
-  setTwitchBearerToken,
+  setTwitchAppToken,
   setTwitchClientId,
   setTwitchClientSecret
 } from '@/store/useTwitchStore'
 import { Button, TextField } from '@mui/material'
+
+declare global {
+  type TwitchUser = {
+    broadcaster_type: string
+    created_at: string
+    description: string
+    display_name: string
+    id: string
+    login: string
+    offline_image_url: string
+    profile_image_url: string
+    type: string
+    view_count: number
+  }
+}
 
 const base_url = 'https://api.twitch.tv/helix'
 const url = 'https://id.twitch.tv/oauth2/token'
@@ -17,7 +32,7 @@ const username = 'k0baru'
 function OldTwitchMethod() {
   const clientId = useTwitchStore((state) => state.client_id)
   const clientSecret = useTwitchStore((state) => state.client_secret)
-  const bearerToken = useTwitchStore((state) => state.bearer_token)
+  const bearerToken = useTwitchStore((state) => state.app_token)
   const [user, setUser] = useState<TwitchUser|null>(null)
 
   const params = new URLSearchParams()
@@ -52,7 +67,7 @@ function OldTwitchMethod() {
       body: params
     }).then(res => res.json())
       .then((res) => {
-        setTwitchBearerToken(res)
+        setTwitchAppToken(res)
       })
       .catch(err => {
         console.error(err)

@@ -38,11 +38,13 @@ export async function POST(
       status: 500
     })
   }
+  // console.log(req.headers)
   const signature = req.headers.get(TWITCH_MESSAGE_SIGNATURE)
   if (!signature) {
     console.log("Twitch Signature isn't defined")
     return NextResponse.json({
-      status: 500
+      status: 500,
+      body: { message: 'Missing signature' }
     })
   }
 

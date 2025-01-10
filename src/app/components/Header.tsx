@@ -34,6 +34,11 @@ function Header() {
           {twitchAuthState && <Button
             onClick={() => setOpenModal(true)}
           ><Cog6ToothIcon className="size-4"/></Button>}
+          {twitchAuthState && <Button
+            href="/twitch-handler"
+          >
+            Twitch Dashboard
+          </Button>}
           <TwitchLogin
             setOpenModal={setOpenModal}
           />

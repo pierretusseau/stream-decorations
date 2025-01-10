@@ -8,7 +8,7 @@ export default function Home() {
   const date = new Date()
 
   return (
-    <div className="bg-neutral-950 text-neutral-50 h-screen flex flex-col gap-10">
+    <div className="bg-neutral-950 text-neutral-50 min-h-screen flex flex-col gap-10">
       <Header />
       <main className="flex flex-col gap-12 p-4">
         <section>

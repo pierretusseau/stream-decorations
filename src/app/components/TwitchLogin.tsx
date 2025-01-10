@@ -15,7 +15,8 @@ const Login = ({
   const requiredScopes = [
     "channel:read:subscriptions",
     "moderator:read:followers",
-    "user:manage:whispers"
+    "user:manage:whispers",
+    "channel:manage:redemptions"
   ]
 
   const baseURI = 'https://id.twitch.tv/oauth2/authorize'
