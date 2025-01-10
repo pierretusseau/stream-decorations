@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect } from 'react'
-import MonsterCard from '@/app/components/AmawMonsters/MonsterCard'
+import MonsterCard from '@/components/AmawMonsters/MonsterCard'
 import useHuntStore, {
   fetchHunts,
   subscribeToHunts

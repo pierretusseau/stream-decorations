@@ -1,8 +1,8 @@
 'use client';
 
-import HomeLink from "@/app/components/Home/HomeLink";
-import Header from "@/app/components/Header";
-import HomeDynamicModules from "@/app/components/Home/HomeDynamicModules";
+import HomeLink from "@/components/Home/HomeLink";
+import Header from "@/components/Header";
+import HomeDynamicModules from "@/components/Home/HomeDynamicModules";
 
 export default function Home() {
   const date = new Date()

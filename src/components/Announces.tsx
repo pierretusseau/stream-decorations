@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useCallback, useEffect, useState } from 'react'
-import Announce from '@/app/components/Announces/Announce'
+import Announce from '@/components/Announces/Announce'
 
 const announceTimer = 30000
 

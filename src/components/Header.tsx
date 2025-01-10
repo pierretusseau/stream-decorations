@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import TwitchLogin from "@/app/components/TwitchLogin";
+import TwitchLogin from "@/components/TwitchLogin";
 import { Button } from '@mui/material'
 // import { useSession } from 'next-auth/react';
 import { Cog6ToothIcon } from '@heroicons/react/24/solid';
-import TwitchAuthStateModal from '@/app/components/Twitch/TwitchAuthStateModal';
+import TwitchAuthStateModal from '@/components/Twitch/TwitchAuthStateModal';
 import useTwitchStore from '@/store/useTwitchStore';
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import supabase from '@/lib/supabase-browser-amaw'
-import AmawTracker from '@/app/components/AmawTracker'
+import AmawTracker from '@/components/AmawTracker'
 
 // Bundle WEBP => PNG
 // https://www.reddit.com/r/software/comments/q78y0c/i_have_a_ton_of_webp_images_need_them_in_png_how/

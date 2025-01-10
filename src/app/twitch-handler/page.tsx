@@ -1,5 +1,5 @@
 import React from 'react'
-import TwitchHandler from '@/app/components/TwitchHandler'
+import TwitchHandler from '@/components/TwitchHandler'
 
 export const dynamic = 'force-dynamic'
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import supabase from '@/lib/supabase-browser-decorations'
-import Announces from '@/app/components/Announces'
+import Announces from '@/components/Announces'
 
 export const dynamic = 'force-dynamic'
 

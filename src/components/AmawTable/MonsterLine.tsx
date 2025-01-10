@@ -1,9 +1,9 @@
 import React, { useCallback, useState } from 'react'
 import useHuntStore from '@/store/useHuntStore'
-import HuntCell from '@/app/components/AmawTable/HuntCell'
+import HuntCell from '@/components/AmawTable/HuntCell'
 import useSettingsStore from '@/store/useSettingsStore'
 import { LockClosedIcon } from '@heroicons/react/24/solid'
-import MonsterImage from '@/app/components/common/MonsterImage'
+import MonsterImage from '@/components/common/MonsterImage'
 
 function MonsterLine({
   monster,

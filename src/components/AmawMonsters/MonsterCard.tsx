@@ -1,5 +1,5 @@
 import React from 'react'
-import MonsterImage from '@/app/components/common/MonsterImage'
+import MonsterImage from '@/components/common/MonsterImage'
 import { CheckBadgeIcon } from '@heroicons/react/24/solid'
 import ProgressionBackground from '../common/ProgressionBackground'
 

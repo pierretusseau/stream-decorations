@@ -1,5 +1,5 @@
 import React from 'react'
-import AmawMonsters from '@/app/components/AmawMonsters'
+import AmawMonsters from '@/components/AmawMonsters'
 
 export const dynamic = 'force-dynamic'
 

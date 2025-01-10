@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import useSettingsStore from "@/store/useSettingsStore";
 import useDecorationsStore, { setDecorations } from "@/store/useDecorationsStore";
-import HomeLink from '@/app/components/Home/HomeLink';
+import HomeLink from '@/components/Home/HomeLink';
 
 function HomeDynamicModules() {
 

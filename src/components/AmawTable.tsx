@@ -5,9 +5,9 @@ import {
   fetchHunts,
   subscribeToHunts
 } from '@/store/useHuntStore'
-import MonsterLine from '@/app/components/AmawTable/MonsterLine'
-import WeaponHeaderCell from '@/app/components/AmawTable/WeaponHeaderCell'
-import SettingsModal from '@/app/components/AmawTable/SettingsModal'
+import MonsterLine from '@/components/AmawTable/MonsterLine'
+import WeaponHeaderCell from '@/components/AmawTable/WeaponHeaderCell'
+import SettingsModal from '@/components/AmawTable/SettingsModal'
 import { IconButton } from '@mui/material'
 import { Cog6ToothIcon } from '@heroicons/react/24/solid'
 import useSettingsStore from '@/store/useSettingsStore'

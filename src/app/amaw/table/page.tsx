@@ -1,6 +1,6 @@
 import React from 'react'
 import supabase from '@/lib/supabase-browser-amaw'
-import AmawTable from '@/app/components/AmawTable'
+import AmawTable from '@/components/AmawTable'
 
 export const dynamic = 'force-dynamic'
 

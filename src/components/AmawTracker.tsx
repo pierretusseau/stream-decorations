@@ -5,7 +5,7 @@ import useHuntStore, {
   fetchHunts,
   subscribeToHunts
 } from '@/store/useHuntStore'
-import Hunt from '@/app/components/AmawTracker/Hunt'
+import Hunt from '@/components/AmawTracker/Hunt'
 
 const screen_width = 2560
 const cam_width = 432

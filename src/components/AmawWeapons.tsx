@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react'
 import useHuntStore, { fetchHunts, subscribeToHunts } from '@/store/useHuntStore'
-import WeaponCard from '@/app/components/AmawWeapons/WeaponCard'
+import WeaponCard from '@/components/AmawWeapons/WeaponCard'
 import { fetchMonsters } from '@/store/useMonstersStore';
 
 function AmawWeapons({

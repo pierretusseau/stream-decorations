@@ -2,10 +2,10 @@
 
 import React from 'react'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
-import Header from '@/app/components/Header'
+import Header from '@/components/Header'
 // import TwitchDebug from '@/app/components/Twitch/TwitchDebug'
 // import OldTwitchMethod from '@/app/components/Twitch/OldTwitchMethod'
-import EventSub from '@/app/components/Twitch/EventSub'
+import EventSub from '@/components/Twitch/EventSub'
 
 const darkTheme = createTheme({
   palette: {

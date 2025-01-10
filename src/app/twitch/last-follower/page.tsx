@@ -1,5 +1,5 @@
 import React from 'react'
-import TwitchLastFollower from '@/app/components/TwitchLastFollower'
+import TwitchLastFollower from '@/components/TwitchLastFollower'
 
 export const dynamic = 'force-dynamic'
 
