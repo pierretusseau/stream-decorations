@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Teko } from "next/font/google";
+import localFont from 'next/font/local'
 import "./globals.css";
 // import { getServerSession } from "next-auth";
 // import { authOptions } from '@/app/api/auth/nextauth/route'
@@ -19,6 +20,11 @@ const teko = Teko({
   variable: "--font-teko",
   display: 'swap',
 })
+const MHNumbers = localFont({
+  src: './MH_NormalNumbers.ttf',
+  variable: "--font-mhn",
+  display: 'swap'
+})
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -32,10 +38,17 @@ export default async function RootLayout({
 }>) {
   // const session = await getServerSession(authOptions) as TwitchSession;
 
+  const fonts = [
+    geistSans.variable,
+    geistMono.variable,
+    teko.variable,
+    MHNumbers.variable
+  ].join(' ')
+
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${teko.variable} antialiased`}
+        className={`${fonts} antialiased`}
       >
         {/* <Provider session={session}>{children}</Provider> */}
         {children}

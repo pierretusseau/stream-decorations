@@ -10,6 +10,7 @@ export default {
     extend: {
       fontFamily: {
         teko: ['var(--font-teko)'],
+        mhn: ['var(--font-mhn)']
       },
       colors: {
         background: "var(--background)",

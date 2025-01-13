@@ -26,7 +26,7 @@ function HomeDynamicModules() {
     <>
       {decorations.map(decoration => <HomeLink
         key={`dynamic-module-${decoration.id}`}
-        href={`twitch/followers/${decoration.code}`}
+        href={`twitch/${decoration.type}/${decoration.code}`}
         title={`twitch/${decoration.type}/[code]`}
         large
       />)}

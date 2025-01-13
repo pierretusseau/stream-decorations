@@ -25,6 +25,9 @@ function Header() {
           <Button
             href="/"
           >Home</Button>
+          <Button
+            href="/playground"
+          >Playground</Button>
         </div>
         <div className="flex items-center gap-4">
           {/* {session && <Button

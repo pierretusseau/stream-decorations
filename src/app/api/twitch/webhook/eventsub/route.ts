@@ -25,6 +25,7 @@ import {
   NextResponse
 } from 'next/server'
 import { getHmac, getHmacMessage, verifyMessage } from '@/utils/twitch';
+import TwitchWebhookParser from '@/utils/twitchWebhookParser';
 
 export async function POST(
   req: NextRequest
@@ -48,6 +49,15 @@ export async function POST(
     })
   }
 
+  const serviceKey = process.env.SUPABASE_DECORATION_SERVICE_KEY
+  if (!serviceKey) {
+    console.log('Missing Supabase Service Key')
+    return NextResponse.json({
+      status: 500,
+      body: { message: 'Missing signature' }
+    })
+  }
+
   const message = await getHmacMessage(req, JSON.stringify(body))
   const hmac = `${HMAC_PREFIX}${getHmac(secret, message)}`
   const isMessageValid = verifyMessage(hmac, signature)
@@ -57,9 +67,12 @@ export async function POST(
     console.log("Signatures match");
     if (MESSAGE_TYPE_NOTIFICATION  === req.headers.get(MESSAGE_TYPE)) {
       // Supabase Updates
-      // TODO : Handle Supabase updates here
-      console.log(`Event type: ${body.subscription.type}`);
-      console.log(JSON.stringify(body.event, null, 4));
+      // console.log(JSON.stringify(body.event, null, 4));
+      TwitchWebhookParser({
+        type: body.subscription.type,
+        event: body.event,
+        serviceKey
+      })
       
       return NextResponse.json({
         status: 204

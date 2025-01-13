@@ -39,6 +39,30 @@ export type Database = {
         }
         Relationships: []
       }
+      followers: {
+        Row: {
+          created_at: string
+          followed_at: string
+          user_id: number
+          user_login: string
+          user_name: string
+        }
+        Insert: {
+          created_at?: string
+          followed_at: string
+          user_id?: number
+          user_login: string
+          user_name: string
+        }
+        Update: {
+          created_at?: string
+          followed_at?: string
+          user_id?: number
+          user_login?: string
+          user_name?: string
+        }
+        Relationships: []
+      }
       modules: {
         Row: {
           code: string

@@ -1,9 +1,9 @@
+import { createSupaClient } from "@/lib/supabase-service-decorations"
 import { create } from "zustand"
 import {
   persist,
   // createJSONStorage
 } from 'zustand/middleware'
-// import supabase from '@//lib/supabase-browser'
 
 // Types
 /*----------------------------------------------------*/
@@ -14,12 +14,6 @@ declare global {
     expiration_date?: string
     token_type: "bearer"
   } | null
-  type Follower = {
-    followed_at: string
-    user_id: string
-    user_login: string
-    user_name: string
-  }
   type Subscriptions = {
     total: number
     data: Subscription[]
@@ -89,27 +83,41 @@ export const setSubscriptions = (subscriptions: Subscriptions) => {
 
 // Followers
 /*----------------------------------------------------*/
-export const fetchFollowers = async (accessToken: string) => {
-  console.log('Fetching followers...')
-  fetch('https://api.twitch.tv/helix/channels/followers?broadcaster_id=52532305', {
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${accessToken}`,
-      'Client-Id': process.env.NEXT_PUBLIC_AUTH_TWITCH_ID!
-    }
-  }).then(res => res.json())
-    .then((res) => {
-      // console.log(res)
-      const { data: followers } = res
-      console.log(followers)
-      setFollowers(followers)
-      setTotalFollowers(followers)
-      setLastFollowers(followers)
-    })
-    .catch(err => {
-      console.error('Error while fetching follower')
-      console.log(err)
-    })
+// export const fetchFollowers = async (accessToken: string) => {
+//   console.log('Fetching followers...')
+//   fetch('https://api.twitch.tv/helix/channels/followers?broadcaster_id=52532305', {
+//     method: 'GET',
+//     headers: {
+//       'Authorization': `Bearer ${accessToken}`,
+//       'Client-Id': process.env.NEXT_PUBLIC_AUTH_TWITCH_ID!
+//     }
+//   }).then(res => res.json())
+//     .then((res) => {
+//       // console.log(res)
+//       const { data: followers } = res
+//       console.log(followers)
+//       setFollowers(followers)
+//       setTotalFollowers(followers)
+//       setLastFollowers(followers)
+//     })
+//     .catch(err => {
+//       console.error('Error while fetching follower')
+//       console.log(err)
+//     })
+// }
+
+export const subscribeToFollowers = async (serviceKey:  string) => {
+  console.log('Subscribing to followers...')
+  const supabase = await createSupaClient(serviceKey)
+  return supabase
+    .channel('followers')
+    .on(
+      'postgres_changes',
+      { event: 'INSERT', schema: 'public', table: 'followers' },
+      // @ts-expect-error : Need to find proper type
+      (payload) => addFollower(payload.new)
+    )
+    .subscribe()
 }
 
 export const setFollowers = (followers: Follower[]) => {
@@ -120,4 +128,13 @@ export const setTotalFollowers = (followers: Follower[]) => {
 }
 export const setLastFollowers = (followers: Follower[]) => {
   useTwitchStore.setState(() => ({ lastFollower: followers[0] || null }))
+}
+export const addFollower = (newFollower: Follower) => {
+  console.log('Received new realtime follower')
+  useTwitchStore.setState((state) => ({
+    followers: [
+      ...state.followers,
+      newFollower
+    ]
+  }))
 }

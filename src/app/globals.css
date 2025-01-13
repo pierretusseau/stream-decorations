@@ -38,3 +38,20 @@ body {
     transform: rotate(360deg);
   }
 }
+
+@font-face {
+  font-family: "MHNormalNumbers";
+  src:
+    local("/fonts/MH_NormalNumbers.ttf"),
+    /* url("trickster-COLRv1.otf") format("opentype") tech(color-COLRv1),
+    url("trickster-outline.otf") format("opentype"),
+    url("trickster-outline.woff") format("woff"); */
+}
+@font-face {
+  font-family: "MHNumbers";
+  src:
+    local("/fonts/MH_Numbers.ttf"),
+    /* url("trickster-COLRv1.otf") format("opentype") tech(color-COLRv1),
+    url("trickster-outline.otf") format("opentype"),
+    url("trickster-outline.woff") format("woff"); */
+}
