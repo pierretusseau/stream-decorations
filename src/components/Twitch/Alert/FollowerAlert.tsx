@@ -15,9 +15,7 @@ gsap.registerPlugin(useGSAP)
 const yellowHex = "#FFE84A"
 const yellowRGB = "255,232,74"
 const orangeRGB = "255,191,77"
-const dropShadow = `drop-shadow-[0_0_10px_rgba(${yellowRGB},1)]`
-// const dropShadow = `drop-shadow-[0_0_10px_rgba(${orangeRGB},1)]`
-const numberOfParticles = 50
+const numberOfParticles = 60
 
 function FollowerAlert({
   content,
@@ -41,6 +39,8 @@ function FollowerAlert({
   const [opacity, setOpacity] = useState(1)
   const [splitText, setSplitText] = useState<SplitType|null>()
   const [particles, setParticles] = useState<React.ReactElement[]>([])
+  const [textDropColor, setTextDropColor] = useState('255,255,255')
+  const [textDropSize, setTextDropSize] = useState(10)
   const [svgColor, setSvgColor] = useState("255,255,255")
 
   const callSound = useCallback((src: string, fadeTimer?: number) => {
@@ -72,7 +72,7 @@ function FollowerAlert({
   useEffect(() => {
     const particlesArray = []
     for (let index = 0; index < numberOfParticles; index++) {
-      const randomSize = Math.floor(Math.random() * 4) + 1
+      const randomSize = Math.floor(Math.random() * 5) + 1
       const randomX = Math.floor(Math.random() * -200) + 200
       const randomY = Math.floor(Math.random() * 500)
 
@@ -129,6 +129,16 @@ function FollowerAlert({
         value: yellowRGB, duration: 1,
         onUpdate: () => setSvgColor(svgProxyColor.value)
       }, '0.4')
+      const textDropColorProxy = { value: textDropColor }
+      tl.to(textDropColorProxy, {
+        value: orangeRGB, duration: 2,
+        onUpdate: () => setTextDropColor(textDropColorProxy.value)
+      }, '1')
+      const textDropSizeProxy = { value: textDropSize }
+      tl.to(textDropSizeProxy, {
+        value: 5, duration: 2,
+        onUpdate: () => setTextDropSize(textDropSizeProxy.value)
+      }, '1')
       tl.to(textRef.current, {
         color: "#FFF",
         duration: 0.2
@@ -195,13 +205,14 @@ function FollowerAlert({
     gsap.utils.toArray(particlesRef.current.children).forEach((element, i) => {
       const odd = i % 2 === 1
       const duration = Math.floor(Math.random() * 5) + 2
-      const y = Math.floor(Math.random() * 100 - 50)
+      const y = Math.floor((Math.random() * -500) + 300)
+      const x = Math.floor((Math.random() * 200) + 100)
       // @ts-expect-error: GSAP
       tl.fromTo(element, { opacity: 0 }, { opacity: 1, duration: 1 }, '0.5')
       // @ts-expect-error: GSAP
-      tl.to(element, { x: odd ? 100 : -100, y, duration }, '0.5')
+      tl.to(element, { x: odd ? x : x * -1, y, duration }, '0.5')
       // @ts-expect-error: GSAP
-      tl.to(element, { opacity: 0, duration }, '2')
+      tl.to(element, { opacity: 0, duration: duration - 1.5 }, '2')
     })
   }, {
     dependencies: [particles]
@@ -259,9 +270,12 @@ function FollowerAlert({
           <div
             className={`${[
               "font-mhn text-[60px] absolute top-0 left-1/2 -translate-x-1/2",
-              dropShadow
+              // dropShadowOrange
             ].join(' ')}`}
-            style={{ whiteSpace: 'nowrap' }}
+            style={{
+              whiteSpace: 'nowrap',
+              filter: `drop-shadow(0 0 ${textDropSize}px rgba(${textDropColor},1))`
+            }}
             ref={textRef}
           >
             New Follower
@@ -269,9 +283,12 @@ function FollowerAlert({
           <div
             className={`${[
               'font-mhn text-[90px] absolute top-[40px] left-1/2 -translate-x-1/2 flex',
-              dropShadow
+              // dropShadowOrange
             ].join(' ')}`}
             ref={contentRef}
+            style={{
+              filter: `drop-shadow(0 0 ${textDropSize}px rgba(${textDropColor},1))`
+            }}
           >
             {content}
           </div>
