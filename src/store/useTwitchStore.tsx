@@ -36,6 +36,85 @@ declare global {
     },
     cost: 0
   }
+  type ChatNotificationMetadata = {
+    message_id: string
+    message_timestamp: string
+    message_type: string
+    subscriptions_type: string
+    subscription_version: string
+  }
+  type ChatNotificationPayload = {
+    "subscription": {
+      "id": string,
+      "status": string,
+      "type": string,
+      "version": string,
+      "condition": {
+        "broadcaster_user_id": string,
+        "user_id": string
+      },
+      "transport": {
+        "method": "websocket" | "webhook",
+        "session_id": string
+      },
+      "created_at": string,
+      "cost": number
+    },
+    "event": {
+      "broadcaster_user_id": string,
+      "broadcaster_user_login": string,
+      "broadcaster_user_name": string,
+      "chatter_user_id": string,
+      "chatter_user_login": string,
+      "chatter_user_name": string,
+      "chatter_is_anonymous": boolean,
+      "color": string,
+      "badges": never[],
+      "system_message": string,
+      "message_id": string,
+      "message": {
+        "text": string,
+        "fragments": never[]
+      },
+      "notice_type": string,
+      "sub": null | unknown,
+      "resub": {
+        "cumulative_months": number,
+        "duration_months": number,
+        "streak_months": null | unknown,
+        "sub_plan": string,
+        "is_gift": boolean,
+        "gifter_is_anonymous": null | unknown,
+        "gifter_user_id": null | unknown,
+        "gifter_user_name": null | unknown,
+        "gifter_user_login": null | unknown
+      },
+      "sub_gift": null | unknown,
+      "community_sub_gift": null | unknown,
+      "gift_paid_upgrade": null | unknown,
+      "prime_paid_upgrade": null | unknown,
+      "pay_it_forward": null | unknown,
+      "raid": null | unknown,
+      "unraid": null | unknown,
+      "announcement": null | unknown,
+      "bits_badge_tier": null | unknown,
+      "charity_donation": null | unknown,
+      "shared_chat_sub": null | unknown,
+      "shared_chat_resub": null | unknown,
+      "shared_chat_sub_gift": null | unknown,
+      "shared_chat_community_sub_gift": null | unknown,
+      "shared_chat_gift_paid_upgrade": null | unknown,
+      "shared_chat_prime_paid_upgrade": null | unknown,
+      "shared_chat_pay_it_forward": null | unknown,
+      "shared_chat_raid": null | unknown,
+      "shared_chat_announcement": null | unknown,
+      "source_broadcaster_user_id": null | unknown,
+      "source_broadcaster_user_login": null | unknown,
+      "source_broadcaster_user_name": null | unknown,
+      "source_message_id": null | unknown,
+      "source_badges": null | unknown
+    }
+  }
 }
 
 // Store creation
@@ -52,6 +131,7 @@ const useTwitchStore = create(
       lastFollower: null as Follower | null,
       twitch_auth_state: '',
       subscriptions: null as Subscriptions | null,
+      debugChatNotificationPayload: [] as ChatNotificationPayload[]
     }),
     {
       name: 'twitch-api', // name of the item in the storage (must be unique)
@@ -79,6 +159,14 @@ export const setTwitchAuthState = (state: string) => {
 }
 export const setSubscriptions = (subscriptions: Subscriptions) => {
   useTwitchStore.setState(() => ({ subscriptions: subscriptions }))
+}
+export const addDebugChatNotificationPayload = (payload: ChatNotificationPayload) => {
+  useTwitchStore.setState((state) => ({
+    debugChatNotificationPayload: [
+      ...state.debugChatNotificationPayload,
+      payload
+    ]
+  }))
 }
 
 // Followers

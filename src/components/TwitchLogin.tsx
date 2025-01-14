@@ -16,7 +16,10 @@ const Login = ({
     "channel:read:subscriptions",
     "moderator:read:followers",
     "user:manage:whispers",
-    "channel:manage:redemptions"
+    "channel:manage:redemptions",
+    "user:read:chat",
+    "user:bot",
+    "channel:bot"
   ]
 
   const baseURI = 'https://id.twitch.tv/oauth2/authorize'

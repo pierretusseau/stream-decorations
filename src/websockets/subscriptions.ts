@@ -106,3 +106,42 @@ export const ChannelUpdateSubscription = async (
   
   return subscription
 }
+
+export const ChannelChatNotificationSubscription = async (
+  access_token: string,
+  session: Payload['session']
+) => {
+  const subscription = await fetch('https://api.twitch.tv/helix/eventsub/subscriptions', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${access_token}`,
+      'Client-Id': process.env.NEXT_PUBLIC_AUTH_TWITCH_ID!,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      "type": "channel.chat.notification",
+      "version": "1",
+      "condition": {
+          // "broadcaster_user_id": "117011503", // Jean Massiet
+          "broadcaster_user_id": "89132304", // sasavot
+          "user_id": process.env.NEXT_PUBLIC_BROADCASTER_ID
+      },
+      "transport": {
+          "method": "websocket",
+          "session_id": session.id
+      }
+    })
+  }).then(res => res.json())
+    .then(res => {
+      console.log(res)
+      const { data } = res
+      if (!data) throw new Error('Error while subscribing to channel.chat.notification')
+      console.log('Subscribed to channel.chat.notification')
+      return res
+    })
+    .catch(err => {
+      console.log(err)
+    })
+  
+  return subscription
+}

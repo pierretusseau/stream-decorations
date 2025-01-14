@@ -1,23 +1,32 @@
 import React from 'react'
 import FollowerAlert from '@/components/Twitch/Alert/FollowerAlert'
+import SubAlert from '@/components/Twitch/Alert/SubAlert'
 
 function Alert({
-  type,
-  content,
-  timestamp,
-  animationFinished
+  alert
 }: {
-  type: 'follower'
-  content: string
-  timestamp: number
-  animationFinished: (timestamp: number) => void
+  alert: Alert
 }) {
-  if (type === 'follower') {
+  if (alert.type === 'follower') {
     return <FollowerAlert
-      content={content}
-      timestamp={timestamp}
-      animationFinished={animationFinished}
+      alert={alert}
     />
+  } else if (alert.type === 'sub' && alert.notice_type !== 'community_sub_gift') {
+    // Exception for the gifted resub
+    if (alert.notice_type === 'resub' && alert.resub.is_gift) return null
+    return <SubAlert
+      alert={alert}
+    />
+  } else if (alert.type === 'sub' && alert.notice_type === 'community_sub_gift') {
+    // TODO : Community sub gift alert
+    return <SubAlert
+      alert={alert}
+    />
+  // } else if (alert.type === 'raid') {
+  //   // TODO : Raid alert
+  //   return <RaidAlert
+  //     alert={alert}
+  //   />
   } else {
     return <div>Unknown alert</div> 
   }

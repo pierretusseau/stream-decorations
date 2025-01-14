@@ -1,15 +1,19 @@
 'use client'
 
-import React, { useCallback, useEffect, useState } from 'react'
-import { createSupaClient } from '@/lib/supabase-service-decorations'
-import { SupabaseClient } from '@supabase/supabase-js'
+import React, { useEffect, useState } from 'react'
 import Alert from '@/components/Twitch/Alert'
+import useAlertStore from '@/store/useAlertStore'
+import {
+  subscribeToFollower,
+  subscribeToSubs
+} from '@/lib/supabase-realtime'
+import type { RealtimeChannel } from '@supabase/supabase-js'
 
-type Alert = {
-  created_at: number
-  type: 'follower'
-  content: string
-  animationOver: boolean
+type WebhookSubscriptionHandler = (serviceKey: string) => Promise<RealtimeChannel>
+
+const subscriptions: Record<string, WebhookSubscriptionHandler> = {
+  'follower': subscribeToFollower,
+  'sub': subscribeToSubs
 }
 
 function TwitchAlerts({
@@ -17,20 +21,9 @@ function TwitchAlerts({
 }: {
   code: string
 }) {
-  const [alerts, setAlerts] = useState<Alert[]>([])
+  const alerts = useAlertStore((state) => state.alerts)
   const [currentAlert, setCurrentAlert] = useState<Alert>()
   const [serviceKey, setServiceKey] = useState()
-  const [supabase, setSupabase] = useState<SupabaseClient|undefined>()
-
-  const handleAnimationFinished = useCallback((created_at: number) => {
-    const newAlerts = alerts.map(alert => {
-      if (alert.created_at === created_at) {
-        return {...alert, animationOver: true}
-      }
-      return alert
-    })
-    setAlerts(newAlerts)
-  }, [alerts])
 
   useEffect(() => {
     fetch('/api/decorations/service-key', {
@@ -45,56 +38,27 @@ function TwitchAlerts({
       .catch(err => console.error(err))
   }, [code])
 
-  const handleNewAlert = useCallback((event: Alert) => {
-    setAlerts([
-      ...alerts,
-      event
-    ])
-  }, [alerts])
-
-  useEffect(() => {
-    console.log('alerts', alerts)
-    if (alerts.length) {
-      const hasMoreAlerts = alerts.some(alert => !alert.animationOver)
-      if (!hasMoreAlerts) setAlerts([])
-    }
-  }, [alerts])
-
   useEffect(() => {
     if (!serviceKey) return
-    if (supabase) return
-    const subscribeToFollowers = async () => {
-      const supabase = await createSupaClient(serviceKey)
-      setSupabase(supabase)
-      return supabase
-        .channel('followers')
-        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'followers' },
-          (payload) => handleNewAlert({
-            created_at: new Date().getTime(),
-            type: 'follower',
-            content: payload.new.user_name,
-            animationOver: false
-          })
-        )
-        .subscribe()
-      }
-    subscribeToFollowers()
-  }, [serviceKey, handleNewAlert, supabase])
+    Object.keys(subscriptions).forEach(subscription => {
+      subscriptions[subscription](serviceKey)
+    })
+  }, [serviceKey])
   
   useEffect(() => {
     const animationsToDo = alerts
-      .sort((a, b) => a.created_at - b.created_at)
-      .filter(alert => !alert.animationOver)
+      .sort((a, b) => {
+        // I hate Typescript, especially the Monday
+        if (!a.created_at || !b.created_at) return 0
+        return a.created_at - b.created_at
+      })
     setCurrentAlert(animationsToDo[0])
   }, [alerts])
   
   return (
     <div>
       {currentAlert && <Alert
-        type={currentAlert.type}
-        content={currentAlert.content}
-        timestamp={currentAlert.created_at}
-        animationFinished={handleAnimationFinished}
+        alert={currentAlert}
       />}
     </div>
   )

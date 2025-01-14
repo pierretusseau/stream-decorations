@@ -1,7 +1,10 @@
 import React from 'react'
 import { Box, Modal, TextField } from '@mui/material'
 import useTwitchStore, { setTwitchAuthState } from '@/store/useTwitchStore';
-import useSettingsStore, { editSupabaseDecorationsServiceKey } from '@/store/useSettingsStore';
+import useSettingsStore, {
+  editSupabaseDecorationsServiceKey,
+  editUserAccessToken
+} from '@/store/useSettingsStore';
 
 const style = {
   position: 'absolute',
@@ -55,6 +58,15 @@ function TwitchAuthStateModal({
           type="password"
           value={serviceKey}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => editSupabaseDecorationsServiceKey(e.target.value)}
+          fullWidth
+        />
+        <TextField
+          id="outlined-basic"
+          label="User Access Token"
+          variant="outlined"
+          type="password"
+          value={serviceKey}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => editUserAccessToken(e.target.value)}
           fullWidth
         />
       </Box>

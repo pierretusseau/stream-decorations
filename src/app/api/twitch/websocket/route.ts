@@ -11,7 +11,8 @@ import welcomeSession from '@/websockets/welcome';
 import {
   ChannelFollowSubscription,
   // ChannelUpdateSubscription,
-  // UserWhisperMessageSubscription
+  // UserWhisperMessageSubscription,
+  ChannelChatNotificationSubscription,
 } from '@/websockets/subscriptions'
 
 export const dynamic = 'force-dynamic'
@@ -56,6 +57,7 @@ const subscribeEvents: Record<string, SubscriptionHandler> = {
   // 'user.whisper.message': UserWhisperMessageSubscription,
   'channel.follow': ChannelFollowSubscription,
   // 'channel.update': ChannelUpdateSubscription,
+  'channel.chat.notification': ChannelChatNotificationSubscription,
 }
 
 export async function POST(
@@ -124,6 +126,7 @@ export async function POST(
 
   return NextResponse.json({
     code: 200,
+    websocket: wss,
     body: { message: 'Connected to Websocket' }
   })
 }

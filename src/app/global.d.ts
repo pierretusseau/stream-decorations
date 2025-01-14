@@ -8,6 +8,7 @@ declare global {
   type Token = TablesDecorations<'twitch_tokens'>
   type Decoration = TablesDecorations<'modules'>
   type Follower = TablesDecorations<'followers'>
+  type Sub = TablesDecorations<'subs'>
   // AMAW
   type DatabaseAmaw = DBAmaw
   type Monster = TablesAmaw<'monsters'>

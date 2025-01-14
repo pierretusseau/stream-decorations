@@ -6,6 +6,7 @@ import { Cog6ToothIcon } from '@heroicons/react/24/solid';
 import TwitchAuthStateModal from '@/components/Twitch/TwitchAuthStateModal';
 import useTwitchStore from '@/store/useTwitchStore';
 import { ThemeProvider, createTheme } from '@mui/material/styles'
+import useSettingsStore from '@/store/useSettingsStore';
 
 const darkTheme = createTheme({
   palette: {
@@ -17,6 +18,7 @@ function Header() {
   // const { data: session } = useSession()
   const [openModal, setOpenModal] = useState(false)
   const twitchAuthState = useTwitchStore((state) => state.twitch_auth_state)
+  const userAccessToken = useSettingsStore((state) => state.user_access_token)
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -30,10 +32,11 @@ function Header() {
           >Playground</Button>
         </div>
         <div className="flex items-center gap-4">
-          {/* {session && <Button
-            href="/twitch-handler"
-            className="flex gap-2 items-center"
-          ><Cog6ToothIcon className="size-4"/> Twitch</Button>} */}
+          {userAccessToken && process.env.NEXT_PUBLIC_ENVIRONMENT === 'develop' && <Button
+            href="/chat-notifications"
+          >
+            Channel Chat Notifications
+          </Button>}
           {twitchAuthState && <Button
             onClick={() => setOpenModal(true)}
           ><Cog6ToothIcon className="size-4"/></Button>}

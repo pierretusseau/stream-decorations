@@ -12,9 +12,14 @@ gsap.registerPlugin(useGSAP)
 const yellowHex = "#FFE84A"
 const yellowRGB = "255,232,74"
 const orangeRGB = "255,191,77"
+const blueRGB = "56,189,248"
 const numberOfParticles = 60
 
-function FollowerAlert({ alert }:{ alert: Alert }) {
+function SubAlert({
+  alert,
+}: {
+  alert: Alert
+}) {
   const containerRef = useRef(null)
   const svgRef = useRef(null)
   const lensRef = useRef(null)
@@ -23,6 +28,7 @@ function FollowerAlert({ alert }:{ alert: Alert }) {
   const textWrapperRef = useRef(null)
   const textRef = useRef(null)
   const contentRef = useRef(null)
+  const complementRef = useRef(null)
   const particlesRef = useRef(null)
   const [opacity, setOpacity] = useState(1)
   const [splitText, setSplitText] = useState<SplitType|null>()
@@ -30,6 +36,9 @@ function FollowerAlert({ alert }:{ alert: Alert }) {
   const [textDropColor, setTextDropColor] = useState('255,255,255')
   const [textDropSize, setTextDropSize] = useState(10)
   const [svgColor, setSvgColor] = useState("255,255,255")
+
+  const isPrime = alert.type === 'sub' && alert.notice_type === 'sub' && alert.sub.is_prime
+    || alert.type === 'sub' && alert.notice_type === 'resub' && alert.resub.is_prime
 
   const callSound = useCallback((src: string, fadeTimer?: number) => {
     const sound = new Howl({
@@ -67,8 +76,8 @@ function FollowerAlert({ alert }:{ alert: Alert }) {
       const style = {
         width: `${randomSize}px`,
         height: `${randomSize}px`,
-        boxShadow: `0 0 5px rgba(${orangeRGB}, 1)`,
-        top: `${randomY}px`
+        boxShadow: `0 0 5px rgba(${isPrime ? blueRGB : orangeRGB}, 1)`,
+        top: `${randomY}px`,
       }
       const positionStyle = index % 2 === 0
         ? { left: randomX }
@@ -79,7 +88,8 @@ function FollowerAlert({ alert }:{ alert: Alert }) {
         key={`particle-${index}`}
         className={`${[
           'absolute',
-          'bg-yellow-200 rounded-full',
+          'rounded-full',
+          isPrime ? 'bg-blue-400' : 'bg-yellow-300'
         ].join(' ')}`}
         style={finalStyle}
       ></div>)
@@ -90,8 +100,10 @@ function FollowerAlert({ alert }:{ alert: Alert }) {
   useGSAP(
     () => {
       const tl = gsap.timeline()
-      if (splitText) tl.set(splitText.chars, { opacity: 0 })
-      // tl.set(containerRef.current, {opacity: 0})
+      if (splitText) {
+        tl.set(splitText.chars, { opacity: 0 })
+        tl.set(contentRef.current, { opacity: 1 })
+      }
       tl.fromTo(containerRef.current, {
         rotation: 90, scale: 1.5
       }, {
@@ -119,7 +131,7 @@ function FollowerAlert({ alert }:{ alert: Alert }) {
       }, '0.4')
       const textDropColorProxy = { value: textDropColor }
       tl.to(textDropColorProxy, {
-        value: orangeRGB, duration: 2,
+        value: isPrime ? blueRGB : orangeRGB, duration: 2,
         onUpdate: () => setTextDropColor(textDropColorProxy.value)
       }, '1')
       const textDropSizeProxy = { value: textDropSize }
@@ -158,6 +170,9 @@ function FollowerAlert({ alert }:{ alert: Alert }) {
         value: 0.25, duration: 2,
         onUpdate: () => setOpacity(svgOpacity.value)
       }, '0.5')
+      tl.to(complementRef.current, { opacity: 1, duration: 0.5 }, '1.2')
+      tl.to(complementRef.current, { y: 50, scale: 1, duration: 4, ease: 'power1.out' }, '1.2')
+      tl.to(complementRef.current, { opacity: 0, duration: 2 }, '3.2')
       if (splitText) {
         tl.fromTo(splitText.chars, { opacity: 0 }, { opacity: 1, duration: 0.4, stagger: 0.01 }, "0.5")
         tl.fromTo(splitText.chars, { color: yellowHex, }, { color: "#FFF", duration: 0.5, stagger: 0.025 }, "0.5")
@@ -224,11 +239,6 @@ function FollowerAlert({ alert }:{ alert: Alert }) {
             "absolute top-1/2 -translate-y-1/2 rounded-full left-1/2 -translate-x-1/2"
           ].join(' ')}`}
           ref={bgRef}
-          style={{
-            // maskImage: "url('/mask2.png')",
-            // maskSize: '100% 1600%',
-            // maskPosition: '0% 0%'
-          }}
         ></div>
         <Image
           src='/lens-blur.png'
@@ -258,7 +268,6 @@ function FollowerAlert({ alert }:{ alert: Alert }) {
           <div
             className={`${[
               "font-mhn text-[60px] absolute top-0 left-1/2 -translate-x-1/2",
-              // dropShadowOrange
             ].join(' ')}`}
             style={{
               whiteSpace: 'nowrap',
@@ -266,19 +275,34 @@ function FollowerAlert({ alert }:{ alert: Alert }) {
             }}
             ref={textRef}
           >
-            New Follower
+            New Sub!
           </div>
           <div
             className={`${[
               'font-mhn text-[90px] absolute top-[40px] left-1/2 -translate-x-1/2 flex',
-              // dropShadowOrange
             ].join(' ')}`}
             ref={contentRef}
             style={{
-              filter: `drop-shadow(0 0 ${textDropSize}px rgba(${textDropColor},1))`
+              filter: `drop-shadow(0 0 ${textDropSize}px rgba(${textDropColor},1))`,
+              opacity: 0
             }}
           >
             {alert.user_name}
+          </div>
+          <div
+            className={`${[
+              'font-mhn text-[70px] absolute top-[200px] left-1/2 -translate-x-1/2 flex flex-col items-center',
+            ].join(' ')}`}
+            ref={complementRef}
+            style={{
+              filter: `drop-shadow(0 0 ${textDropSize}px rgba(${textDropColor},1))`,
+              opacity: 0,
+              lineHeight: '60px'
+            }}
+          >
+            {alert.type === 'sub' && alert.notice_type === 'sub' && alert.sub.sub_tier !== '1000' && <div>Tier&nbsp;{parseInt(alert.sub.sub_tier) / 1000}</div>}
+            {alert.type === 'sub' && alert.notice_type === 'resub' && <div className="whitespace-nowrap">Resub{alert.resub.cumulative_months > 1 && ` x${alert.resub.cumulative_months}`}</div>}
+            {isPrime && <div>Prime</div>}
           </div>
         </div>
         <div ref={particlesRef}>
@@ -289,4 +313,4 @@ function FollowerAlert({ alert }:{ alert: Alert }) {
   )
 }
 
-export default FollowerAlert
+export default SubAlert

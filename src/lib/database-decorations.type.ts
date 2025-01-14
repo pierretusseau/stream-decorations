@@ -84,6 +84,42 @@ export type Database = {
         }
         Relationships: []
       }
+      subs: {
+        Row: {
+          chatter_user_id: number | null
+          chatter_user_login: string | null
+          chatter_user_name: string
+          community_sub_gift: Json | null
+          created_at: string
+          id: number
+          notice_type: string
+          resub: Json | null
+          sub: Json | null
+        }
+        Insert: {
+          chatter_user_id?: number | null
+          chatter_user_login?: string | null
+          chatter_user_name?: string
+          community_sub_gift?: Json | null
+          created_at?: string
+          id?: number
+          notice_type: string
+          resub?: Json | null
+          sub?: Json | null
+        }
+        Update: {
+          chatter_user_id?: number | null
+          chatter_user_login?: string | null
+          chatter_user_name?: string
+          community_sub_gift?: Json | null
+          created_at?: string
+          id?: number
+          notice_type?: string
+          resub?: Json | null
+          sub?: Json | null
+        }
+        Relationships: []
+      }
       twitch_tokens: {
         Row: {
           access_token: string
