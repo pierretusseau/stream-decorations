@@ -54,7 +54,7 @@ function RaidAlert({
     () => {
       const tl = gsap.timeline()
       tl.set(containerRef.current, {opacity: 0})
-      tl.to(containerRef.current, {opacity: 1, duration: 1})
+      tl.to(containerRef.current, {opacity: 1, duration: 2})
       tl.fromTo(containerRef.current, {
         scale: 0.5,
       }, {
