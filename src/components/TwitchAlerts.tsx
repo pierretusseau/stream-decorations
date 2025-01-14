@@ -38,22 +38,18 @@ function TwitchAlerts({
       .catch(err => console.error(err))
   }, [code])
 
-  useEffect(() => {
-    if (!serviceKey) return
-    Object.keys(subscriptions).forEach(subscription => {
-      subscriptions[subscription](serviceKey)
+  if (!serviceKey) return null
+  Object.keys(subscriptions).forEach(subscription => {
+    subscriptions[subscription](serviceKey)
+  })
+
+  const animationsToDo = alerts
+    .sort((a, b) => {
+      // I hate Typescript, especially the Monday
+      if (!a.created_at || !b.created_at) return 0
+      return a.created_at - b.created_at
     })
-  }, [serviceKey])
-  
-  useEffect(() => {
-    const animationsToDo = alerts
-      .sort((a, b) => {
-        // I hate Typescript, especially the Monday
-        if (!a.created_at || !b.created_at) return 0
-        return a.created_at - b.created_at
-      })
-    setCurrentAlert(animationsToDo[0])
-  }, [alerts])
+  setCurrentAlert(animationsToDo[0])
   
   return (
     <div>

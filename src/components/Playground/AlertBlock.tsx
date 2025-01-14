@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import { Button } from '@mui/material'
-import { PlayIcon } from '@heroicons/react/24/solid'
+import { PlayIcon, XMarkIcon } from '@heroicons/react/24/solid'
 import { ArrowPathIcon } from '@heroicons/react/24/solid'
 
 const resetRender = (setter: React.Dispatch<React.SetStateAction<boolean>>) => {
   setter(false)
   setTimeout(() => {
     setter(true)
-  }, 50);
+  }, 1);
 }
 
 function AlertBlock({
@@ -24,6 +24,9 @@ function AlertBlock({
       <div className="flex justify-between items-center">
         <h2>{title}</h2>
         <div>
+          <Button
+            onClick={() => setDisplayAlert(false)}
+          ><XMarkIcon /></Button>
           <Button
             onClick={() => setDisplayAlert(true)}
           ><PlayIcon /></Button>
