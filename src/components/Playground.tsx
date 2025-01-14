@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import useSettingsStore from '@/store/useSettingsStore'
 import FollowerAlert from '@/components/Twitch/Alert/FollowerAlert'
 import Header from '@/components/Header';
 import { ThemeProvider } from '@emotion/react'
@@ -17,12 +18,14 @@ const darkTheme = createTheme({
 });
 
 function Playground() {
+  const serviceKey = useSettingsStore((state) => state.supabase_decorations_service_key)
+
   return (
     <ThemeProvider theme={darkTheme}>
     <div className="bg-neutral-950 text-neutral-50 min-h-screen flex flex-col gap-10">
       <Header />
       <main className="bg-neutral-900 max-w-screen-2xl mx-auto flex flex-col gap-4 mb-[1200px]">
-        <AlertTester />
+        {serviceKey && <AlertTester serviceKey={serviceKey} />}
         <div className="w-[1200px] max-w-full flex flex-col gap-6">
           <AlertBlock title="Follower">
             <FollowerAlert

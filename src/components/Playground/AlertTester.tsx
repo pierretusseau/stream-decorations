@@ -1,4 +1,3 @@
-import useSettingsStore from '@/store/useSettingsStore'
 import React, { useCallback, useEffect, useState } from 'react'
 import { createClient } from '@supabase/supabase-js'
 import { Button } from '@mui/material'
@@ -7,8 +6,11 @@ const randomIDGenerator = () => {
   return Math.floor(Math.random() * 100000)
 }
 
-function AlertTester() {
-  const serviceKey = useSettingsStore((state) => state.supabase_decorations_service_key)
+function AlertTester({
+  serviceKey
+}: {
+  serviceKey: string
+}) {
   const [displayingAlert, setDisplayingAlert] = useState(false)
   const [randomID, setRandomID] = useState<number>()
 
