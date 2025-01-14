@@ -3,7 +3,7 @@ import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 import Image from 'next/image'
 import { Howl } from 'howler'
-import { removeAlert } from '@/store/useAlertStore'
+import { pauseAlerts, removeAlert } from '@/store/useAlertStore'
 import FollowerAlertSvg from '@/components/Twitch/Alert/FollowerAlert/FollowerAlertSvg'
 import FollowerAlertText from '@/components/Twitch/Alert/FollowerAlert/FollowerAlertText'
 
@@ -24,7 +24,7 @@ function FollowerAlert({ alert }:{ alert: Alert }) {
   }) => {
     const sound = new Howl({
       src,
-      html5: true,
+      // html5: true,
     })
     sound.play()
     console.log(fade)
@@ -61,7 +61,7 @@ function FollowerAlert({ alert }:{ alert: Alert }) {
         opacity: 0, scale: 0.8
       }, {
         opacity: 0.1, scale: 1.7,
-        duration: 0.6
+        duration: 5, ease: 'power1.out'
       }, '0.3')
       tl.to(imageRef.current, {
         opacity: 0, scale: 1, duration: 1
@@ -76,6 +76,7 @@ function FollowerAlert({ alert }:{ alert: Alert }) {
     const timer = setTimeout(() => {
       if (!alert.created_at) return
       removeAlert(alert.created_at)
+      pauseAlerts()
     }, 12000)
   
     return () => clearTimeout(timer)

@@ -6,6 +6,7 @@ import Header from '@/components/Header';
 import { ThemeProvider } from '@emotion/react'
 import { createTheme } from '@mui/material';
 import AlertBlock from '@/components/Playground/AlertBlock'
+import AlertTester from '@/components/Playground/AlertTester'
 import SubAlert from '@/components/Twitch/Alert/SubAlert'
 
 const darkTheme = createTheme({
@@ -20,6 +21,7 @@ function Playground() {
     <div className="bg-neutral-950 text-neutral-50 min-h-screen flex flex-col gap-10">
       <Header />
       <main className="bg-neutral-900 max-w-screen-2xl mx-auto flex flex-col gap-4 mb-[1200px]">
+        <AlertTester />
         <div className="w-[1200px] max-w-full flex flex-col gap-6">
           <AlertBlock title="Follower">
             <FollowerAlert
@@ -60,6 +62,36 @@ function Playground() {
                   gifter_user_id: null,
                   gifter_user_name: null,
                   gifter_user_login: null,
+                }
+              }}
+            />
+          </AlertBlock>
+          <AlertBlock title="Gift x1 T3">
+            <SubAlert
+              alert={{
+                type: "sub",
+                user_name: "VeryLongNicknameForTests",
+                notice_type: 'community_sub_gift',
+                community_sub_gift: {
+                  id: '123456789',
+                  total: 1,
+                  cumulative_total: 20,
+                  sub_tier: "3000",
+                }
+              }}
+            />
+          </AlertBlock>
+          <AlertBlock title="Gift x20">
+            <SubAlert
+              alert={{
+                type: "sub",
+                user_name: "VeryLongNicknameForTests",
+                notice_type: 'community_sub_gift',
+                community_sub_gift: {
+                  id: '123456789',
+                  total: 20,
+                  cumulative_total: 20,
+                  sub_tier: "1000",
                 }
               }}
             />

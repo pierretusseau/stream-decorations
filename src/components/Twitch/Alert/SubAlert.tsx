@@ -9,7 +9,7 @@ import { useGSAP } from '@gsap/react'
 // import SplitType from 'split-type'
 import Image from 'next/image'
 import { Howl } from 'howler'
-import { removeAlert } from '@/store/useAlertStore'
+import { pauseAlerts, removeAlert } from '@/store/useAlertStore'
 import Particles from '@/components/Twitch/Alert/Particles'
 import SubAlertSvg from '@/components/Twitch/Alert/SubAlert/SubAlertSvg'
 import SubAlertText from './SubAlert/SubAlertText'
@@ -36,6 +36,8 @@ function SubAlert({
     ? alert.sub.sub_tier
     : alert.type === 'sub' && alert.notice_type === 'resub'
     ? alert.resub.sub_tier
+    : alert.type === 'sub' && alert.notice_type === 'community_sub_gift'
+    ? alert.community_sub_gift.sub_tier
     : '1000'
 
   const callSound = (src: string, fadeTimer?: number) => {
@@ -50,13 +52,18 @@ function SubAlert({
   }
 
   useEffect(() => {
+    const isEpic = alert.type === 'sub'
+      && alert.notice_type === 'community_sub_gift'
+      && alert.community_sub_gift.total >= 5
     const sfx = callSound('/sounds/mhw_quest_complete_cleaned.mp3', 2500)
-    const music = callSound('/sounds/quest_complete_music.mp3')
+    const music = isEpic
+    ? callSound('/sounds/mhw_quest_complete_epic.mp3')
+    : callSound('/sounds/quest_complete_music.mp3')
     return () => {
       sfx.unload()
       music.unload()
     }
-  }, [])
+  }, [alert])
   
   useGSAP(() => {
     const tl = gsap.timeline()
@@ -99,6 +106,7 @@ function SubAlert({
     const timer = setTimeout(() => {
       if (!alert.created_at) return
       removeAlert(alert.created_at)
+      pauseAlerts()
     }, 12000)
   
     return () => clearTimeout(timer)

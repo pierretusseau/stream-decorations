@@ -2,12 +2,14 @@
 
 import React, { useEffect, useState } from 'react'
 import Alert from '@/components/Twitch/Alert'
-import useAlertStore from '@/store/useAlertStore'
+import useAlertStore, {
+  resumeAlerts
+} from '@/store/useAlertStore'
 import {
   subscribeToFollower,
   subscribeToSubs
 } from '@/lib/supabase-realtime'
-import type { RealtimeChannel } from '@supabase/supabase-js'
+import { RealtimeChannel } from '@supabase/supabase-js'
 
 type WebhookSubscriptionHandler = (serviceKey: string) => Promise<RealtimeChannel>
 
@@ -22,6 +24,7 @@ function TwitchAlerts({
   code: string
 }) {
   const alerts = useAlertStore((state) => state.alerts)
+  const pause = useAlertStore((state) => state.pause)
   const [currentAlert, setCurrentAlert] = useState<Alert>()
   const [serviceKey, setServiceKey] = useState()
 
@@ -38,22 +41,39 @@ function TwitchAlerts({
       .catch(err => console.error(err))
   }, [code])
 
-  if (!serviceKey) return null
-  Object.keys(subscriptions).forEach(subscription => {
-    subscriptions[subscription](serviceKey)
-  })
-
-  const animationsToDo = alerts
-    .sort((a, b) => {
-      // I hate Typescript, especially the Monday
-      if (!a.created_at || !b.created_at) return 0
-      return a.created_at - b.created_at
+  useEffect(() => {
+    if (!serviceKey) return
+    Object.keys(subscriptions).forEach(subscription => {
+      subscriptions[subscription](serviceKey)
     })
-  setCurrentAlert(animationsToDo[0])
+  }, [serviceKey])
+  
+  useEffect(() => {
+    console.log('New alerts', alerts)
+    const animationsToDo = alerts
+      .sort((a, b) => {
+        // I hate Typescript, especially the Monday
+        if (!a.created_at || !b.created_at) return 0
+        return a.created_at - b.created_at
+      })
+    setCurrentAlert(animationsToDo[0])
+  }, [alerts])
+
+  useEffect(() => {
+    if (!pause) return
+    const pauseTimer = setTimeout(() => {
+      resumeAlerts()
+    }, 1000);
+  
+    return () => clearTimeout(pauseTimer)
+  }, [pause])
+  
+
+  console.log('currentAlert', currentAlert)
   
   return (
     <div>
-      {currentAlert && <Alert
+      {currentAlert && !pause && <Alert
         alert={currentAlert}
       />}
     </div>

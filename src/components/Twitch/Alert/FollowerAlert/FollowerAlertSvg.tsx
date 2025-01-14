@@ -20,11 +20,12 @@ function FollowerAlert({
   useGSAP(() => {
     const tl = gsap.timeline()
     tl.fromTo(svgRef.current, {
-      opacity: 0
+      opacity: 0,
     }, {
       opacity: 1,
-      duration: 0.2
+      duration: 0.2,
     }, '0.2')
+    tl.to(svgRef.current, { scale: 1.3, duration: 5.5, ease: 'power1.out' }, '0.2')
     const svgProxyColor = { value: svgColor }
     tl.to(svgProxyColor, {
       value: mainColor, duration: 1,

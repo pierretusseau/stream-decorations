@@ -104,7 +104,18 @@ function SubAlertText({
         }}
       >
         {subTier > 1 && <div>Tier&nbsp;{subTier}</div>}
-        {alert.type === 'sub' && alert.notice_type === 'resub' && <div className="whitespace-nowrap">Resub{alert.resub.cumulative_months > 1 && ` x${alert.resub.cumulative_months}`}</div>}
+        {
+          alert.type === 'sub' && alert.notice_type === 'resub'
+          && <div className="whitespace-nowrap">
+            Resub{alert.resub.cumulative_months > 1 && ` x${alert.resub.cumulative_months}`}
+            </div>
+        }
+        {
+          alert.type === 'sub' && alert.notice_type === 'community_sub_gift'
+          && <div className="whitespace-nowrap">
+            Gift{alert.community_sub_gift.total > 1 && ` x${alert.community_sub_gift.total}`}
+          </div>
+        }
         {isPrime && <div>Prime</div>}
       </div>
     </div>
