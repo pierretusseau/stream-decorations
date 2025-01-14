@@ -63,7 +63,7 @@ function SubAlert({
       sfx.unload()
       music.unload()
     }
-  }, [alert])
+  }, [isEpic])
   
   useGSAP(() => {
     const tl = gsap.timeline()
