@@ -37,7 +37,7 @@ function Playground() {
                 notice_type: 'sub',
                 sub: {
                   duration_months: 1,
-                  sub_tier: "2000",
+                  sub_tier: "1000",
                   is_prime: true,
                 }
               }}

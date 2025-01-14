@@ -1,19 +1,41 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useRef } from 'react'
+import gsap from 'gsap'
+import { useGSAP } from '@gsap/react'
+
+gsap.registerPlugin(useGSAP)
 
 function Particles({
-  numberOfParticles,
   prime,
-  ref,
+  numberOfParticles = 60
 }: {
-  numberOfParticles: number
   prime: {
     isPrime: boolean
     primeColor: string
     nonPrimeColor: string
   }
-  ref: React.RefObject<HTMLDivElement|null> 
+  numberOfParticles?: number
 }) {
+  const particlesRef = useRef(null)
   const { isPrime, primeColor, nonPrimeColor } = prime
+  
+  useGSAP(() => {
+    // @ts-expect-error: GSAP
+    if (!particlesRef.current || !particlesRef.current.children) return
+    const tl = gsap.timeline()
+    // @ts-expect-error: GSAP
+    gsap.utils.toArray(particlesRef.current.children).forEach((element, i) => {
+      const odd = i % 2 === 1
+      const duration = Math.floor(Math.random() * 5) + 2
+      const y = Math.floor((Math.random() * -500) + 200)
+      const x = Math.floor((Math.random() * 200) + 100)
+      // @ts-expect-error: GSAP
+      tl.fromTo(element, { opacity: 0 }, { opacity: 1, duration: 1 }, '0.5')
+      // @ts-expect-error: GSAP
+      tl.to(element, { x: odd ? x : x * -1, y, duration }, '0.5')
+      // @ts-expect-error: GSAP
+      tl.to(element, { opacity: 0, duration: duration - 1.5 }, '2')
+    })
+  })
 
   const particles = useMemo(() => {
     const particlesArray = []
@@ -44,10 +66,10 @@ function Particles({
       ></div>)
     }
     return particlesArray
-  }, [isPrime, nonPrimeColor, numberOfParticles, primeColor])
+  }, [isPrime, nonPrimeColor, primeColor, numberOfParticles])
 
   return (
-    <div ref={ref}>
+    <div ref={particlesRef}>
       {particles.length > 0 && particles.map(particle => particle)}
     </div>
   )

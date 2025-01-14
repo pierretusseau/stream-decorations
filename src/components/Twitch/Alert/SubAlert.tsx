@@ -19,7 +19,6 @@ gsap.registerPlugin(useGSAP)
 const yellowRGB = "255,232,74"
 const orangeRGB = "255,191,77"
 const blueRGB = "56,189,248"
-const numberOfParticles = 60
 
 function SubAlert({
   alert,
@@ -30,10 +29,14 @@ function SubAlert({
   const lensRef = useRef(null)
   const raysRef = useRef(null)
   const bgRef = useRef(null)
-  const particlesRef = useRef(null)
 
   const isPrime = alert.type === 'sub' && alert.notice_type === 'sub' && alert.sub.is_prime
     || alert.type === 'sub' && alert.notice_type === 'resub' && alert.resub.is_prime
+  const subTier = alert.type === 'sub' && alert.notice_type === 'sub'
+    ? alert.sub.sub_tier
+    : alert.type === 'sub' && alert.notice_type === 'resub'
+    ? alert.resub.sub_tier
+    : '1000'
 
   const callSound = (src: string, fadeTimer?: number) => {
     const sound = new Howl({
@@ -90,25 +93,6 @@ function SubAlert({
     }, "5.7")
   }, {
     dependencies: []
-  });
-
-  useGSAP(() => {
-    // @ts-expect-error: GSAP
-    if (!particlesRef.current || !particlesRef.current.children) return
-    const tl = gsap.timeline()
-    // @ts-expect-error: GSAP
-    gsap.utils.toArray(particlesRef.current.children).forEach((element, i) => {
-      const odd = i % 2 === 1
-      const duration = Math.floor(Math.random() * 5) + 2
-      const y = Math.floor((Math.random() * -500) + 300)
-      const x = Math.floor((Math.random() * 200) + 100)
-      // @ts-expect-error: GSAP
-      tl.fromTo(element, { opacity: 0 }, { opacity: 1, duration: 1 }, '0.5')
-      // @ts-expect-error: GSAP
-      tl.to(element, { x: odd ? x : x * -1, y, duration }, '0.5')
-      // @ts-expect-error: GSAP
-      tl.to(element, { opacity: 0, duration: duration - 1.5 }, '2')
-    })
   })
 
   useEffect(() => {
@@ -153,16 +137,16 @@ function SubAlert({
         <SubAlertText
           color={isPrime ? blueRGB : yellowRGB}
           alert={alert}
+          subTier={parseInt(subTier) / 1000}
           isPrime={isPrime}
         />
         <Particles
-          numberOfParticles={numberOfParticles}
           prime={{
             isPrime,
             primeColor: blueRGB,
             nonPrimeColor: orangeRGB
           }}
-          ref={particlesRef}
+          numberOfParticles={parseInt(subTier) / 1000 * 30}
         />
       </div>
     </div>

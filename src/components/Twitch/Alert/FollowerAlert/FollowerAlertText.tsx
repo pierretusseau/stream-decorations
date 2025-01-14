@@ -5,22 +5,17 @@ import SplitType from 'split-type'
 
 gsap.registerPlugin(useGSAP)
 
-function SubAlertText({
+function FollowerAlertText({
   alert,
   color,
-  subTier,
-  isPrime,
 }: {
   alert: Alert
   color: string
-  subTier: number
-  isPrime: boolean
 }) {
   const textWrapperRef = useRef(null)
   const textRef = useRef(null)
   const contentRef = useRef(null)
-  const complementRef = useRef(null)
-  const [textDropColor, setTextDropColor] = useState('255,255,255')
+  // const [textDropColor, setTextDropColor] = useState('255,255,255')
   const [textDropSize, setTextDropSize] = useState(10)
   
   useGSAP(() => {
@@ -35,12 +30,12 @@ function SubAlertText({
       opacity: 1,
       duration: 0.5
     }, '0')
-    tl.to(textRef.current, { color: `rgb(${color})`, duration: 0.2 }, '0.2')
-    const textDropColorProxy = { value: textDropColor }
-    tl.to(textDropColorProxy, {
-      value: color, duration: 2,
-      onUpdate: () => setTextDropColor(textDropColorProxy.value)
-    }, '1')
+    // tl.to(textRef.current, { color: `rgb(${color})`, duration: 0.2 }, '0.2')
+    // const textDropColorProxy = { value: textDropColor }
+    // tl.to(textDropColorProxy, {
+    //   value: color, duration: 2,
+    //   onUpdate: () => setTextDropColor(textDropColorProxy.value)
+    // }, '1')
     const textDropSizeProxy = { value: textDropSize }
     tl.to(textDropSizeProxy, {
       value: 5, duration: 2,
@@ -50,9 +45,6 @@ function SubAlertText({
       color: "#FFF",
       duration: 0.2
     }, '0.4')
-    tl.to(complementRef.current, { opacity: 1, duration: 0.5 }, '1.2')
-    tl.to(complementRef.current, { y: 50, scale: 1, duration: 4, ease: 'power1.out' }, '1.2')
-    tl.to(complementRef.current, { opacity: 0, duration: 2 }, '3.2')
     tl.fromTo(splitText.chars, { opacity: 0 }, { opacity: 1, duration: 0.4, stagger: 0.01 }, "0.5")
     tl.fromTo(splitText.chars, { color: `rgb(${color})`, }, { color: "#FFF", duration: 0.5, stagger: 0.025 }, "0.5")
     tl.to(textRef.current, {
@@ -67,18 +59,19 @@ function SubAlertText({
   })
 
   return (
-    <div ref={textWrapperRef} className="absolute top-[180px] left-1/2 -translate-x-1/2">
+    <div ref={textWrapperRef} className="absolute top-[160px] left-1/2 -translate-x-1/2">
       <div
         className={`${[
           "font-mhn text-[60px] absolute top-0 left-1/2 -translate-x-1/2",
         ].join(' ')}`}
         style={{
           whiteSpace: 'nowrap',
-          filter: `drop-shadow(0 0 ${textDropSize}px rgba(${textDropColor},1))`
+          // filter: `drop-shadow(0 0 ${textDropSize}px rgba(${textDropColor},1))`
+          filter: `drop-shadow(0 0 ${textDropSize}px rgba(${color},1))`
         }}
         ref={textRef}
       >
-        New Sub!
+        New follower
       </div>
       <div
         className={`${[
@@ -86,29 +79,15 @@ function SubAlertText({
         ].join(' ')}`}
         ref={contentRef}
         style={{
-          filter: `drop-shadow(0 0 ${textDropSize}px rgba(${textDropColor},1))`,
+          // filter: `drop-shadow(0 0 ${textDropSize}px rgba(${textDropColor},1))`,
+          filter: `drop-shadow(0 0 ${textDropSize}px rgba(${color},1))`,
           opacity: 0
         }}
       >
         {alert.user_name}
       </div>
-      <div
-        className={`${[
-          'font-mhn text-[70px] absolute top-[200px] left-1/2 -translate-x-1/2 flex flex-col items-center',
-        ].join(' ')}`}
-        ref={complementRef}
-        style={{
-          filter: `drop-shadow(0 0 ${textDropSize}px rgba(${textDropColor},1))`,
-          opacity: 0,
-          lineHeight: '60px'
-        }}
-      >
-        {subTier > 1 && <div>Tier&nbsp;{subTier}</div>}
-        {alert.type === 'sub' && alert.notice_type === 'resub' && <div className="whitespace-nowrap">Resub{alert.resub.cumulative_months > 1 && ` x${alert.resub.cumulative_months}`}</div>}
-        {isPrime && <div>Prime</div>}
-      </div>
     </div>
   )
 }
 
-export default SubAlertText
+export default FollowerAlertText
