@@ -1,6 +1,6 @@
 import { create } from "zustand"
 import {
-  persist,
+  // persist,
   // createJSONStorage
 } from 'zustand/middleware'
 // import supabase from '@//lib/supabase-browser'
