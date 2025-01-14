@@ -1,11 +1,11 @@
 import React, { useRef, useState } from 'react'
-import MHWHeadingBack from '@/components/Svg/MHWHeadingBack'
+import MHWQuestFailed from '@/components/Svg/MHWQuestFailed'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 
 gsap.registerPlugin(useGSAP)
 
-function FollowerAlertSvg({
+function RaidAlertSvg({
   mainColor,
   secondaryColor,
   timingOut
@@ -27,7 +27,7 @@ function FollowerAlertSvg({
       opacity: 1,
       duration: 0.2,
     }, '0.2')
-    tl.to(svgRef.current, { scale: 1.3, duration: 5.5, ease: 'power1.out' }, '0.2')
+    tl.to(svgRef.current, { scale: 1.3, duration: 8, ease: 'power1.out' }, '0.2')
     const svgProxyColor = { value: svgColor }
     tl.to(svgProxyColor, {
       value: mainColor, duration: 1,
@@ -44,13 +44,13 @@ function FollowerAlertSvg({
       onUpdate: () => setOpacity(svgOpacity.value)
     }, '0.5')
     tl.to(svgRef.current, {
-      opacity: 0, scale: 0.8, duration: 2, ease: 'power4.out'
+      opacity: 0, scale: 0.8, duration: 5, ease: 'power4.out'
     }, timingOut)
   })
 
   return (
     <div ref={svgRef}>
-      <MHWHeadingBack
+      <MHWQuestFailed
         className={`${[].join(' ')}`}
         color={`rgba(${svgColor},${opacity})`}
         bgColor={`rgba(${svgBgColor},1)`}
@@ -60,4 +60,4 @@ function FollowerAlertSvg({
   )
 }
 
-export default FollowerAlertSvg
+export default RaidAlertSvg

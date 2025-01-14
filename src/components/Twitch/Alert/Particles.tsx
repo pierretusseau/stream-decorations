@@ -5,18 +5,17 @@ import { useGSAP } from '@gsap/react'
 gsap.registerPlugin(useGSAP)
 
 function Particles({
-  prime,
+  color,
+  primeColor,
+  bgColor,
   numberOfParticles = 60
 }: {
-  prime: {
-    isPrime: boolean
-    primeColor: string
-    nonPrimeColor: string
-  }
+  color: string
+  primeColor?: string
+  bgColor?: string
   numberOfParticles?: number
 }) {
   const particlesRef = useRef(null)
-  const { isPrime, primeColor, nonPrimeColor } = prime
   
   useGSAP(() => {
     // @ts-expect-error: GSAP
@@ -47,7 +46,7 @@ function Particles({
       const style = {
         width: `${randomSize}px`,
         height: `${randomSize}px`,
-        boxShadow: `0 0 5px rgba(${isPrime ? primeColor : nonPrimeColor}, 1)`,
+        boxShadow: `0 0 5px rgba(${primeColor || color}, 1)`,
         top: `${randomY}px`,
       }
       const positionStyle = index % 2 === 0
@@ -60,13 +59,18 @@ function Particles({
         className={`${[
           'absolute',
           'rounded-full',
-          isPrime ? 'bg-blue-400' : 'bg-yellow-300'
+          primeColor
+            ? 'bg-blue-400'
+            : 'bg-yellow-300'
         ].join(' ')}`}
-        style={finalStyle}
+        style={{
+          ...finalStyle,
+          backgroundColor: bgColor
+        }}
       ></div>)
     }
     return particlesArray
-  }, [isPrime, nonPrimeColor, primeColor, numberOfParticles])
+  }, [color, primeColor, bgColor, numberOfParticles])
 
   return (
     <div ref={particlesRef}>

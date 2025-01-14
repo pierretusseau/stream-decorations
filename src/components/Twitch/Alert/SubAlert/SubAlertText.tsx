@@ -10,11 +10,13 @@ function SubAlertText({
   color,
   subTier,
   isPrime,
+  timingOut,
 }: {
   alert: Alert
   color: string
   subTier: number
   isPrime: boolean
+  timingOut: string
 }) {
   const textWrapperRef = useRef(null)
   const textRef = useRef(null)
@@ -57,13 +59,13 @@ function SubAlertText({
     tl.fromTo(splitText.chars, { color: `rgb(${color})`, }, { color: "#FFF", duration: 0.5, stagger: 0.025 }, "0.5")
     tl.to(textRef.current, {
       scale: 1.5, duration: 2, ease: "expoScale(10,2.5,power2.out)"
-    }, "5.7")
+    }, timingOut)
     tl.to(textRef.current, {
       opacity: 0, duration: 0.4
-    }, "5.7")
+    }, timingOut)
     tl.to(contentRef.current, {
       opacity: 0, duration: 2
-    }, "6")
+    }, ">0.3")
   })
 
   return (

@@ -8,9 +8,11 @@ gsap.registerPlugin(useGSAP)
 function SubAlertSvg({
   mainColor,
   secondaryColor,
+  timingOut
 }: {
   mainColor: string
   secondaryColor: string
+  timingOut: string
 }) {
   const svgRef = useRef(null)
   const [opacity, setOpacity] = useState(1)
@@ -42,7 +44,7 @@ function SubAlertSvg({
     }, '0.5')
     tl.to(svgRef.current, {
       opacity: 0, scale: 0.8, duration: 2, ease: 'power4.out'
-    }, "5.7")
+    }, timingOut)
   })
 
   return (

@@ -9,6 +9,7 @@ declare global {
   type Decoration = TablesDecorations<'modules'>
   type Follower = TablesDecorations<'followers'>
   type Sub = TablesDecorations<'subs'>
+  type Raid = TablesDecorations<'raids'>
   // AMAW
   type DatabaseAmaw = DBAmaw
   type Monster = TablesAmaw<'monsters'>

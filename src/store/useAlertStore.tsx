@@ -29,7 +29,11 @@ declare global {
     notice_type: 'community_sub_gift'
     community_sub_gift: TwitchCommunitySubGift
   } & SubAlertBase
-  type Alert = AlertBase & (FollowAlert | SubAlert | ResubAlert | CommunitySubGiftAlert)
+  type RaidAlert = {
+    type: 'raid'
+    viewers: number
+  }
+  type Alert = AlertBase & (FollowAlert | SubAlert | ResubAlert | CommunitySubGiftAlert | RaidAlert)
 }
 
 

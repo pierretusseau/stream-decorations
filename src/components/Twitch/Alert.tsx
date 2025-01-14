@@ -1,6 +1,7 @@
 import React from 'react'
 import FollowerAlert from '@/components/Twitch/Alert/FollowerAlert'
 import SubAlert from '@/components/Twitch/Alert/SubAlert'
+import RaidAlert from '@/components/Twitch/Alert/RaidAlert'
 
 function Alert({
   alert
@@ -18,15 +19,13 @@ function Alert({
       alert={alert}
     />
   } else if (alert.type === 'sub' && alert.notice_type === 'community_sub_gift') {
-    // TODO : Community sub gift alert
     return <SubAlert
       alert={alert}
     />
-  // } else if (alert.type === 'raid') {
-  //   // TODO : Raid alert
-  //   return <RaidAlert
-  //     alert={alert}
-  //   />
+  } else if (alert.type === 'raid') {
+    return <RaidAlert
+      alert={alert}
+    />
   } else {
     return <div>Unknown alert</div> 
   }

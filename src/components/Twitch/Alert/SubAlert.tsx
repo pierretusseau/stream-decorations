@@ -1,12 +1,9 @@
 import React, {
   useEffect,
-  useRef,
-  // useState
+  useRef
 } from 'react'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
-// import MHWQuestComplete from '@/components/Svg/MHWQuestComplete'
-// import SplitType from 'split-type'
 import Image from 'next/image'
 import { Howl } from 'howler'
 import { pauseAlerts, removeAlert } from '@/store/useAlertStore'
@@ -39,6 +36,12 @@ function SubAlert({
     : alert.type === 'sub' && alert.notice_type === 'community_sub_gift'
     ? alert.community_sub_gift.sub_tier
     : '1000'
+    
+  const isEpic = alert.type === 'sub'
+    && alert.notice_type === 'community_sub_gift'
+    && alert.community_sub_gift.total >= 5
+  
+  const timingOut = isEpic ? "8" : "5.7"
 
   const callSound = (src: string, fadeTimer?: number) => {
     const sound = new Howl({
@@ -52,13 +55,10 @@ function SubAlert({
   }
 
   useEffect(() => {
-    const isEpic = alert.type === 'sub'
-      && alert.notice_type === 'community_sub_gift'
-      && alert.community_sub_gift.total >= 5
     const sfx = callSound('/sounds/mhw_quest_complete_cleaned.mp3', 2500)
     const music = isEpic
-    ? callSound('/sounds/mhw_quest_complete_epic.mp3')
-    : callSound('/sounds/quest_complete_music.mp3')
+      ? callSound('/sounds/mhw_quest_complete_epic.mp3')
+      : callSound('/sounds/quest_complete_music.mp3')
     return () => {
       sfx.unload()
       music.unload()
@@ -97,7 +97,7 @@ function SubAlert({
     tl.fromTo(bgRef.current, { scale: 0 }, { scale: 1, duration: 2 }, '0.2')
     tl.to(bgRef.current, {
       opacity: 0, duration: 2
-    }, "5.7")
+    }, timingOut)
   }, {
     dependencies: []
   })
@@ -141,19 +141,18 @@ function SubAlert({
         <SubAlertSvg
           mainColor={isPrime ? blueRGB : yellowRGB}
           secondaryColor={isPrime ? blueRGB : orangeRGB}
+          timingOut={timingOut}
         />
         <SubAlertText
           color={isPrime ? blueRGB : yellowRGB}
           alert={alert}
           subTier={parseInt(subTier) / 1000}
           isPrime={isPrime}
+          timingOut={timingOut}
         />
         <Particles
-          prime={{
-            isPrime,
-            primeColor: blueRGB,
-            nonPrimeColor: orangeRGB
-          }}
+          color={orangeRGB}
+          primeColor={isPrime ? blueRGB : undefined}
           numberOfParticles={parseInt(subTier) / 1000 * 30}
         />
       </div>

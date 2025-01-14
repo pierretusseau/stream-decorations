@@ -39,3 +39,20 @@ export const subscribeToSubs = async (serviceKey: string) => {
     )
     .subscribe()
 }
+export const subscribeToRaids = async (serviceKey: string) => {
+  const supabase = await createSupaClient(serviceKey)
+  return supabase
+    .channel('raids')
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'raids' },
+      (payload) => {
+        console.log('=> Received new sub:', payload)
+        addAlert({
+          created_at: new Date().getTime(),
+          type: 'raid',
+          user_name: payload.new.raider_user_name,
+          viewers: payload.new.viewers,
+        })
+      }
+    )
+    .subscribe()
+}

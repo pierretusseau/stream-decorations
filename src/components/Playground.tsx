@@ -8,6 +8,7 @@ import { createTheme } from '@mui/material';
 import AlertBlock from '@/components/Playground/AlertBlock'
 import AlertTester from '@/components/Playground/AlertTester'
 import SubAlert from '@/components/Twitch/Alert/SubAlert'
+import RaidAlert from '@/components/Twitch/Alert/RaidAlert'
 
 const darkTheme = createTheme({
   palette: {
@@ -93,6 +94,15 @@ function Playground() {
                   cumulative_total: 20,
                   sub_tier: "1000",
                 }
+              }}
+            />
+          </AlertBlock>
+          <AlertBlock title="Raid">
+            <RaidAlert
+              alert={{
+                type: "raid",
+                user_name: "VeryLongNicknameForTests",
+                viewers: 1234
               }}
             />
           </AlertBlock>

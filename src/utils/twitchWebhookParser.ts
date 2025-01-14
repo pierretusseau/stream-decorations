@@ -55,12 +55,12 @@ type UserSubEvent = {
 
 type SubEvent = SubEventBase & (AnonymousSubEvent | UserSubEvent)
 
-// type RaidEvent = {
-//   raider_user_id: string,
-//   raider_user_login: string,
-//   raider_user_name: string,
-//   viewers: number,
-// }
+type RaidEvent = {
+  raider_user_id: string,
+  raider_user_login: string,
+  raider_user_name: string,
+  viewers: number,
+}
 
 const TwitchWebhookParser = async ({
   type,
@@ -78,7 +78,7 @@ const TwitchWebhookParser = async ({
 
   if (type === 'channel.follow') addSupaFollower(supabase, event as FollowerEvent)
   if (type === 'channel.chat.notification') addSupaSub(supabase, event as SubEvent)
-  // if (type === 'channel.raid') addSupaRaid(supabase, event as RaidEvent)
+  if (type === 'channel.raid') addSupaRaid(supabase, event as RaidEvent)
 }
 
 export default TwitchWebhookParser
@@ -113,4 +113,18 @@ const addSupaSub = async (supabase: SupabaseClient, event: SubEvent) => {
     .upsert(newSub)
   if (error) console.error(error)
   if (data) console.log('New sub added to supabase :', newSub)
+}
+
+const addSupaRaid = async (supabase: SupabaseClient, event: RaidEvent) => {
+  const newRaid = {
+    raider_user_id: event.raider_user_id,
+    raider_user_login: event.raider_user_login,
+    raider_user_name: event.raider_user_name,
+    viewers: event.viewers,
+  }
+  const { data, error } = await supabase
+    .from('raids')
+    .upsert(newRaid)
+  if (error) console.error(error)
+  if (data) console.log('New raid added to supabase :', newRaid)
 }

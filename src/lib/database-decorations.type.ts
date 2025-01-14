@@ -84,6 +84,33 @@ export type Database = {
         }
         Relationships: []
       }
+      raids: {
+        Row: {
+          created_at: string
+          id: number
+          raider_user_id: string
+          raider_user_login: string
+          raider_user_name: string
+          viewers: number
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          raider_user_id: string
+          raider_user_login: string
+          raider_user_name: string
+          viewers: number
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          raider_user_id?: string
+          raider_user_login?: string
+          raider_user_name?: string
+          viewers?: number
+        }
+        Relationships: []
+      }
       subs: {
         Row: {
           chatter_user_id: number | null
