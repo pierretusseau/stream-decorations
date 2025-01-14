@@ -56,9 +56,9 @@ type UserSubEvent = {
 type SubEvent = SubEventBase & (AnonymousSubEvent | UserSubEvent)
 
 type RaidEvent = {
-  raider_user_id: string,
-  raider_user_login: string,
-  raider_user_name: string,
+  from_broadcaster_user_id: string,
+  from_broadcaster_user_login: string,
+  from_broadcaster_user_name: string,
   viewers: number,
 }
 
@@ -91,11 +91,10 @@ const addSupaFollower = async (supabase: SupabaseClient, event: FollowerEvent) =
     followed_at: event.followed_at
   }
   // const newFollower = event as Follower
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from('followers')
     .upsert(newFollower)
   if (error) console.error(error)
-  if (data) console.log('New follower added to supabase :', newFollower)
 }
 
 const addSupaSub = async (supabase: SupabaseClient, event: SubEvent) => {
@@ -108,23 +107,22 @@ const addSupaSub = async (supabase: SupabaseClient, event: SubEvent) => {
     resub: event.resub,
     community_sub_gift: event.community_sub_gift
   }
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from('subs')
     .upsert(newSub)
   if (error) console.error(error)
-  if (data) console.log('New sub added to supabase :', newSub)
 }
 
 const addSupaRaid = async (supabase: SupabaseClient, event: RaidEvent) => {
+  console.log('Trying to add raid to supabase...')
   const newRaid = {
-    raider_user_id: event.raider_user_id,
-    raider_user_login: event.raider_user_login,
-    raider_user_name: event.raider_user_name,
+    from_broadcaster_user_id: event.from_broadcaster_user_id,
+    from_broadcaster_user_login: event.from_broadcaster_user_login,
+    from_broadcaster_user_name: event.from_broadcaster_user_name,
     viewers: event.viewers,
   }
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from('raids')
     .upsert(newRaid)
   if (error) console.error(error)
-  if (data) console.log('New raid added to supabase :', newRaid)
 }

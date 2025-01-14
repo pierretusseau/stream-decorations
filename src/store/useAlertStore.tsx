@@ -80,32 +80,50 @@ export const resumeAlerts = () => {
 }
 
 export const subscribeToAllTables = async (serviceKey: string) => {
-  console.log('Subscribing to followers...')
+  console.log('Subscribing to Followers...')
   const supabase = await createSupaClient(serviceKey)
   supabase
     .channel('followers')
     .on(
       'postgres_changes',
-      { event: 'INSERT', schema: 'public', table: 'hunts' },
-      (payload) => {
-        console.log('=> Received new follower:', payload)
-        addAlert({
-          created_at: new Date().getTime(),
-          type: 'follower',
-          user_name: payload.new.user_name
-        })
-      }
-    )
-    .subscribe()
-  supabase
-    .channel('followers')
-    .on(
-      'postgres_changes',
-      { event: 'INSERT', schema: 'public', table: 'hunts' },
+      { event: 'INSERT', schema: 'public', table: 'followers' },
       (payload) => addAlert({
         created_at: new Date().getTime(),
         type: 'follower',
         user_name: payload.new.user_name
+      })
+    )
+    .subscribe()
+    
+  console.log('Subscribing to Subs...')
+  supabase
+    .channel('subs')
+    .on(
+      'postgres_changes',
+      { event: 'INSERT', schema: 'public', table: 'subs' },
+      (payload) => addAlert({
+        created_at: new Date().getTime(),
+        type: 'sub',
+        user_name: payload.new.chatter_user_name,
+        notice_type: payload.new.notice_type,
+        sub: payload.new.sub,
+        resub: payload.new.resub,
+        community_sub_gift: payload.new.community_sub_gift,
+      })
+    )
+    .subscribe()
+    
+  console.log('Subscribing to Raids...')
+  supabase
+    .channel('raids')
+    .on(
+      'postgres_changes',
+      { event: 'INSERT', schema: 'public', table: 'raids' },
+      (payload) => addAlert({
+        created_at: new Date().getTime(),
+        type: 'raid',
+        user_name: payload.new.from_broadcaster_user_name,
+        viewers: payload.new.viewers,
       })
     )
     .subscribe()

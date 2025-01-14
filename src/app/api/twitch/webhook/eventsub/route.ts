@@ -67,7 +67,7 @@ export async function POST(
     console.log("Signatures match");
     if (MESSAGE_TYPE_NOTIFICATION  === req.headers.get(MESSAGE_TYPE)) {
       // Supabase Updates
-      // console.log(JSON.stringify(body.event, null, 4));
+      console.log(JSON.stringify(body.event, null, 4));
       TwitchWebhookParser({
         type: body.subscription.type,
         event: body.event,

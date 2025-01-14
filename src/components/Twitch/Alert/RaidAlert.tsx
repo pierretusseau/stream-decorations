@@ -21,7 +21,6 @@ function RaidAlert({
   alert: Alert
 }) {
   const containerRef = useRef(null)
-  const imageRef = useRef(null)
   const bgRef = useRef(null)
   
   const callSound = useCallback((src: string, fade?: {
@@ -35,7 +34,6 @@ function RaidAlert({
       // html5: true,
     })
     sound.play()
-    console.log(fade)
     if (fade) sound.fade(fade.from || 0, fade.to || 1, fade.duration)
     
     return sound
@@ -65,15 +63,6 @@ function RaidAlert({
       tl.fromTo(bgRef.current,
         { scale: 0 }, { scale: 1, duration: 2 },
       '0.2')
-      tl.fromTo(imageRef.current, {
-        opacity: 0, scale: 0.8
-      }, {
-        opacity: 0.1, scale: 1.7,
-        duration: 7, ease: 'power1.out'
-      }, '0.3')
-      tl.to(imageRef.current, {
-        opacity: 0, scale: 1, duration: 1
-      }, timingOut)
       tl.to(bgRef.current, {
         opacity: 0, duration: 2
       }, timingOut)

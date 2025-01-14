@@ -87,26 +87,26 @@ export type Database = {
       raids: {
         Row: {
           created_at: string
+          from_broadcaster_user_id: string
+          from_broadcaster_user_login: string
+          from_broadcaster_user_name: string
           id: number
-          raider_user_id: string
-          raider_user_login: string
-          raider_user_name: string
           viewers: number
         }
         Insert: {
           created_at?: string
+          from_broadcaster_user_id: string
+          from_broadcaster_user_login: string
+          from_broadcaster_user_name: string
           id?: number
-          raider_user_id: string
-          raider_user_login: string
-          raider_user_name: string
           viewers: number
         }
         Update: {
           created_at?: string
+          from_broadcaster_user_id?: string
+          from_broadcaster_user_login?: string
+          from_broadcaster_user_name?: string
           id?: number
-          raider_user_id?: string
-          raider_user_login?: string
-          raider_user_name?: string
           viewers?: number
         }
         Relationships: []

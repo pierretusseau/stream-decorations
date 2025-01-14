@@ -3,20 +3,9 @@
 import React, { useEffect, useState } from 'react'
 import Alert from '@/components/Twitch/Alert'
 import useAlertStore, {
-  resumeAlerts
+  resumeAlerts,
+  subscribeToAllTables
 } from '@/store/useAlertStore'
-import {
-  subscribeToFollower,
-  subscribeToSubs
-} from '@/lib/supabase-realtime'
-import { RealtimeChannel } from '@supabase/supabase-js'
-
-type WebhookSubscriptionHandler = (serviceKey: string) => Promise<RealtimeChannel>
-
-const subscriptions: Record<string, WebhookSubscriptionHandler> = {
-  'follower': subscribeToFollower,
-  'sub': subscribeToSubs
-}
 
 function TwitchAlerts({
   code
@@ -43,13 +32,10 @@ function TwitchAlerts({
 
   useEffect(() => {
     if (!serviceKey) return
-    Object.keys(subscriptions).forEach(subscription => {
-      subscriptions[subscription](serviceKey)
-    })
+    subscribeToAllTables(serviceKey)
   }, [serviceKey])
   
   useEffect(() => {
-    console.log('New alerts', alerts)
     const animationsToDo = alerts
       .sort((a, b) => {
         // I hate Typescript, especially the Monday
@@ -67,9 +53,6 @@ function TwitchAlerts({
   
     return () => clearTimeout(pauseTimer)
   }, [pause])
-  
-
-  console.log('currentAlert', currentAlert)
   
   return (
     <div>
