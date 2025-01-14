@@ -38,13 +38,13 @@ function Header() {
             Channel Chat Notifications
           </Button>}
           {twitchAuthState && <Button
-            onClick={() => setOpenModal(true)}
-          ><Cog6ToothIcon className="size-4"/></Button>}
-          {twitchAuthState && <Button
             href="/twitch-handler"
           >
             Twitch Dashboard
           </Button>}
+          {twitchAuthState && <Button
+            onClick={() => setOpenModal(true)}
+          ><Cog6ToothIcon className="size-4"/></Button>}
           <TwitchLogin
             setOpenModal={setOpenModal}
           />
