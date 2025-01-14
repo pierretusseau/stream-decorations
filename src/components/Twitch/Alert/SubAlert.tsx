@@ -95,7 +95,7 @@ function SubAlert({
       ></div>)
     }
     setParticles(particlesArray)
-  }, [])
+  }, [isPrime])
   
   useGSAP(
     () => {
