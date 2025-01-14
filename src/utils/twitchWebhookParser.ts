@@ -109,7 +109,7 @@ const addSupaSub = async (supabase: SupabaseClient, event: SubEvent) => {
   }
   const { error } = await supabase
     .from('subs')
-    .upsert(newSub)
+    .insert(newSub)
   if (error) console.error(error)
 }
 
@@ -121,18 +121,11 @@ const addSupaRaid = async (supabase: SupabaseClient, event: RaidEvent) => {
     from_broadcaster_user_name: event.from_broadcaster_user_name,
     viewers: event.viewers,
   }
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from('raids')
-    .upsert(newRaid)
-    .select()
-    .limit(1)
-    .single()
+    .insert(newRaid)
   if (error) {
     console.log('Error adding raid to supabase')
     console.error(error)
-  }
-  if (data) {
-    console.log('Added raid to supabase')
-    console.log(data)
   }
 }

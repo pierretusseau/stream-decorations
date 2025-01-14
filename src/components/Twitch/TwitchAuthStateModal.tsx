@@ -28,6 +28,7 @@ function TwitchAuthStateModal({
   const handleClose = () => setOpenModal(false);
   const twitchAuthState = useTwitchStore((state) => state.twitch_auth_state)
   const serviceKey = useSettingsStore((state) => state.supabase_decorations_service_key)
+  const userToken = useSettingsStore((state) => state.user_access_token)
 
   return (
     <Modal
@@ -65,7 +66,7 @@ function TwitchAuthStateModal({
           label="User Access Token"
           variant="outlined"
           type="password"
-          value={serviceKey}
+          value={userToken}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => editUserAccessToken(e.target.value)}
           fullWidth
         />
