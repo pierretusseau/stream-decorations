@@ -28,7 +28,6 @@ function FollowerAlert({ alert }:{ alert: Alert }) {
       // html5: true,
     })
     sound.play()
-    console.log(fade)
     if (fade) sound.fade(fade.from || 0, fade.to || 1, fade.duration)
     
     return sound
