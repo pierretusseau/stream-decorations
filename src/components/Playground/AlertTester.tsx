@@ -69,15 +69,15 @@ function AlertTester() {
           community_sub_gift: options.community_sub_gift
         })
         .select('id')
-        .single()
       if (error) console.error(error)
       if (data) {
-        console.log('Created test follower')
+        console.log('Created test sub')
         setTimeout(async () => {
+          const { id } = data[0]
           const response = await supabase
-            .from('followers')
+            .from('subs')
             .delete()
-            .eq('id', data.id)
+            .eq('id', id)
           if (response) {
             setDisplayingAlert(false)
             setRandomID(randomIDGenerator())
