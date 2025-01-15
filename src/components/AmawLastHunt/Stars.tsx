@@ -12,6 +12,8 @@ function Stars({
 }) {
   const starsRef = useRef(null)
 
+  // console.log('starsRef', starsRef)
+
   useGSAP(() => {
     // @ts-expect-error: GSAP
     if (!starsRef.current || !starsRef.current.children) return

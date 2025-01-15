@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 import useHuntStore, { fetchHunts, subscribeToHunts } from '@/store/useHuntStore'
@@ -18,21 +18,104 @@ function AmawLastHunt({
   monsters: Monster[]
   weapons: Weapon[]
 }) {
-  const timerRef = useRef(null)
-  const questRef = useRef(null)
-  const monsterRef = useRef(null)
-  const weaponRef = useRef(null)
+  const huntsStore = useHuntStore((state) => state.hunts)
+  const [prevHunts, setPrevHunts] = useState<Hunt[]>([])
+  const [currentHunt, setCurrentHunt] = useState<Hunt|null>()
+  const [outAnim, setOutAnim] = useState<boolean>(false)
+  const [inAnim, setInAnim] = useState<boolean>(true)
+
+  const handleNewHunt = useCallback(() => {
+    setCurrentHunt(null)
+    setTimeout(() => {
+      setCurrentHunt(huntsStore.slice(-1)[0])
+      setInAnim(true)
+    }, 100);
+  }, [huntsStore])
+
+  if (huntsStore.length > 0) {
+    if (huntsStore !== prevHunts) {
+      // Update prevHunts to stop the rerendering
+      setPrevHunts(huntsStore)
+      // When store updates
+      if (currentHunt) {
+        if (currentHunt.id !== huntsStore.slice(-1)[0].id) {
+          // If the hunt we receive is different from the store one then animOut
+          // Animate old one out
+          setOutAnim(true)
+        }
+      } else {
+        // Else we need to define the next hunt
+        setCurrentHunt(huntsStore.slice(-1)[0])
+      }
+    }
+  } else {
+    console.log('Waiting for huntsStore to init')
+  }
 
   useEffect(() => {
     fetchHunts()
     subscribeToHunts()
   }, [])
 
+  // const lastHunt = huntsStore.slice(-1)[0] || null
+  const lastHunt = currentHunt
+
+  if (!lastHunt) return  null
+
+  const lastHuntMonster = monsters.find(monster => monster.id === lastHunt.monster)
+  const lastHuntWeapon = weapons.find(weapon => weapon.id === lastHunt.weapon)
+
+  if (!lastHuntMonster || !lastHuntWeapon) return null
+
+  return <LastHuntContainer
+    hunt={lastHunt}
+    weapon={lastHuntWeapon}
+    monster={lastHuntMonster}
+    inAnim={inAnim}
+    outAnim={outAnim}
+    setOutAnim={setOutAnim}
+    setInAnim={setInAnim}
+    handleNewHunt={handleNewHunt}
+  />
+}
+
+export default AmawLastHunt
+
+const LastHuntContainer = ({
+  hunt,
+  weapon,
+  monster,
+  inAnim,
+  outAnim,
+  setOutAnim,
+  setInAnim,
+  handleNewHunt,
+}: {
+  hunt: Hunt
+  weapon: Weapon
+  monster: Monster
+  inAnim: boolean
+  outAnim: boolean
+  setOutAnim: React.Dispatch<React.SetStateAction<boolean>>
+  setInAnim: React.Dispatch<React.SetStateAction<boolean>>
+  handleNewHunt: () => void
+}) => {
+  const containerRef = useRef(null)
+  const timerRef = useRef(null)
+  const questRef = useRef(null)
+  const monsterRef = useRef(null)
+  const weaponRef = useRef(null)
+
   useGSAP(() => {
-    const tl = gsap.timeline()
+    if (!inAnim) return
+    const tl = gsap.timeline({
+      onComplete: () => setInAnim(false)
+    })
+    console.log(monster.name, 'should display !')
     
     if (!timerRef.current) return
     const splitTimer = new SplitType(timerRef.current, { types: 'chars' })
+    tl.set(containerRef.current, {opacity: 1})
     tl.set(splitTimer.chars, { opacity: 0 })
     tl.set(timerRef.current, { opacity: 1 })
     tl.fromTo(monsterRef.current, {
@@ -59,25 +142,29 @@ function AmawLastHunt({
       opacity: 1, y: 0,
       duration: 1
     }, "<0.1")
+  }, {
+    dependencies: [inAnim, timerRef.current]
   })
 
-  const huntsStore = useHuntStore((state) => state.hunts)
-  const lastHunt = huntsStore.slice(-1)[0] || null
-
-  if (!lastHunt) return  null
-
-  const lastHuntMonster = monsters.find(monster => monster.id === lastHunt.monster)
-  const lastHuntWeapon = weapons.find(weapon => weapon.id === lastHunt.weapon)
-
-  if (!lastHuntMonster || !lastHuntWeapon) return null
+  console.log('outAnim', outAnim)
+  useGSAP(() => {
+    if (!outAnim) return
+    const tl = gsap.timeline({
+      onComplete: () => {
+        setOutAnim(false)
+        handleNewHunt()
+      }
+    })
+    tl.to(containerRef.current, { opacity: 0, duration: 2 })
+  }, [outAnim])
 
   return (
-    <div className="flex gap-4 w-[500px] pr-[20px]">
+    <div ref={containerRef} className="flex gap-4 w-[500px] pr-[20px]">
       <div className="relative flex flex-col gap-2 items-center">
-        <div className="relative overflow-hidden">
+        <div className="relative overflow-hidden p-5">
           <div ref={monsterRef} className="opacity-0">
             <MonsterImage
-              monster={lastHuntMonster}
+              monster={monster}
               size={200}
               className="drop-shadow-[0_0_10px_rgba(0,0,0,1)]"
             />
@@ -86,23 +173,21 @@ function AmawLastHunt({
         <p
           className="m-0 text-4xl font-bold opacity-0"
           ref={timerRef}
-        >{lastHunt.time}</p>
-        <div className="absolute top-0 translate-x-3/4 -translate-y-1/3 overflow-hidden">
+        >{hunt.time}</p>
+        <div className="absolute top-11 translate-x-3/4 -translate-y-1/3 overflow-hidden">
           <div ref={weaponRef}>
             <WeaponImage
-              weapon={lastHuntWeapon}
+              weapon={weapon}
               size={120}
               className="bg-neutral-950 rounded-full p-2"
             />
           </div>
         </div>
       </div>
-      <div className="text-xl font-bold flex flex-col gap-2 pt-20">
-        <Stars monster={lastHuntMonster} />
-        <p className="m-0" ref={questRef}>{lastHuntMonster.quest}</p>
+      <div className="text-xl font-bold flex flex-col gap-2 pt-[150px]">
+        <Stars monster={monster} />
+        <p className="m-0" ref={questRef}>{monster.quest}</p>
       </div>
     </div>
   )
 }
-
-export default AmawLastHunt

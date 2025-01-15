@@ -15,11 +15,13 @@ function PlaygroundBlock({
   title,
   tabValue,
   value,
+  endButton,
 }: {
   children: React.ReactNode
   title: string
   tabValue: number
   value: number
+  endButton?: React.ReactElement,
 }) {
   const [displayAlert, setDisplayAlert] = useState(false)
   
@@ -37,6 +39,7 @@ function PlaygroundBlock({
           <Button
             onClick={() => resetRender(setDisplayAlert)}
           ><ArrowPathIcon /></Button>
+          {endButton}
         </div>
       </div>
       {displayAlert && children}
