@@ -22,14 +22,14 @@ function AmawLastHunt({
   const [prevHunts, setPrevHunts] = useState<Hunt[]>([])
   const [currentHunt, setCurrentHunt] = useState<Hunt|null>()
   const [outAnim, setOutAnim] = useState<boolean>(false)
-  const [inAnim, setInAnim] = useState<boolean>(true)
+  // const [inAnim, setInAnim] = useState<boolean>(true)
 
   const handleNewHunt = useCallback(() => {
     setOutAnim(false)
     setCurrentHunt(null)
     setTimeout(() => {
       setCurrentHunt(huntsStore.slice(-1)[0])
-      setInAnim(true)
+      // setInAnim(true)
     }, 500);
   }, [huntsStore])
 
@@ -72,9 +72,9 @@ function AmawLastHunt({
     hunt={lastHunt}
     weapon={lastHuntWeapon}
     monster={lastHuntMonster}
-    inAnim={inAnim}
+    // inAnim={inAnim}
     outAnim={outAnim}
-    setInAnim={setInAnim}
+    // setInAnim={setInAnim}
     handleNewHunt={handleNewHunt}
   />
 }
@@ -85,17 +85,17 @@ const LastHuntContainer = ({
   hunt,
   weapon,
   monster,
-  inAnim,
+  // inAnim,
   outAnim,
-  setInAnim,
+  // setInAnim,
   handleNewHunt,
 }: {
   hunt: Hunt
   weapon: Weapon
   monster: Monster
-  inAnim: boolean
+  // inAnim: boolean
   outAnim: boolean
-  setInAnim: React.Dispatch<React.SetStateAction<boolean>>
+  // setInAnim: React.Dispatch<React.SetStateAction<boolean>>
   handleNewHunt: () => void
 }) => {
   const containerRef = useRef(null)
@@ -105,37 +105,38 @@ const LastHuntContainer = ({
   const weaponRef = useRef(null)
 
   useGSAP(() => {
-    if (!inAnim) return
+    if (outAnim) return
     if (!timerRef.current) return
     
+    console.count('GSAP Main timeline')
     console.log(monster.name, 'should display !')
 
     const tl = gsap.timeline({
-      onComplete: () => setInAnim(false)
+      // onComplete: () => setInAnim(false)
     })
     const splitTimer = new SplitType(timerRef.current, { types: 'chars' })
-    // tl.set(splitTimer.chars, { opacity: 0 })
-    // tl.set(monsterRef.current, { opacity: 0 })
+    tl.set(splitTimer.chars, { opacity: 0 })
+    tl.set(monsterRef.current, { opacity: 0 })
     tl.set(containerRef.current, { opacity: 1 })
-    // tl.set(timerRef.current, { opacity: 1 })
+    tl.set(timerRef.current, { opacity: 1 })
     tl.fromTo(monsterRef.current, {
-      opacity: 0, x: "100%"
+      opacity: 0, x: "110%"
     }, {
       opacity: 1, x: "0%",
-      duration: 1, ease: 'power1.out'
+      duration: 2, ease: 'power1.out'
     })
     tl.fromTo(weaponRef.current, {
-      opacity: 0, x: "100%"
+      opacity: 0, rotate: 360, x: "110%"
     }, {
-      opacity: 1, x: "0%",
+      opacity: 1, rotate: 0, x: "0%",
       duration: 1, ease: 'power1.out'
-    }, "<0.2")
+    }, "<0.5")
     tl.fromTo(splitTimer.chars, {
-      x: 10, opacity: 0,
+      y: 20, opacity: 0,
     }, {
-      x: 0, opacity: 1,
-      duration: 2, stagger: 0.05
-    }, "<1")
+      y: 0, opacity: 1,
+      duration: 3, stagger: 0.07
+    }, "1")
     tl.fromTo(questRef.current, {
       opacity: 0, y: 20
     }, {
@@ -143,8 +144,7 @@ const LastHuntContainer = ({
       duration: 1
     }, "<0.1")
   }, {
-    dependencies: [inAnim, timerRef.current],
-    revertOnUpdate: false
+    dependencies: [outAnim, timerRef.current],
   })
 
   useGSAP(() => {
@@ -152,14 +152,15 @@ const LastHuntContainer = ({
     const tl = gsap.timeline({
       onComplete: () => handleNewHunt()
     })
-    tl.to(containerRef.current, { x: '-150%', duration: 1, ease: 'power1.in' })
+    tl.to(containerRef.current, { x: '-150%', opacity: 0, duration: 1, ease: 'power1.in' })
+    tl.to(weaponRef.current, { x: '-150%', rotation: -180, duration: 0.5, ease: 'power1.in'}, '0')
   }, [outAnim])
 
   return (
     <div ref={containerRef} className="flex gap-4 w-[500px] pr-[20px]">
       <div className="relative flex flex-col items-center">
         <div className="relative overflow-hidden p-5">
-          <div ref={monsterRef} className="w-[200px] h-[200px]">
+          <div ref={monsterRef} className="w-[200px] h-[200px] opacity-0">
             <MonsterImage
               monster={monster}
               size={200}
@@ -168,7 +169,7 @@ const LastHuntContainer = ({
           </div>
         </div>
         <p
-          className="m-0 text-4xl font-bold relative bottom-2"
+          className="m-0 text-4xl font-bold relative bottom-2 opacity-0"
           ref={timerRef}
         >{hunt.time}</p>
         <div className="absolute top-11 translate-x-3/4 -translate-y-1/3 overflow-hidden">
