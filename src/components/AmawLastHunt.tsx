@@ -143,7 +143,8 @@ const LastHuntContainer = ({
       duration: 1
     }, "<0.1")
   }, {
-    dependencies: [inAnim, timerRef.current]
+    dependencies: [inAnim, timerRef.current],
+    revertOnUpdate: false
   })
 
   useGSAP(() => {
