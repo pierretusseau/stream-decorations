@@ -25,11 +25,12 @@ function AmawLastHunt({
   const [inAnim, setInAnim] = useState<boolean>(true)
 
   const handleNewHunt = useCallback(() => {
+    setOutAnim(false)
     setCurrentHunt(null)
     setTimeout(() => {
       setCurrentHunt(huntsStore.slice(-1)[0])
       setInAnim(true)
-    }, 100);
+    }, 500);
   }, [huntsStore])
 
   if (huntsStore.length > 0) {
@@ -37,6 +38,7 @@ function AmawLastHunt({
       // Update prevHunts to stop the rerendering
       setPrevHunts(huntsStore)
       // When store updates
+      console.log('ICI', currentHunt)
       if (currentHunt) {
         if (currentHunt.id !== huntsStore.slice(-1)[0].id) {
           // If the hunt we receive is different from the store one then animOut
@@ -73,7 +75,6 @@ function AmawLastHunt({
     monster={lastHuntMonster}
     inAnim={inAnim}
     outAnim={outAnim}
-    setOutAnim={setOutAnim}
     setInAnim={setInAnim}
     handleNewHunt={handleNewHunt}
   />
@@ -87,7 +88,6 @@ const LastHuntContainer = ({
   monster,
   inAnim,
   outAnim,
-  setOutAnim,
   setInAnim,
   handleNewHunt,
 }: {
@@ -96,7 +96,6 @@ const LastHuntContainer = ({
   monster: Monster
   inAnim: boolean
   outAnim: boolean
-  setOutAnim: React.Dispatch<React.SetStateAction<boolean>>
   setInAnim: React.Dispatch<React.SetStateAction<boolean>>
   handleNewHunt: () => void
 }) => {
@@ -108,14 +107,15 @@ const LastHuntContainer = ({
 
   useGSAP(() => {
     if (!inAnim) return
+    if (!timerRef.current) return
+    
+    console.log(monster.name, 'should display !')
+
     const tl = gsap.timeline({
       onComplete: () => setInAnim(false)
     })
-    console.log(monster.name, 'should display !')
-    
-    if (!timerRef.current) return
     const splitTimer = new SplitType(timerRef.current, { types: 'chars' })
-    tl.set(containerRef.current, {opacity: 1})
+    tl.set(containerRef.current, { opacity: 1 })
     tl.set(splitTimer.chars, { opacity: 0 })
     tl.set(timerRef.current, { opacity: 1 })
     tl.fromTo(monsterRef.current, {
@@ -149,12 +149,9 @@ const LastHuntContainer = ({
   useGSAP(() => {
     if (!outAnim) return
     const tl = gsap.timeline({
-      onComplete: () => {
-        setOutAnim(false)
-        handleNewHunt()
-      }
+      onComplete: () => handleNewHunt()
     })
-    tl.to(containerRef.current, { opacity: 0, duration: 2 })
+    tl.to(containerRef.current, { x: '-150%', duration: 1, ease: 'power1.in' })
   }, [outAnim])
 
   return (
