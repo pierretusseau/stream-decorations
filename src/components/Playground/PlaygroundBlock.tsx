@@ -10,17 +10,21 @@ const resetRender = (setter: React.Dispatch<React.SetStateAction<boolean>>) => {
   }, 1);
 }
 
-function AlertBlock({
+function PlaygroundBlock({
   children,
   title,
+  tabValue,
+  value,
 }: {
   children: React.ReactNode
   title: string
+  tabValue: number
+  value: number
 }) {
   const [displayAlert, setDisplayAlert] = useState(false)
   
   return (
-    <>
+    <div role="tabpanel" hidden={tabValue !== value}>
       <div className="flex justify-between items-center">
         <h2>{title}</h2>
         <div>
@@ -36,8 +40,8 @@ function AlertBlock({
         </div>
       </div>
       {displayAlert && children}
-    </>
+    </div>
   )
 }
 
-export default AlertBlock
+export default PlaygroundBlock

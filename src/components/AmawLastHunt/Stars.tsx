@@ -1,11 +1,31 @@
+import React, { useRef } from 'react'
 import { StarIcon } from '@heroicons/react/24/solid'
-import React from 'react'
+import gsap from 'gsap'
+import { useGSAP } from '@gsap/react'
+
+gsap.registerPlugin(useGSAP)
 
 function Stars({
   monster
 }: {
   monster: Monster
 }) {
+  const starsRef = useRef(null)
+
+  useGSAP(() => {
+    // @ts-expect-error: GSAP
+    if (!starsRef.current || !starsRef.current.children) return
+    const tl = gsap.timeline()
+    // @ts-expect-error: GSAP
+    const gsapStars = gsap.utils.toArray(starsRef.current.children)
+    tl.fromTo(gsapStars, {
+      opacity: 0, scale: 0.5, rotate: -20
+    }, {
+      opacity: 1, scale: 1, rotate: 0,
+      duration: 0.2, stagger: 0.05
+    }, '1.5')
+  })
+
   const quest_level = monster.quest_level || monster.mr_level
   if (!quest_level) return null
 
@@ -30,9 +50,12 @@ function Stars({
   }
 
   return (
-    <div className={`group/last-hunt-stars ${[
-      "flex"
-    ].join(' ')}`}>
+    <div
+      className={`group/last-hunt-stars ${[
+        "flex"
+      ].join(' ')}`}
+      ref={starsRef}
+    >
       {stars.map((star, index) => <div
         key={`last-hunt-star-${index}`}>
           {star}
