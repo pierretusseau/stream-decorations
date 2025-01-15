@@ -38,7 +38,6 @@ function AmawLastHunt({
       // Update prevHunts to stop the rerendering
       setPrevHunts(huntsStore)
       // When store updates
-      console.log('ICI', currentHunt)
       if (currentHunt) {
         if (currentHunt.id !== huntsStore.slice(-1)[0].id) {
           // If the hunt we receive is different from the store one then animOut
@@ -115,9 +114,10 @@ const LastHuntContainer = ({
       onComplete: () => setInAnim(false)
     })
     const splitTimer = new SplitType(timerRef.current, { types: 'chars' })
-    tl.set(containerRef.current, { opacity: 1 })
     tl.set(splitTimer.chars, { opacity: 0 })
-    tl.set(timerRef.current, { opacity: 1 })
+    tl.set(monsterRef.current, { opacity: 0 })
+    tl.set(containerRef.current, { opacity: 1 })
+    // tl.set(timerRef.current, { opacity: 1 })
     tl.fromTo(monsterRef.current, {
       opacity: 0, x: "100%"
     }, {
@@ -158,7 +158,7 @@ const LastHuntContainer = ({
     <div ref={containerRef} className="flex gap-4 w-[500px] pr-[20px]">
       <div className="relative flex flex-col items-center">
         <div className="relative overflow-hidden p-5">
-          <div ref={monsterRef} className="opacity-0 w-[200px] h-[200px]">
+          <div ref={monsterRef} className="w-[200px] h-[200px]">
             <MonsterImage
               monster={monster}
               size={200}
@@ -167,7 +167,7 @@ const LastHuntContainer = ({
           </div>
         </div>
         <p
-          className="m-0 text-4xl font-bold opacity-0 relative bottom-2"
+          className="m-0 text-4xl font-bold relative bottom-2"
           ref={timerRef}
         >{hunt.time}</p>
         <div className="absolute top-11 translate-x-3/4 -translate-y-1/3 overflow-hidden">
