@@ -131,18 +131,18 @@ const LastHuntContainer = ({
       opacity: 1, rotate: 0, x: "0%",
       duration: 1, ease: 'power1.out'
     }, "<0.5")
-    tl.fromTo(splitTimer.chars, {
-      y: 20, opacity: 0,
-    }, {
-      y: 0, opacity: 1,
-      duration: 3, stagger: 0.07
-    }, "1")
     tl.fromTo(questRef.current, {
       opacity: 0, y: 20
     }, {
       opacity: 1, y: 0,
       duration: 1
-    }, "<0.1")
+    }, "1")
+    tl.fromTo(splitTimer.chars, {
+      y: -20, opacity: 0,
+    }, {
+      y: 0, opacity: 1,
+      duration: 0.2, stagger: 0.05, ease: "power1.out"
+    })
   }, {
     dependencies: [outAnim, timerRef.current],
   })
