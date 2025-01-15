@@ -114,8 +114,8 @@ const LastHuntContainer = ({
       onComplete: () => setInAnim(false)
     })
     const splitTimer = new SplitType(timerRef.current, { types: 'chars' })
-    tl.set(splitTimer.chars, { opacity: 0 })
-    tl.set(monsterRef.current, { opacity: 0 })
+    // tl.set(splitTimer.chars, { opacity: 0 })
+    // tl.set(monsterRef.current, { opacity: 0 })
     tl.set(containerRef.current, { opacity: 1 })
     // tl.set(timerRef.current, { opacity: 1 })
     tl.fromTo(monsterRef.current, {
