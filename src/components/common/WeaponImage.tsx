@@ -10,6 +10,7 @@ function WeaponImage({
   size?: number
   className?: string
 }) {
+  console.log('className', className)
   return (
     <Image
       src={`/mhw-weapons/${weapon.acronym}.svg`}

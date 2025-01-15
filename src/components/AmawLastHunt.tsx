@@ -146,7 +146,6 @@ const LastHuntContainer = ({
     dependencies: [inAnim, timerRef.current]
   })
 
-  console.log('outAnim', outAnim)
   useGSAP(() => {
     if (!outAnim) return
     const tl = gsap.timeline({
@@ -160,18 +159,18 @@ const LastHuntContainer = ({
 
   return (
     <div ref={containerRef} className="flex gap-4 w-[500px] pr-[20px]">
-      <div className="relative flex flex-col gap-2 items-center">
+      <div className="relative flex flex-col items-center">
         <div className="relative overflow-hidden p-5">
-          <div ref={monsterRef} className="opacity-0">
+          <div ref={monsterRef} className="opacity-0 w-[200px] h-[200px]">
             <MonsterImage
               monster={monster}
               size={200}
-              className="drop-shadow-[0_0_10px_rgba(0,0,0,1)]"
+              className="drop-shadow-[0_0_10px_rgba(0,0,0,1)] object-contain w-full h-full"
             />
           </div>
         </div>
         <p
-          className="m-0 text-4xl font-bold opacity-0"
+          className="m-0 text-4xl font-bold opacity-0 relative bottom-2"
           ref={timerRef}
         >{hunt.time}</p>
         <div className="absolute top-11 translate-x-3/4 -translate-y-1/3 overflow-hidden">

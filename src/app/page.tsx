@@ -36,31 +36,31 @@ export default function Home() {
           <h2>MHWI - All Weapons All Monsters</h2>
           <div className="flex flex-wrap gap-8">
             <HomeLink
-              href="/amaw-sidebar"
+              href="/amaw/sidebar"
               title="AMAW Sidebar"
               subtitle="432x1440"
             />
             <HomeLink
-              href="/amaw-tracker"
+              href="/amaw/tracker"
               title="AMAW Tracker"
               subtitle="2560x200"
             />
             <HomeLink
-              href="/amaw-table"
+              href="/amaw/table"
               title="AMAW Table"
             />
             <HomeLink
-              href="/amaw-monsters"
+              href="/amaw/monsters"
               title="AMAW Monsters"
               subtitle="1250x980"
             />
             <HomeLink
-              href="/amaw-weapons"
+              href="/amaw/weapons"
               title="AMAW Weapons"
               subtitle="220x1104"
             />
             <HomeLink
-              href="/amaw-last-hunt"
+              href="/amaw/last-hunt"
               title="AMAW Last Hunt"
               // subtitle="220x1104"
             />
