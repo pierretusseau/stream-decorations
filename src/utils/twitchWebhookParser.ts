@@ -79,12 +79,29 @@ const TwitchWebhookParser = async ({
 
   if (type === 'channel.follow') addSupaFollower(supabase, event as FollowerEvent)
   if (type === 'channel.chat.notification') addSupaSub(supabase, event as SubEvent)
-  if (type === 'channel.raid') addSupaRaid(supabase, event as RaidEvent)
+  // if (type === 'channel.raid') addSupaRaid(supabase, event as RaidEvent)
+  if (type === 'channel.raid') {
+    const raidEvent = event as RaidEvent
+    const newRaid = {
+      from_broadcaster_user_id: raidEvent.from_broadcaster_user_id,
+      from_broadcaster_user_login: raidEvent.from_broadcaster_user_login,
+      from_broadcaster_user_name: raidEvent.from_broadcaster_user_name,
+      viewers: raidEvent.viewers,
+    }
+    const { error } = await supabase
+      .from('raids')
+      .insert(newRaid)
+    if (error) {
+      console.log('Error adding raid to supabase')
+      console.error(error)
+    }
+  }
 }
 
 export default TwitchWebhookParser
 
 const addSupaFollower = async (supabase: SupabaseClient, event: FollowerEvent) => {
+  console.log('Trying to add follow to supabase...')
   const newFollower = {
     user_id: parseInt(event.user_id),
     user_login: event.user_login,
@@ -99,6 +116,7 @@ const addSupaFollower = async (supabase: SupabaseClient, event: FollowerEvent) =
 }
 
 const addSupaSub = async (supabase: SupabaseClient, event: SubEvent) => {
+  console.log('Trying to add sub to supabase...')
   const newSub = {
     chatter_user_id: event.chatter_user_id ? parseInt(event.chatter_user_id) : null,
     chatter_user_login: event.chatter_user_login,
@@ -114,29 +132,29 @@ const addSupaSub = async (supabase: SupabaseClient, event: SubEvent) => {
   if (error) console.error(error)
 }
 
-const addSupaRaid = async (supabase: SupabaseClient, event: RaidEvent) => {
-  console.log('Trying to add raid to supabase...')
-  const newRaid = {
-    from_broadcaster_user_id: event.from_broadcaster_user_id,
-    from_broadcaster_user_login: event.from_broadcaster_user_login,
-    from_broadcaster_user_name: event.from_broadcaster_user_name,
-    viewers: event.viewers,
-  }
-  console.log('newRaid', newRaid)
-  try {
-    console.log('Try')
-    console.log(supabase)
-    const { error } = await supabase
-      .from('raids')
-      .insert(newRaid)
-    if (error) {
-      console.log('Error adding raid to supabase')
-      console.error(error)
-    } else {
-      console.log('New raid SHOULD be in DB')
-    }
-  } catch (err) {
-    console.log('Catch error')
-    console.log(err)
-  }
-}
+// const addSupaRaid = async (supabase: SupabaseClient, event: RaidEvent) => {
+//   console.log('Trying to add raid to supabase...')
+//   const newRaid = {
+//     from_broadcaster_user_id: event.from_broadcaster_user_id,
+//     from_broadcaster_user_login: event.from_broadcaster_user_login,
+//     from_broadcaster_user_name: event.from_broadcaster_user_name,
+//     viewers: event.viewers,
+//   }
+//   console.log('newRaid', newRaid)
+//   try {
+//     console.log('Try')
+//     console.log(supabase)
+//     const { error } = await supabase
+//       .from('raids')
+//       .insert(newRaid)
+//     if (error) {
+//       console.log('Error adding raid to supabase')
+//       console.error(error)
+//     } else {
+//       console.log('New raid SHOULD be in DB')
+//     }
+//   } catch (err) {
+//     console.log('Catch error')
+//     console.log(err)
+//   }
+// }
