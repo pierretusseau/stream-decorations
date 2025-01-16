@@ -122,15 +122,19 @@ const addSupaRaid = async (supabase: SupabaseClient, event: RaidEvent) => {
     from_broadcaster_user_name: event.from_broadcaster_user_name,
     viewers: event.viewers,
   }
-  console.log('New raid from')
-  console.log(newRaid.from_broadcaster_user_name)
-  const { error } = await supabase
-    .from('raids')
-    .insert(newRaid)
-  if (error) {
-    console.log('Error adding raid to supabase')
-    console.error(error)
-  } else {
-    console.log('New raid SHOULD be in DB')
+  console.log('newRaid from: ', newRaid.from_broadcaster_user_name)
+  try {
+    const { error } = await supabase
+      .from('raids')
+      .insert(newRaid)
+    if (error) {
+      console.log('Error adding raid to supabase')
+      console.error(error)
+    } else {
+      console.log('New raid SHOULD be in DB')
+    }
+  } catch (err) {
+    console.log('Catch error')
+    console.log(err)
   }
 }
