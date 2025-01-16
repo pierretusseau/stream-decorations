@@ -122,9 +122,10 @@ const addSupaRaid = async (supabase: SupabaseClient, event: RaidEvent) => {
     from_broadcaster_user_name: event.from_broadcaster_user_name,
     viewers: event.viewers,
   }
-  console.log('newRaid from: ', newRaid.from_broadcaster_user_name)
+  console.log('newRaid', newRaid)
   try {
     console.log('Try')
+    console.log(supabase)
     const { error } = await supabase
       .from('raids')
       .insert(newRaid)

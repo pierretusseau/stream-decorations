@@ -11,7 +11,7 @@ export default async function TwitchAlertsPage({
   const { code } = await params
 
   if (!code) {
-    return <div>Provide a code</div>
+    return <div className="text-[500px]">Provide a code</div>
   } else {
     return <TwitchAlerts
       code={code}

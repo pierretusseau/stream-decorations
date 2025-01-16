@@ -54,6 +54,7 @@ function TwitchAlerts({
     return () => clearTimeout(pauseTimer)
   }, [pause])
   
+  if (!serviceKey) return <div className="text-[200px]">LOADING SERVICE KEY</div>
   return (
     <div>
       {currentAlert && !pause && <Alert
