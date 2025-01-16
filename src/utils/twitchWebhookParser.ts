@@ -75,6 +75,8 @@ const TwitchWebhookParser = async ({
   console.log(event)
   console.log('=========================================')
   const supabase = await createSupaClient(serviceKey)
+  console.log('Initiated supabase')
+  console.log(supabase)
 
   if (type === 'channel.follow') addSupaFollower(supabase, event as FollowerEvent)
   if (type === 'channel.chat.notification') addSupaSub(supabase, event as SubEvent)
