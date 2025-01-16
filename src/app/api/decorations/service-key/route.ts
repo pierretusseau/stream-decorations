@@ -24,6 +24,7 @@ export async function POST(
   })
 
   const supabase = await createSupaClient(envServiceKey)
+  console.log('Iniated supabase')
   const { data, error } = await supabase
     .from('modules')
     .select()
@@ -33,7 +34,9 @@ export async function POST(
     body: { message: 'Error while fetching modules list from Supabase' }
   })
 
+  console.log('Found', data.length, 'module')
   const deco_module = data?.find(mod => mod.code === code)
+  console.log('Module is', deco_module?.type)
   if (deco_module) {
     return NextResponse.json({
       status: 200,
