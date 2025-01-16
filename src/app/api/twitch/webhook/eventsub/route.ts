@@ -20,12 +20,20 @@ const MESSAGE_TYPE_REVOCATION = 'revocation';
 // Prepend this string to the HMAC that's created from the message
 const HMAC_PREFIX = 'sha256=';
 
+type RaidEvent = {
+  from_broadcaster_user_id: string,
+  from_broadcaster_user_login: string,
+  from_broadcaster_user_name: string,
+  viewers: number,
+}
+
 import {
   NextRequest,
   NextResponse
 } from 'next/server'
 import { getHmac, getHmacMessage, verifyMessage } from '@/utils/twitch';
-import TwitchWebhookParser from '@/utils/twitchWebhookParser';
+// import TwitchWebhookParser from '@/utils/twitchWebhookParser';
+import { createSupaClient } from "@/lib/supabase-service-decorations"
 
 export async function POST(
   req: NextRequest
@@ -67,12 +75,31 @@ export async function POST(
     console.log("Signatures match");
     if (MESSAGE_TYPE_NOTIFICATION  === req.headers.get(MESSAGE_TYPE)) {
       // Supabase Updates
-      console.log(JSON.stringify(body.event, null, 4));
-      TwitchWebhookParser({
-        type: body.subscription.type,
-        event: body.event,
-        serviceKey
-      })
+      // console.log(JSON.stringify(body.event, null, 4));
+      // TwitchWebhookParser({
+      //   type: body.subscription.type,
+      //   event: body.event,
+      //   serviceKey
+      // })
+
+      const supabase = await createSupaClient(serviceKey)
+      if (body.subscription.type === 'channel.raid') {
+        console.log('=> Receive channel.raid event')
+        const raidEvent = body.event as RaidEvent
+        const newRaid = {
+          from_broadcaster_user_id: raidEvent.from_broadcaster_user_id,
+          from_broadcaster_user_login: raidEvent.from_broadcaster_user_login,
+          from_broadcaster_user_name: raidEvent.from_broadcaster_user_name,
+          viewers: raidEvent.viewers,
+        }
+        const { error } = await supabase
+          .from('raids')
+          .insert(newRaid)
+        if (error) {
+          console.log('Error adding raid to supabase')
+          console.error(error)
+        }
+      }
       
       return NextResponse.json({
         status: 204
