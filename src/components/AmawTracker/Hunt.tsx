@@ -1,19 +1,48 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import Image from 'next/image'
 import { monsterNameParser } from '@/utils/utils'
+import gsap from 'gsap'
+import { useGSAP } from '@gsap/react'
+
+gsap.registerPlugin(useGSAP)
 
 function Hunt({
   monster,
   weapon,
-  hunt
+  hunt,
+  outAnim,
+  inAnim,
 }: {
   monster: Monster
   weapon: Weapon
   hunt: Hunt
+  outAnim?: boolean
+  inAnim?: boolean
 }) {
+  const huntRef = useRef(null)
+
+  useGSAP(() => {
+    if (!outAnim) return
+    const tl = gsap.timeline()
+    tl.to(huntRef.current, { opacity: 0, duration: 1 }, '0.25')
+  }, {
+    dependencies: [outAnim],
+    revertOnUpdate: true
+  })
+
+  useGSAP(() => {
+    if (!inAnim) return
+    const tl = gsap.timeline()
+    tl.fromTo(huntRef.current, { opacity: 0 }, { opacity: 1, duration: 1 }, '0.25')
+  }, {
+    dependencies: [inAnim],
+    revertOnUpdate: true
+  })
+
   return (
     <div
-      className="group/hunt flex flex-col gap-2 items-center px-4"
+      ref={huntRef}
+      className="group/hunt flex flex-col gap-2 items-center px-4 mx-4"
     >
       <div className="group/hunt-images relative">
         <Image
