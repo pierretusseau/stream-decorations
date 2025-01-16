@@ -3,11 +3,11 @@
 import { createClient } from "@supabase/supabase-js"
 
 const options = {
-  // auth: {
-  //   autoRefreshToken: true,
-  //   persistSession: true,
-  //   detectSessionInUrl: true
-  // }
+  auth: {
+    persistSession: false,
+    autoRefreshToken: false,
+    detectSessionInUrl: false,
+  }
 }
 
 export const createSupaClient = async (
