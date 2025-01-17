@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
+import { Box, CircularProgress } from '@mui/material'
 import Alert from '@/components/Twitch/Alert'
 import useAlertStore, {
   resumeAlerts,
@@ -54,14 +55,24 @@ function TwitchAlerts({
     return () => clearTimeout(pauseTimer)
   }, [pause])
   
-  if (!serviceKey) return <div className="text-[200px]">LOADING SERVICE KEY</div>
-  return (
-    <div>
-      {currentAlert && !pause && <Alert
-        alert={currentAlert}
-      />}
-    </div>
-  )
+
+  if (!serviceKey) {
+    return <Box
+      className="flex min-h-screen items-center justify-center"
+    >
+      <div className="w-[40px] h-[40px] scale-[5]">
+        <CircularProgress />
+      </div>
+    </Box>
+  } else {
+    return (
+      <div>
+        {currentAlert && !pause && <Alert
+          alert={currentAlert}
+        />}
+      </div>
+    )
+  }
 }
 
 export default TwitchAlerts
