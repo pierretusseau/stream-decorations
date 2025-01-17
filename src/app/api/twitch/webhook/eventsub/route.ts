@@ -128,17 +128,10 @@ export async function POST(
     // Signature is valid
     console.log("Signatures match");
     if (MESSAGE_TYPE_NOTIFICATION  === req.headers.get(MESSAGE_TYPE)) {
-      // Supabase Updates
-      // console.log(JSON.stringify(body.event, null, 4));
-      // TwitchWebhookParser({
-      //   type: body.subscription.type,
-      //   event: body.event,
-      //   serviceKey
-      // })
-
-      console.log(`=> Receive ${body.subscriptions.type} event`)
+      // Supabase inserts/upserts
+      console.log(`=> Receive ${body.subscription.type} event`)
       const supabase = await createSupaClient(serviceKey)
-      if (body.subscription.types === 'channel.followe') {
+      if (body.subscription.type === 'channel.follow') {
         const followEvent = body.event as FollowerEvent
         const newFollower = {
           user_id: parseInt(followEvent.user_id),
