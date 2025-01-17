@@ -3,6 +3,7 @@ import { Box, Modal, TextField } from '@mui/material'
 import useTwitchStore, { setTwitchAuthState } from '@/store/useTwitchStore';
 import useSettingsStore, {
   editSupabaseDecorationsServiceKey,
+  editSupabaseServiceKey,
   editUserAccessToken
 } from '@/store/useSettingsStore';
 
@@ -27,7 +28,8 @@ function TwitchAuthStateModal({
 }) {
   const handleClose = () => setOpenModal(false);
   const twitchAuthState = useTwitchStore((state) => state.twitch_auth_state)
-  const serviceKey = useSettingsStore((state) => state.supabase_decorations_service_key)
+  const serviceKeyDeco = useSettingsStore((state) => state.supabase_decorations_service_key)
+  const serviceKey = useSettingsStore((state) => state.supabase_service_key)
   const userToken = useSettingsStore((state) => state.user_access_token)
 
   return (
@@ -57,8 +59,17 @@ function TwitchAuthStateModal({
           label="SupaSupaDecorations"
           variant="outlined"
           type="password"
-          value={serviceKey}
+          value={serviceKeyDeco}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => editSupabaseDecorationsServiceKey(e.target.value)}
+          fullWidth
+        />
+        <TextField
+          id="outlined-basic"
+          label="SupaSupaAmaw"
+          variant="outlined"
+          type="password"
+          value={serviceKey}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => editSupabaseServiceKey(e.target.value)}
           fullWidth
         />
         <TextField

@@ -131,7 +131,8 @@ const useTwitchStore = create(
       lastFollower: null as Follower | null,
       twitch_auth_state: '',
       subscriptions: null as Subscriptions | null,
-      debugChatNotificationPayload: [] as ChatNotificationPayload[]
+      debugChatNotificationPayload: [] as ChatNotificationPayload[],
+      addDebugChatNotificationPayloadPersonal: [] as ChatNotificationPayload[]
     }),
     {
       name: 'twitch-api', // name of the item in the storage (must be unique)
@@ -161,12 +162,24 @@ export const setSubscriptions = (subscriptions: Subscriptions) => {
   useTwitchStore.setState(() => ({ subscriptions: subscriptions }))
 }
 export const addDebugChatNotificationPayload = (payload: ChatNotificationPayload) => {
-  useTwitchStore.setState((state) => ({
-    debugChatNotificationPayload: [
-      ...state.debugChatNotificationPayload,
-      payload
-    ]
-  }))
+  useTwitchStore.setState((state) => {
+    if (payload.event.broadcaster_user_id === process.env.NEXT_PUBLIC_BROADCASTER_ID) {
+      return {
+        addDebugChatNotificationPayloadPersonal: [
+          ...state.debugChatNotificationPayload,
+          payload
+        ]
+      }
+    } else {
+      return {
+        debugChatNotificationPayload: [
+          ...state.debugChatNotificationPayload,
+          payload
+        ]
+      }
+    }
+  }
+  )
 }
 
 // Followers
