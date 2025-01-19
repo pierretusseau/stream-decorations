@@ -39,7 +39,7 @@ function SubAlertSvg({
     }, '0.4')
     const svgOpacity = { value: opacity }
     tl.to(svgOpacity, {
-      value: 0.25, duration: 2,
+      value: 0.9, duration: 2,
       onUpdate: () => setOpacity(svgOpacity.value)
     }, '0.5')
     tl.to(svgRef.current, {

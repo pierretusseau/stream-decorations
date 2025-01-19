@@ -24,7 +24,7 @@ function Particles({
     // @ts-expect-error: GSAP
     gsap.utils.toArray(particlesRef.current.children).forEach((element, i) => {
       const odd = i % 2 === 1
-      const duration = Math.floor(Math.random() * 5) + 2
+      const duration = Math.floor(Math.random() * 10) + 5
       const y = Math.floor((Math.random() * -500) + 200)
       const x = Math.floor((Math.random() * 200) + 100)
       // @ts-expect-error: GSAP
@@ -61,7 +61,7 @@ function Particles({
           'rounded-full',
           primeColor
             ? 'bg-blue-400'
-            : 'bg-yellow-300'
+            : 'bg-yellow-200'
         ].join(' ')}`}
         style={{
           ...finalStyle,

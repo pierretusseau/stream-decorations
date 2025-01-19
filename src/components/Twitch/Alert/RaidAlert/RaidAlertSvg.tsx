@@ -27,7 +27,9 @@ function RaidAlertSvg({
       opacity: 1,
       duration: 0.2,
     }, '0.2')
-    tl.to(svgRef.current, { scale: 1.3, duration: 8, ease: 'power1.out' }, '0.2')
+    tl.fromTo(svgRef.current, {
+      scale: 0.8
+    }, { scale: 1, duration: 8, ease: 'power1.out' }, '0.2')
     const svgProxyColor = { value: svgColor }
     tl.to(svgProxyColor, {
       value: mainColor, duration: 1,
@@ -40,7 +42,7 @@ function RaidAlertSvg({
     }, '0.4')
     const svgOpacity = { value: opacity }
     tl.to(svgOpacity, {
-      value: 0.25, duration: 2,
+      value: 0.7, duration: 2,
       onUpdate: () => setOpacity(svgOpacity.value)
     }, '0.5')
     tl.to(svgRef.current, {

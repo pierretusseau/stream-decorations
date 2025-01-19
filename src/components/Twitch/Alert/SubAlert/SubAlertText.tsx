@@ -72,7 +72,7 @@ function SubAlertText({
     <div ref={textWrapperRef} className="absolute top-[180px] left-1/2 -translate-x-1/2">
       <div
         className={`${[
-          "font-mhn text-[60px] absolute top-0 left-1/2 -translate-x-1/2",
+          "font-mhn text-[80px] absolute -top-[20px] left-1/2 -translate-x-1/2",
         ].join(' ')}`}
         style={{
           whiteSpace: 'nowrap',
@@ -84,7 +84,7 @@ function SubAlertText({
       </div>
       <div
         className={`${[
-          'font-mhn text-[90px] absolute top-[40px] left-1/2 -translate-x-1/2 flex',
+          'font-mhn text-[120px] absolute top-[10px] left-1/2 -translate-x-1/2 flex',
         ].join(' ')}`}
         ref={contentRef}
         style={{

@@ -117,7 +117,7 @@ function SubAlert({
       <div className="relative p-10 flex item-center justify-center" ref={containerRef}>
         <div
           className={`${[
-            "bg-neutral-950 opacity-50 blur-[50px] w-[800px] h-[250px]",
+            "bg-neutral-950 opacity-50 blur-[100px] w-[800px] h-[500px]",
             "absolute top-1/2 -translate-y-1/2 rounded-full left-1/2 -translate-x-1/2"
           ].join(' ')}`}
           ref={bgRef}

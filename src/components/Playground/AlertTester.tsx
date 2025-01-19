@@ -57,7 +57,7 @@ function AlertTester({
     community_sub_gift?: TwitchCommunitySubGift
   }) => {
     setDisplayingAlert(true)
-    const addDeleteFollower = async () => {
+    const addDeleteSub = async () => {
       const supabase = await createClient(process.env.NEXT_PUBLIC_SUPABASE_DECORATIONS_URL!, serviceKey)
       const { data, error } = await supabase
         .from('subs')
@@ -87,7 +87,39 @@ function AlertTester({
         }, 100)
       }
     }
-    addDeleteFollower()
+    addDeleteSub()
+  }, [serviceKey, randomID])
+
+  const handleAddRaid = useCallback(() => {
+    setDisplayingAlert(true)
+    const addDeleteRaid = async () => {
+      const supabase = await createClient(process.env.NEXT_PUBLIC_SUPABASE_DECORATIONS_URL!, serviceKey)
+      const { data, error } = await supabase
+        .from('raids')
+        .insert({
+          from_broadcaster_user_id: randomID,
+          from_broadcaster_user_login: `${randomID}`,
+          from_broadcaster_user_name: `${randomID}`,
+          viewers: Math.floor(Math.random() * 1000)
+        })
+        .select('id')
+      if (error) console.error(error)
+      if (data) {
+        console.log('Created test sub')
+        setTimeout(async () => {
+          const { id } = data[0]
+          const response = await supabase
+            .from('raids')
+            .delete()
+            .eq('id', id)
+          if (response) {
+            setDisplayingAlert(false)
+            setRandomID(randomIDGenerator())
+          }
+        }, 100)
+      }
+    }
+    addDeleteRaid()
   }, [serviceKey, randomID])
 
   return (
@@ -161,6 +193,10 @@ function AlertTester({
           })}
           disabled={displayingAlert}
         >Sub Gift x20({randomID})</Button>
+        <Button
+          onClick={() => handleAddRaid()}
+          disabled={displayingAlert}
+        >Raid ({randomID})</Button>
       </div>
     </div>
   )

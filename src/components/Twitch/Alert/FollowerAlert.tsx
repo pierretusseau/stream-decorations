@@ -87,8 +87,8 @@ function FollowerAlert({ alert }:{ alert: Alert }) {
       <div className="relative p-10 flex item-center justify-center" ref={containerRef}>
         <div
           className={`${[
-            "bg-neutral-950 opacity-50 blur-[50px] w-[800px] h-[250px]",
-            "absolute top-1/2 -translate-y-[50px] rounded-full left-1/2 -translate-x-1/2"
+            "bg-neutral-950 opacity-70 blur-[100px] w-[600px] h-[400px]",
+            "absolute top-1/2 -translate-y-1/2 rounded-full left-1/2 -translate-x-1/2"
           ].join(' ')}`}
           ref={bgRef}
         ></div>

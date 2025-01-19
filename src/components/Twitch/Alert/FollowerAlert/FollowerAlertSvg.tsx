@@ -28,7 +28,9 @@ function FollowerAlertSvg({
       duration: 1,
       ease: 'power1.out'
     }, '0.2')
-    tl.to(svgRef.current, { scale: 1.3, duration: 5.5, ease: 'power1.out' }, '0.2')
+    tl.fromTo(svgRef.current, {
+      scale: 0.75,
+    }, { scale: 1, duration: 5.5, ease: 'power1.out' }, '0.2')
     const svgProxyColor = { value: svgColor }
     tl.to(svgProxyColor, {
       value: mainColor, duration: 1,
@@ -41,7 +43,7 @@ function FollowerAlertSvg({
     }, '0.4')
     const svgOpacity = { value: opacity }
     tl.to(svgOpacity, {
-      value: 0.25, duration: 2,
+      value: 0.75, duration: 2,
       onUpdate: () => setOpacity(svgOpacity.value)
     }, '0.5')
     tl.to(svgRef.current, {
