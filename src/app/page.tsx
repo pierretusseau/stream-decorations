@@ -30,6 +30,11 @@ export default function Home() {
               title="Twitch Last Follower"
               // subtitle="400x100"
             />
+            <HomeLink
+              href="/twitch/cam-layout"
+              title="Cam Layout"
+              subtitle="314x228"
+            />
           </div>
         </section>
         <section>
