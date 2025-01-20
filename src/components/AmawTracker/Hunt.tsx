@@ -1,8 +1,8 @@
 import React, { useRef } from 'react'
 import Image from 'next/image'
-import { monsterNameParser } from '@/utils/utils'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
+import MonsterImage from '@/components/common/MonsterImage'
 
 gsap.registerPlugin(useGSAP)
 
@@ -45,19 +45,20 @@ function Hunt({
       className="group/hunt flex flex-col gap-2 items-center px-4 mx-4"
     >
       <div className="group/hunt-images relative">
-        <Image
-          src={`/mhw-monsters/${monsterNameParser(monster.name)}.png`}
-          width={120}
-          height={120}
-          alt={`Icon of ${monster.name}`}
-          className="group/monster-image"
+        <MonsterImage
+          monster={monster}
+          size={120}
+          border={2}
         />
         <Image
           src={`/mhw-weapons/${weapon.acronym}.svg`}
           width={100}
           height={100}
           alt={`Icon of ${weapon.name}`}
-          className="group/weapon-image absolute bottom-10 -right-12 bg-neutral-950 rounded-full p-4 scale-90"
+          className={`group/weapon-image ${[
+            "absolute bottom-10 -right-12",
+            "bg-neutral-950 rounded-full p-4 scale-90 z-10"
+          ].join(' ')}`}
         />
       </div>
       <p

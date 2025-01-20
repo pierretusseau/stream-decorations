@@ -149,7 +149,8 @@ const LastHuntContainer = ({
             <MonsterImage
               monster={monster}
               size={200}
-              className="drop-shadow-[0_0_10px_rgba(0,0,0,1)] object-contain w-full h-full"
+              className="object-contain w-full h-full"
+              border={2}
             />
           </div>
         </div>
