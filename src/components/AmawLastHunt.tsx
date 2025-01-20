@@ -156,6 +156,13 @@ const LastHuntContainer = ({
         <p
           className="m-0 text-4xl font-bold relative bottom-2"
           ref={timerRef}
+          style={{
+            textShadow: `
+                        2px 2px 2px #000,
+                        -2px -2px 2px #000,
+                        -2px 2px 2px #000,
+                        2px -2px 2px #000`
+          }}
         >{hunt.time}</p>
         <div className="absolute top-11 translate-x-3/4 -translate-y-1/3 overflow-hidden">
           <div ref={weaponRef}>
@@ -169,7 +176,17 @@ const LastHuntContainer = ({
       </div>
       <div className="text-xl font-bold flex flex-col gap-2 pt-[150px]">
         <Stars monster={monster} />
-        <p className="m-0" ref={questRef}>{monster.quest}</p>
+        <p
+          className="m-0"
+          ref={questRef}
+          style={{
+            textShadow: `
+                        2px 2px 2px #000,
+                        -2px -2px 2px #000,
+                        -2px 2px 2px #000,
+                        2px -2px 2px #000`
+          }}
+        >{monster.quest}</p>
       </div>
     </div>
   )

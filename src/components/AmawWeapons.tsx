@@ -19,7 +19,7 @@ function AmawWeapons({
   }, [])
 
   const amawWeaponsStyles = [
-    "flex flex-wrap w-[220px] gap-4 justify-center"
+    "flex flex-wrap gap-4 justify-center"
   ].join(' ')
   
   return (

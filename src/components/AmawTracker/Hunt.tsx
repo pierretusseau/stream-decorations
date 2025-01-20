@@ -60,7 +60,16 @@ function Hunt({
           className="group/weapon-image absolute bottom-10 -right-12 bg-neutral-950 rounded-full p-4 scale-90"
         />
       </div>
-      <p className="font-bold text-xl">{hunt.time}</p>
+      <p
+        className="font-bold text-xl"
+        style={{
+          textShadow: `
+                      2px 2px 2px #000,
+                      -2px -2px 2px #000,
+                      -2px 2px 2px #000,
+                      2px -2px 2px #000`
+        }}
+      >{hunt.time}</p>
     </div>
   )
 }

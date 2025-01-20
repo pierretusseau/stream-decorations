@@ -29,3 +29,16 @@ export const dateISOToRelativeDays = (date: string) => {
   // Output the result
   return relativeDateString;
 }
+
+export const huntTimeToNumbers = (timeStr: string) => {
+  const [minutes, seconds, centiseconds] = timeStr.split(/['"]/).map(time => parseFloat(time))
+  const totalSeconds = (minutes * 60) + seconds + (centiseconds / 100)
+  return { minutes, seconds, centiseconds, totalSeconds }
+}
+export const floatToTimeString = (totalSeconds: number) => {
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = Math.floor(totalSeconds % 60);
+  const centiseconds = Math.round((totalSeconds - minutes * 60 - seconds) * 100);
+
+  return `${minutes < 10 ? '0' : ''}${minutes}'${seconds < 10 ? '0' : ''}${seconds}"${centiseconds < 10 ? '0' : ''}${centiseconds}`;
+}
