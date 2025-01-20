@@ -144,21 +144,24 @@ export async function POST(
           .upsert(newFollower)
         if (error) console.error(error)
       } else if (body.subscription.type === 'channel.chat.notification') {
-
           const subEvent = body.event as SubEvent
-          const newSub = {
-            chatter_user_id: subEvent.chatter_is_anonymous ? null : parseInt(subEvent.chatter_user_id as string),
-            chatter_user_login: subEvent.chatter_user_login,
-            chatter_user_name: subEvent.chatter_user_name ?? undefined,
-            notice_type: subEvent.notice_type,
-            sub: subEvent.sub,
-            resub: subEvent.resub,
-            community_sub_gift: subEvent.community_sub_gift
+          if (subEvent.notice_type === 'sub' || subEvent.notice_type === 'resub' || subEvent.notice_type === 'community_sub_gift') {
+            // Subs
+            const newSub = {
+              chatter_user_id: subEvent.chatter_is_anonymous ? null : parseInt(subEvent.chatter_user_id as string),
+              chatter_user_login: subEvent.chatter_user_login,
+              chatter_user_name: subEvent.chatter_user_name ?? undefined,
+              notice_type: subEvent.notice_type,
+              sub: subEvent.sub,
+              resub: subEvent.resub,
+              community_sub_gift: subEvent.community_sub_gift
+            }
+            const { error } = await supabase
+              .from('subs')
+              .insert(newSub)
+            if (error) console.error(error)
           }
-          const { error } = await supabase
-            .from('subs')
-            .insert(newSub)
-          if (error) console.error(error)
+          // TODO : Points de chaîne
       } else if (body.subscription.type === 'channel.raid') {
         const raidEvent = body.event as RaidEvent
         const newRaid = {
