@@ -50,7 +50,10 @@ export const resumeEvents = () => {
   useEventStore.setState(() => ({ pause: false }))
 }
 
-export const fetchAllTables = async (serviceKey: string) => {
+export const fetchAllTables = async (
+  serviceKey: string,
+  withRaids:boolean = true
+) => {
   const supabase = await createSupaClient(serviceKey)
   console.log('Fetch Followers...')
   const { data: followers, error: followersError } = await supabase
@@ -65,6 +68,7 @@ export const fetchAllTables = async (serviceKey: string) => {
   const { data: subs, error: subsError } = await supabase
     .from('subs')
     .select()
+    .order('created_at', { ascending: false })
     .limit(10)
   if (subsError) console.log('Error while fecthing subs', subsError)
   if (subs) useEventStore.setState(() => ({ subs: subs }))
@@ -73,6 +77,7 @@ export const fetchAllTables = async (serviceKey: string) => {
   const { data: raids, error: raidsError } = await supabase
     .from('raids')
     .select()
+    .order('created_at', { ascending: false })
     .limit(10)
   if (raidsError) console.log('Error while fecthing raids', raidsError)
   if (raids) useEventStore.setState(() => ({ raids: raids }))
@@ -92,12 +97,14 @@ export const fetchAllTables = async (serviceKey: string) => {
       resub: sub.resub,
       community_sub_gift: sub.community_sub_gift
     }))
-    const eventsRaids = raids.map(raid => ({
-      created_at: new Date(raid.created_at).getTime(),
-      user_name: raid.from_broadcaster_user_name,
-      type: 'raid',
-      viewers: raid.viewers
-    }))
+    const eventsRaids = withRaids
+      ? raids.map(raid => ({
+        created_at: new Date(raid.created_at).getTime(),
+        user_name: raid.from_broadcaster_user_name,
+        type: 'raid',
+        viewers: raid.viewers
+      }))
+      : []
     const newEvents = [
       ...eventsFollower,
       ...eventsSubs,

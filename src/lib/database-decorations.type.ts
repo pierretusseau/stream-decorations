@@ -18,6 +18,7 @@ export type Database = {
           id: number
           image: string | null
           message: string | null
+          type: string
         }
         Insert: {
           chip?: string | null
@@ -27,6 +28,7 @@ export type Database = {
           id?: number
           image?: string | null
           message?: string | null
+          type: string
         }
         Update: {
           chip?: string | null
@@ -36,6 +38,7 @@ export type Database = {
           id?: number
           image?: string | null
           message?: string | null
+          type?: string
         }
         Relationships: []
       }

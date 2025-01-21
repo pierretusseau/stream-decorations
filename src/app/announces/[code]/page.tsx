@@ -15,12 +15,20 @@ const getAnnounces = async () => {
   return data
 }
 
-export default async function AnnouncesPage() {
+export default async function AnnouncesPage({
+  params,
+}: {
+  params: Promise<{ code: string }>
+}) {
+  const { code } = await params
   const announces = await getAnnounces()
 
-  return (
-    <Announces
+  if (!code) {
+    return <div className="text-[500px]">Provide a code</div>
+  } else {
+    return <Announces
+      code={code}
       announces={announces}
     />
-  )
+  }
 }

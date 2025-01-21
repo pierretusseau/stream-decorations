@@ -16,6 +16,7 @@ function Announce({
   const imageRef = useRef(null)
   const chipRef = useRef(null)
   const textRef = useRef(null)
+  const timerRef = useRef(null)
 
   const timerInSecond = timer / 1000
 
@@ -24,67 +25,55 @@ function Announce({
       const tl = gsap.timeline()
       tl.set(imageRef.current, {opacity: 0})
       tl.fromTo(
-        imageRef.current,
-        {
-          x: '110%',
-          opacity: 0
-        },
-        {
-          x: "0%",
-          opacity: 1,
+        imageRef.current, {
+          x: '110%', opacity: 0
+        }, { x: "0%", opacity: 1,
           duration: 1 
         }, "+=5")
       tl.fromTo(
-        chipRef.current,
-        {
-          x: '-110%',
-          opacity: 0,
-        },
-        {
-          x: "0%",
-          opacity: 1,
+        chipRef.current, {
+          x: '-110%', opacity: 0,
+        }, { x: "0%", opacity: 1,
           duration: 1 
         })
       tl.fromTo(
-        textRef.current,
-        {
-          x: '-110%',
-          opacity: 0,
-        },
-        {
-          x: "0%",
-          opacity: 1,
+        textRef.current, {
+          x: '-110%', opacity: 0,
+        }, { x: "0%", opacity: 1,
           duration: 1 
         }, "<0.2")
       tl.fromTo(
-        imageRef.current,
-        {
-          x: "0%",
-          opacity: 1,
-        },
-        {
-          x: '110%',
-          opacity: 0,
+        imageRef.current, {
+          x: "0%", opacity: 1,
+        }, {
+          x: '110%', opacity: 0,
           duration: 0.4 
         }, timerInSecond - 1)
-      tl.fromTo(
-        chipRef.current,
-        {
+      tl.fromTo(chipRef.current, {
           x: "0%",
-        },
-        {
+        }, {
           x: '-110%',
           duration: 0.4 
         }, timerInSecond - 1.9)
-      tl.fromTo(
-        textRef.current,
-        {
+      tl.fromTo(textRef.current, {
           x: "0%",
-        },
-        {
+        }, {
           x: '-110%',
           duration: 0.4 
         }, timerInSecond - 2)
+      tl.set(timerRef.current, {
+        "--announces-origin": 'left'
+      }, '4.7')
+      tl.fromTo(timerRef.current, {
+        scaleX: '0%',
+      }, {
+        scaleX: '100%',
+        duration: timerInSecond - 5, ease: 'linear'
+      }, '4.8')
+      tl.set(timerRef.current, { "--announces-origin": 'right' })
+      tl.to(timerRef.current, {
+        scaleX: "0%", duration: 0.2
+      })
     },
     {
       dependencies: [announce]
@@ -101,15 +90,20 @@ function Announce({
   ].join(' ')
 
   const textStyles = [
-    "font-bold text-2xl"
+    "font-bold text-xl"
   ].join(' ')
 
   return (
     <div
       // ref={container}
+      className="w-full"
     >
       <div
-        className="group/announce flex gap-4 items-center"
+        className={`group/announce ${[
+          "relative overflow-hidden",
+          "flex pt-2 pb-3 px-2 gap-4 items-center w-full",
+          "rounded-b-lg"
+        ].join(' ')}`}
       >
         {announce.image && <div><Image
           ref={imageRef}
@@ -134,6 +128,19 @@ function Announce({
             }}
           >{announce.message}</div>
         </div>
+        <div
+          ref={timerRef}
+          className={`${[
+            "absolute bottom-0 left-0",
+            "w-full h-[6px]",
+            "origin-left",
+            "opacity-85"
+          ].join(' ')}`}
+          style={{
+            transformOrigin: 'var(--announces-origin)',
+            backgroundColor: announceColor
+          }}
+        ></div>
       </div>
     </div>
   )
