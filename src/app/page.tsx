@@ -69,6 +69,11 @@ export default function Home() {
               title="AMAW Last Hunt"
               // subtitle="220x1104"
             />
+            <HomeLink
+              href="/amaw/total"
+              title="AMAW Total"
+              subtitle="340x170"
+            />
           </div>
         </section>
       </main>
