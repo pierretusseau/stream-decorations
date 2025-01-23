@@ -15,4 +15,5 @@ declare global {
   type Monster = TablesAmaw<'monsters'>
   type Weapon = TablesAmaw<'weapons'>
   type Hunt = TablesAmaw<'hunts'>
+  type AmawOption = TablesAmaw<'option'>
 }

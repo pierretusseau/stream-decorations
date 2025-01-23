@@ -1,7 +1,7 @@
 import React, {
   // useCallback,
   useRef,
-  // useState
+  useState
 } from 'react'
 import WeaponImage from '@/components/common/WeaponImage'
 import gsap from 'gsap'
@@ -13,16 +13,20 @@ gsap.registerPlugin(useGSAP)
 
 function AmawRandomWeapon({
   size = 100,
+  monsterRolling,
   rolling,
   weapons,
   randomMonster,
+  setRollingWeapon,
 }: {
   size?: number
+  monsterRolling: boolean
   rolling: boolean
   weapons: Weapon[]
   randomMonster?: RandomMonster
+  setRollingWeapon: React.Dispatch<React.SetStateAction<boolean>>
 }) {
-  // const [init, setInit] = useState<boolean>(false)
+  const [init, setInit] = useState<boolean>(false)
   // const [weaponsRolling, setWeaponRolling] = useState<boolean>(false)
   
   const questionRef = useRef(null)
@@ -36,22 +40,37 @@ function AmawRandomWeapon({
   
   useGSAP(() => {
     if (!rolling) return
-    // setWeaponRolling(true)
-    tl.to(questionRef.current, {
-      opacity: 0, y: -50, duration: 0.25
-    })
-    tl.to(weaponsRef.current, {
-      opacity: 1, y: 0, duration: 0.25
-    })
+    setInit(true)
+    console.log('Monster rolling', monsterRolling)
+    if (!init) {
+      tl.to(questionRef.current, {
+        opacity: 0, y: -50, duration: 0.25
+      })
+      tl.to(weaponsRef.current, {
+        opacity: 1, y: 0, duration: 0.25
+      })
+    }
     tl.to(weaponsRef.current, {
       duration: 1, ease: 'linear',
       y: `-=${size * weapons.length}`,
       modifiers: {
         y: gsap.utils.unitize(wrap)
       },
-      repeat: 6,
+      repeat: monsterRolling ? 6 : 3,
     })
-  }, [rolling])
+    if (!monsterRolling) {
+      const random = Math.random()
+      const randomFromWeapon = random * (rouletteWeapons.length - 1) * 2
+      const randomFloor = Math.floor(randomFromWeapon)
+      const randomStopY = size * randomFloor
+      tl.set(weaponsRef.current, { y: 0 })
+      tl.to(weaponsRef.current, {
+        y: `-=${randomStopY}`,
+        duration: 1, ease: 'power1.out'
+      })
+      tl.call(() => setRollingWeapon(false))
+    }
+  }, [rolling, monsterRolling])
 
   useGSAP(() => {
     if (!randomMonster) return
@@ -78,7 +97,7 @@ function AmawRandomWeapon({
   return (
     <div
       className={[
-        "bg-red-300",
+        // "bg-red-300",
         "relative",
         "overflow-hidden"
       ].join(' ')}
@@ -106,6 +125,9 @@ function AmawRandomWeapon({
         <div style={{
           // animation: !randomMonster ? `roulette 1s infinite` : ''
         }}>
+          {rouletteWeapons.map(weapon => <div key={`random-weapons-${weapon.id}`}>
+            <WeaponImage weapon={weapon} size={size} />
+          </div>)}
           {rouletteWeapons.map(weapon => <div key={`random-weapons-${weapon.id}`}>
             <WeaponImage weapon={weapon} size={size} />
           </div>)}

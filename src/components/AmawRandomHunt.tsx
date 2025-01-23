@@ -9,7 +9,6 @@ import { fetchHunts } from '@/store/useHuntStore'
 import { Button } from '@mui/material'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
-// import Image from 'next/image'
 import AmawRandomMonster from '@/components/AmawRandomHunt/AmawRandomMonster'
 import AmawRandomWeapon from '@/components/AmawRandomHunt/AmawRandomWeapon'
 
@@ -19,7 +18,7 @@ export type RandomMonster = {
   remainingWeapons: Weapon[]
 } & Monster
 
-const roulette_size = 100
+const roulette_size = 300
 
 function AmawRandomHunt({
   weapons,
@@ -27,7 +26,12 @@ function AmawRandomHunt({
   weapons: Weapon[]
 }) {
   const [randomMonster, setRandomMonster] = useState<RandomMonster>()
-  const [rolling, setRolling] = useState(false)
+  const [rollingMonster, setRollingMonster] = useState(false)
+  const [rollingWeapon, setRollingWeapon] = useState(false)
+  const [display, setDisplay] = useState({
+    monster: false,
+    weapon: false,
+  })
 
   useEffect(() => {
     fetchMonsters()
@@ -36,23 +40,56 @@ function AmawRandomHunt({
 
   if (!weapons || weapons.length === 0) return null
   return (
-    <div className="bg-neutral-950">
-      <Button onClick={() => setRolling(true)} fullWidth>CLICK ME !</Button>
-      <div className="w-full text-center">{randomMonster?.name}</div>
-      <div className="flex items-center">
-        <AmawRandomMonster
+    <div>
+      <div className="w-full flex justify-between bg-neutral-950 mb-5">
+        <Button onClick={() => {
+          setDisplay({
+            monster: true,
+            weapon: false,
+          })
+          setTimeout(() => {
+            setRandomMonster(undefined)
+            setRollingMonster(true)
+          }, 500);
+        }}>Roll Monster</Button>
+        <Button onClick={() => {
+          setDisplay({
+            monster: false,
+            weapon: true,
+          })
+          setTimeout(() => {
+            setRollingWeapon(true)
+          }, 500);
+        }}>Roll Weapon</Button>
+        <Button onClick={() => {
+          setDisplay({
+            monster: true,
+            weapon: true,
+          })
+          setTimeout(() => {
+            setRandomMonster(undefined)
+            setRollingWeapon(true)
+            setRollingMonster(true)
+          }, 500);
+        }}>Roll Both</Button>
+      </div>
+      <div className="flex items-center justify-center gap-2">
+        {display.monster && <AmawRandomMonster
           size={roulette_size}
-          rolling={rolling}
-          setRolling={setRolling}
+          rolling={rollingMonster}
+          randomMonster={randomMonster}
+          setRollingMonster={setRollingMonster}
           weapons={weapons}
           setRandomMonster={setRandomMonster}
-        />
-        <AmawRandomWeapon
+        />}
+        {display.weapon && <AmawRandomWeapon
           size={roulette_size}
-          rolling={rolling}
+          monsterRolling={rollingMonster}
+          rolling={rollingWeapon}
           weapons={weapons}
           randomMonster={randomMonster}
-        />
+          setRollingWeapon={setRollingWeapon}
+        />}
       </div>
     </div>
   )

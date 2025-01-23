@@ -1,4 +1,6 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback,
+  // useEffect,
+  useRef, useState } from 'react'
 import Image from 'next/image'
 import MonsterImage from '@/components/common/MonsterImage'
 import type { RandomMonster } from '@/components/AmawRandomHunt'
@@ -23,15 +25,19 @@ const shuffleArray = (array: unknown[]) => {
 function AmawRandomMonster({
   size = 100,
   rolling,
-  setRolling,
+  // setRolling,
+  setRollingMonster,
   setRandomMonster,
   weapons,
+  randomMonster,
 }: {
   size?: number
   rolling: boolean
-  setRolling: React.Dispatch<React.SetStateAction<boolean>>
+  // setRolling: React.Dispatch<React.SetStateAction<boolean>>
+  setRollingMonster: React.Dispatch<React.SetStateAction<boolean>>
   setRandomMonster: React.Dispatch<React.SetStateAction<RandomMonster | undefined>>
   weapons: Weapon[]
+  randomMonster?: Monster
 }) {
   const monsters = useMonstersStore((state) => state.monsters)
   const hunts = useHuntStore((state) => state.hunts)
@@ -77,23 +83,22 @@ function AmawRandomMonster({
     tl.to(questionRef.current, {
       opacity: 0, y: -50, duration: 0.25
     })
+    tl.to(monstersRef.current, {
+      opacity: 1, y: 0, duration: 1
+    })
     tl.call(() => {
+      setInit(true)
       handleRandomHunt()
     })
   }, [rolling])
+
   useGSAP(() => {
-    if (!rolling || randomMonsters.length === 0) return
+    if (randomMonsters.length === 0) return
+    if (randomMonster) return
     const tl = gsap.timeline()
     tl.call(() => {
-      setRolling(false)
       setRandomMonster(undefined)
     })
-    if (!init) {
-      tl.to(monstersRef.current, {
-        opacity: 1, y: 0, duration: 1
-      })
-      tl.call(() => setInit(true))
-    }
     tl.to(monstersRef.current, {
       y: ((randomMonsters.length - 1) * -size),
       ease: 'power1.inOut', duration: 5,
@@ -105,7 +110,10 @@ function AmawRandomMonster({
       y: ((getRemainingHunts(unlockedMonsters).length - 1) * -size),
     })
     tl.to(monstersRef.current, { opacity: 1, duration: 1, ease: 'power1.out' })
-  }, [rolling, randomMonsters, unlockedMonsters, init])
+    tl.call(() => {
+      setRollingMonster(false)
+    })
+  }, [randomMonsters, randomMonster, unlockedMonsters, init])
 
   return (
     <div
