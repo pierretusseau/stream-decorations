@@ -40,6 +40,15 @@ body {
   }
 }
 
+@keyframes roulette {
+  from {
+    transform: translateY(0%);
+  }
+  to {
+    transform: translateY(-100%);
+  }
+}
+
 @font-face {
   font-family: "MHNormalNumbers";
   src:
