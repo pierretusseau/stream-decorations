@@ -1,6 +1,6 @@
 'use client'
 
-import useHuntStore, { fetchHunts } from '@/store/useHuntStore'
+import useHuntStore, { fetchHunts, subscribeToHunts } from '@/store/useHuntStore'
 import React, { useEffect } from 'react'
 
 function AmawTotal({
@@ -18,6 +18,7 @@ function AmawTotal({
 
   useEffect(() => {
     fetchHunts()
+    subscribeToHunts()
   }, [])
 
   return (
