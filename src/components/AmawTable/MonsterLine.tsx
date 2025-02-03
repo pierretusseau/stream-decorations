@@ -53,6 +53,7 @@ function MonsterLine({
       <div
         className="group/monster-line-img w-[50px] mr-2 flex items-center"
         onContextMenu={(e) => handleMonsterLockState(e)}
+        title={`${monster.name} (${monster.id}) - ${monster.quest}`}
       >
         <div className="relative pointer-events-none">
           <MonsterImage
