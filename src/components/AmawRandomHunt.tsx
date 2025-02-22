@@ -13,7 +13,8 @@ import { useGSAP } from '@gsap/react'
 import AmawRandomMonster from '@/components/AmawRandomHunt/AmawRandomMonster'
 import AmawRandomWeapon from '@/components/AmawRandomHunt/AmawRandomWeapon'
 import { Cog6ToothIcon } from '@heroicons/react/24/solid'
-import AmawRandomMonsterModal from './AmawRandomHunt/AmawRandomMonsterModal'
+import AmawRandomMonsterModal from '@/components/AmawRandomHunt/AmawRandomMonsterModal'
+import AmawRandomWeaponModal from '@/components/AmawRandomHunt/AmawRandomWeaponModal'
 
 gsap.registerPlugin(useGSAP)
 
@@ -37,8 +38,9 @@ function AmawRandomHunt({
     weapon: false,
   })
   const [monsterChoice, setMonsterChoice] = useState<Monster[]>([])
-  // const [weaponChoice, setWeaponChoice] = useState<Weapon[]>([])
+  const [weaponChoice, setWeaponChoice] = useState<Weapon[]>(weapons)
   const [openMonsterModal, setOpenMonsterModal] = useState<boolean>(false)
+  const [openWeaponModal, setOpenWeaponModal] = useState<boolean>(false)
 
   useEffect(() => {
     fetchMonsters()
@@ -70,15 +72,22 @@ function AmawRandomHunt({
             <Cog6ToothIcon className="size-4"/>
           </Button>
         </div>
-        <Button onClick={() => {
-          setDisplay({
-            monster: false,
-            weapon: true,
-          })
-          setTimeout(() => {
-            setRollingWeapon(true)
-          }, 500);
-        }}>Roll Weapon</Button>
+        <div>
+          <Button onClick={() => {
+            setDisplay({
+              monster: false,
+              weapon: true,
+            })
+            setTimeout(() => {
+              setRollingWeapon(true)
+            }, 500);
+          }}>Roll Weapon</Button>
+          <Button
+            onClick={() => setOpenWeaponModal(true)}
+          >
+            <Cog6ToothIcon className="size-4"/>
+          </Button>
+        </div>
         <Button onClick={() => {
           setDisplay({
             monster: true,
@@ -97,6 +106,12 @@ function AmawRandomHunt({
         monsterChoice={monsterChoice}
         weapons={weapons}
       />}
+      {openWeaponModal && <AmawRandomWeaponModal
+        setOpenWeaponModal={setOpenWeaponModal}
+        setWeaponChoice={setWeaponChoice}
+        weaponChoice={weaponChoice}
+        weapons={weapons}
+      />}
       <div className="flex items-center justify-center gap-2">
         {display.monster && <AmawRandomMonster
           size={roulette_size}
@@ -111,7 +126,7 @@ function AmawRandomHunt({
           size={roulette_size}
           monsterRolling={rollingMonster}
           rolling={rollingWeapon}
-          weapons={weapons}
+          weapons={weaponChoice}
           randomMonster={randomMonster}
           setRollingWeapon={setRollingWeapon}
         />}
