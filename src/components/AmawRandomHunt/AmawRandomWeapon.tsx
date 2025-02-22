@@ -15,6 +15,7 @@ function AmawRandomWeapon({
   size = 100,
   monsterRolling,
   rolling,
+  allWeapons,
   weapons,
   randomMonster,
   setRollingWeapon,
@@ -22,6 +23,7 @@ function AmawRandomWeapon({
   size?: number
   monsterRolling: boolean
   rolling: boolean
+  allWeapons: Weapon[]
   weapons: Weapon[]
   randomMonster?: RandomMonster
   setRollingWeapon: React.Dispatch<React.SetStateAction<boolean>>
@@ -34,9 +36,11 @@ function AmawRandomWeapon({
 
   const wrap = gsap.utils.wrap(size * weapons.length * -1, 0)
   const tl = gsap.timeline()
-  const rouletteWeapons = randomMonster
+  const rouletteWeapons = randomMonster && Object.hasOwn(randomMonster, 'remainingWeapons')
     ? randomMonster.remainingWeapons
-    : weapons
+    : weapons.length > 0
+    ? weapons
+    : allWeapons
   
   useGSAP(() => {
     if (!rolling) return

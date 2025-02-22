@@ -7,7 +7,7 @@ import React, {
 } from 'react'
 import useMonstersStore, { fetchMonsters } from '@/store/useMonstersStore'
 import { fetchHunts } from '@/store/useHuntStore'
-import { Button } from '@mui/material'
+import { Button, Switch } from '@mui/material'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 import AmawRandomMonster from '@/components/AmawRandomHunt/AmawRandomMonster'
@@ -26,8 +26,10 @@ const roulette_size = 300
 
 function AmawRandomHunt({
   weapons,
+  filters,
 }: {
   weapons: Weapon[]
+  filters: {[key: string]: string | string[] | undefined}
 }) {
   const monsters = useMonstersStore((state) => state.monsters)
   const [randomMonster, setRandomMonster] = useState<RandomMonster>()
@@ -37,6 +39,8 @@ function AmawRandomHunt({
     monster: false,
     weapon: false,
   })
+  const [amaw, setAmaw] = useState(false)
+  const [amawInit, setAmawInit] = useState(false)
   const [monsterChoice, setMonsterChoice] = useState<Monster[]>([])
   const [weaponChoice, setWeaponChoice] = useState<Weapon[]>(weapons)
   const [openMonsterModal, setOpenMonsterModal] = useState<boolean>(false)
@@ -51,10 +55,23 @@ function AmawRandomHunt({
     if (monsters.length > 0 && monsterChoice.length === 0 && !openMonsterModal) setMonsterChoice(monsters)
   }, [monsters, monsterChoice.length, openMonsterModal])
 
+  useEffect(() => {
+    if (Object.hasOwn(filters, 'amaw')) {
+      setAmaw(true)
+      setOpenMonsterModal(true)
+    }
+  }, [filters])
+
   if (!weapons || weapons.length === 0) return null
+
   return (
     <div className="w-[650px] h-[300px]">
       <div className="w-full flex justify-between bg-neutral-950 mb-5">
+        <Switch
+          checked={amaw}
+          onChange={() => setAmaw(!amaw)}
+          inputProps={{ 'aria-label': 'controlled' }}
+        />
         <div>
           <Button onClick={() => {
             setDisplay({
@@ -105,6 +122,9 @@ function AmawRandomHunt({
         setMonsterChoice={setMonsterChoice}
         monsterChoice={monsterChoice}
         weapons={weapons}
+        amaw={amaw}
+        amawInit={amawInit}
+        setAmawInit={setAmawInit}
       />}
       {openWeaponModal && <AmawRandomWeaponModal
         setOpenWeaponModal={setOpenWeaponModal}
@@ -126,6 +146,7 @@ function AmawRandomHunt({
           size={roulette_size}
           monsterRolling={rollingMonster}
           rolling={rollingWeapon}
+          allWeapons={weapons}
           weapons={weaponChoice}
           randomMonster={randomMonster}
           setRollingWeapon={setRollingWeapon}

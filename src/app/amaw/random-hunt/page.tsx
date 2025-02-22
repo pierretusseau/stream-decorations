@@ -15,9 +15,17 @@ const getWeapons = async () => {
   return data
 }
 
-export default async function AmawRandomHuntPage() {
+export default async function AmawRandomHuntPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
   const weapons = await getWeapons()
+  const filters = await searchParams
   return (
-    <AmawRandomHunt weapons={weapons}/>
+    <AmawRandomHunt
+      weapons={weapons}
+      filters={filters}
+    />
   )
 }

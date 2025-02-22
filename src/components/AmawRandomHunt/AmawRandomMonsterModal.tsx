@@ -2,7 +2,6 @@ import { useCallback, useEffect } from 'react'
 import { Button, Modal } from '@mui/material'
 import useMonstersStore from '@/store/useMonstersStore'
 import useHuntStore from '@/store/useHuntStore'
-import useSettingsStore from '@/store/useSettingsStore'
 import MonsterImage from '@/components/common/MonsterImage'
 import type { RandomMonster } from '@/components/AmawRandomHunt'
 
@@ -11,17 +10,22 @@ type Props = {
   setMonsterChoice: React.Dispatch<React.SetStateAction<Monster[]>>
   monsterChoice: Monster[]
   weapons: Weapon[]
+  amaw: boolean
+  amawInit: boolean
+  setAmawInit: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const AmawRandomMonsterModal = ({
   setOpenMonsterModal,
   setMonsterChoice,
   monsterChoice,
-  weapons
+  weapons,
+  amaw,
+  amawInit,
+  setAmawInit
 }: Props) => {
   const monsters = useMonstersStore((state) => state.monsters)
   const hunts = useHuntStore((state) => state.hunts)
-  const amawServiceKey = useSettingsStore((state) => state.supabase_service_key)
   
   const modalStyle = [
     'absolute top-1/2 left-1/2',
@@ -46,10 +50,15 @@ const AmawRandomMonsterModal = ({
   }, [hunts, weapons])
 
   const getUnlockedMonsters = useCallback(() => {
-    if (amawServiceKey.length > 0) {
-      return monsters.filter(monster => monster.unlocked)
+    if (amaw) return monsters.filter(monster => monster.unlocked)
+  }, [monsters, amaw])
+
+  useEffect(() => {
+    if (amaw && !amawInit && monsterChoice.length > 0) {
+      setOpenMonsterModal(false)
+      setAmawInit(true)
     }
-  }, [monsters, amawServiceKey.length])
+  }, [amaw, amawInit, monsterChoice.length, setOpenMonsterModal, setAmawInit])
 
   useEffect(() => {
     const unlockedMonsters = getUnlockedMonsters() || []
