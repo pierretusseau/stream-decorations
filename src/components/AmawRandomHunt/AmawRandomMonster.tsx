@@ -1,14 +1,10 @@
 import React, { useCallback,
-  // useEffect,
-  // useEffect,
   useRef, useState } from 'react'
 import Image from 'next/image'
 import MonsterImage from '@/components/common/MonsterImage'
 import type { RandomMonster } from '@/components/AmawRandomHunt'
-// import useHuntStore from '@/store/useHuntStore'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
-// import useMonstersStore from '@/store/useMonstersStore'
 
 gsap.registerPlugin(useGSAP)
 
@@ -26,24 +22,19 @@ const shuffleArray = (array: unknown[]) => {
 function AmawRandomMonster({
   size = 100,
   rolling,
-  // setRolling,
   setRollingMonster,
   setRandomMonster,
-  // weapons,
   randomMonster,
   monsters,
 }: {
   size?: number
   rolling: boolean
-  // setRolling: React.Dispatch<React.SetStateAction<boolean>>
   setRollingMonster: React.Dispatch<React.SetStateAction<boolean>>
   setRandomMonster: React.Dispatch<React.SetStateAction<RandomMonster | undefined>>
   weapons: Weapon[]
   randomMonster?: Monster
   monsters: Monster[]
 }) {
-  // const monsters = useMonstersStore((state) => state.monsters)
-  // const hunts = useHuntStore((state) => state.hunts)
   const [randomMonsters, setRandomMonsters] = useState<RandomMonster[]>([])
   const [init, setInit] = useState<boolean>(false)
 

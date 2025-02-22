@@ -29,7 +29,6 @@ function AmawRandomWeapon({
   setRollingWeapon: React.Dispatch<React.SetStateAction<boolean>>
 }) {
   const [init, setInit] = useState<boolean>(false)
-  // const [weaponsRolling, setWeaponRolling] = useState<boolean>(false)
   
   const questionRef = useRef(null)
   const weaponsRef = useRef(null)
