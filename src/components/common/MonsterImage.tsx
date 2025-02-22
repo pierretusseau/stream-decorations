@@ -6,12 +6,14 @@ function MonsterImage({
   monster,
   size = 50,
   className = '',
-  border
+  border,
+  contain = false
 }: {
   monster: Monster
   size?: number
   className?: string
   border?: number
+  contain?: boolean
 }) {
   const borderStyle = {
     filter: `
@@ -27,7 +29,7 @@ function MonsterImage({
       width={size}
       height={size}
       alt={`Icon of ${monster.name}`}
-      className={`relative z-10 ${className}`}
+      className={`relative z-10 ${className} ${contain ? 'object-contain w-full h-full' : ''}`}
       title={`${monster.name} - ${monster.quest}`}
       style={
         border ? {...borderStyle} : {}

@@ -74,6 +74,11 @@ export default function Home() {
               title="AMAW Total"
               subtitle="340x170"
             />
+            <HomeLink
+              href="/amaw/random-hunt"
+              title="AMAW Random Hunt"
+              subtitle="650x300"
+            />
           </div>
         </section>
       </main>
